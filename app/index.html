@@ -92,6 +92,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-icon icon="mail"></iron-icon>
             <span>Contact</span>
           </a>
+
+          <a data-route="settings" href="{{baseUrl}}settings">
+            <iron-icon icon="settings"></iron-icon>
+            <span>Settings</span>
+          </a>
         </paper-menu>
       </paper-scroll-header-panel>
 
@@ -149,6 +154,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-material elevation="1">
                 <h1 class="page-title focus-target" tabindex="-1">Contact</h1>
                 <p>This is the contact section</p>
+              </paper-material>
+            </section>
+
+            <section data-route="settings">
+              <paper-material elevation="1">
+                <h1>Settings</h1>
+                <tpa-region-selection></tpa-region-selection>
               </paper-material>
             </section>
           </iron-pages>
