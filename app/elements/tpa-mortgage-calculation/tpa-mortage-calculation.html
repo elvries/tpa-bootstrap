@@ -18,8 +18,14 @@
         padding-top: 10px;
       }
 
-      paper-button{
-        color: var(--primary-color)
+      paper-button.primary{
+        color: var(--primary-background-color);
+        background: var(--primary-color);
+      }
+
+      paper-button.secondary{
+        color: var(--primary-color);
+        background: var(--primary-background-color);
       }
     </style>
 
@@ -35,8 +41,8 @@
       </div>
     </section>
     <section>
-      <paper-button raised primary>Make appointment</paper-button>
-      <paper-button raised>Edit calculation</paper-button>
+      <paper-button class="primary" raised>Make appointment</paper-button>
+      <paper-button class="secondary" raised>Edit calculation</paper-button>
     </section>
   </template>
   <script>
