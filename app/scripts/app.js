@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   if (window.location.port === '') {  // if production
     // Uncomment app.baseURL below and
     // set app.baseURL to '/your-pathname/' if running from folder in production
-    // app.baseUrl = '/polymer-starter-kit/';
+    app.baseUrl = '/tpa-bootstrap/';
   }
 
   app.displayInstalledToast = function() {
@@ -70,6 +70,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   //   Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   // });
 
+  window.addEventListener('open-menu',function(){
+    app.$.paperDrawerPanel.togglePanel();
+  });
   // Scroll page to top and expand header
   app.scrollPageToTop = function() {
     app.$.headerPanelMain.scrollToTop(true);

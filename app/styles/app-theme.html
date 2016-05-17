@@ -23,6 +23,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    for further information on custom CSS properties.
    */
 
+  #mainToolbar {
+    --layout-horizontal:{
+      padding-left:0;
+      padding-right:0;
+      height:auto;
+    }
+
+    height:auto;
+  }
   /* Application theme */
 
   :root {
@@ -32,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     --disabled-text-color: #9b9b9b;
     --divider-color: #dbdbdb;
     --primary-color: #ff6200;
-    --light-primary-color: var(--paper-indigo-100);
+    --light-primary-color: var(--paper-grey-500);
     --dark-primary-color: var(--paper-indigo-700);
     --accent-color: var(--paper-pink-a200);
     --light-accent-color: var(--paper-pink-a100);
@@ -51,6 +60,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     /* paper-input */
     --paper-input-container-color:var(--light-primary-color)
+
+    /* Icons */
+    --iron-icon-fill-color:var(--primary-color);
+    --iron-icon-stroke-color:var(--primary-color);
   }
 
   /* General styles */
@@ -65,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   #drawerToolbar {
-    color: var(--secondary-text-color);
+    color: var(--primary-color);
     background-color: var(--drawer-menu-color);
     border-bottom: var(--drawer-toolbar-border-color);
   }
@@ -102,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-center);
 
     text-decoration: none;
-    color: var(--menu-link-color);
+    color: var(--primary-color);
     font-family: 'INgMe', sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
