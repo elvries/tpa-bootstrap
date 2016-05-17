@@ -14,7 +14,8 @@
 * [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, Mobile Chrome Apps and lint tools.
 
 ### Demo
-TBA
+
+[TPA Demo](https://ing-group.github.io/tpa-bootstrap/)
 
 ### Tutorials
 
