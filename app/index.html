@@ -65,7 +65,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <!-- endbuild -->
 
-
   <template is="dom-bind" id="app">
 
     <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px" force-narrow>
@@ -103,8 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-scroll-header-panel fixed main id="headerPanelMain">
         <!-- Main Toolbar -->
 
-
-        <paper-toolbar id="mainToolbar">
+        <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
           <!-- Application sub title -->
 
           <tpa-nav-bar></tpa-nav-bar>
@@ -120,7 +118,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
 
               <paper-material elevation="1">
-                <p>This is another card.</p>
+                <tpa-transaction-list hide-sub-text title="Latest Transactions"></tpa-transaction-list>
+              </paper-material>
+
+              <paper-material elevation="1">
+                <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
               </paper-material>
 
             </section>
@@ -160,7 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-toast>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    
+
     <paper-toast id="caching-complete"
                  duration="6000"
                  text="Caching complete! This app will work offline.">

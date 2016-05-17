@@ -46,7 +46,7 @@ gulp.task('i18n2', function() {
         .pipe(replace(/%PATH%/g, "../../"))
         .pipe(replace(/%CSSPATH%/g, ""))
         .pipe(replace(/\/\*@i18n-json\*\//, "i18n: { type: Object, value: function() { return { " + contents.substr(0,contents.length-1) + "};}, notify: true },"))
-        .pipe(replace(/.*@i18n-link.*/, '<link rel="import" href="../../ing-i18n/ing-i18n.html">\n<link rel="import" href="../../iron-signals/iron-signals.html">'))
+        .pipe(replace(/.*@i18n-link.*/, '<link rel="import" href="../../ing-i18n/tpa-i18n.html">\n<link rel="import" href="../../iron-signals/iron-signals.html">'))
         .pipe(replace(/.*@i18n-signal.*/, '<iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>'))
         .pipe(replace(/\/\*@i18n-behavior\*\//, 'I18nBehavior'))
         .pipe(replace(/\$\{\{(.*)\}\}\$/g, "{{content.$1}}"))
