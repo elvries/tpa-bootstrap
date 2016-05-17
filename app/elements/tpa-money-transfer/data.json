@@ -1,0 +1,20 @@
+[
+  {
+    "firstname": "John",
+    "lastname": "Smith",
+    "account": "NL 1234 5678 IBAN 1234",
+    "institute": "ING NETHERLANDS"
+  },
+  {
+    "firstname": "James",
+    "lastname": "Bond",
+    "account": "AU 1234 5678 IBAN 1234",
+    "institute": "ING AUSTRALIA"
+  },
+  {
+    "firstname": "Austin",
+    "lastname": "Powers",
+    "account": "NL 1234 5678 IBAN 1234",
+    "institute": "ING NETHERLANDS"
+  }
+]

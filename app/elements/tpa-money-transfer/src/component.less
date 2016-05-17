@@ -1,18 +1,26 @@
-  @import "custom-mixins.less";
+  // @import "custom-mixins.less";
 
-  // body {
-  //   font-family: "ING Me Regular";
-  // }
+  // as long as we have no global mixins, mixins are defined locally
+
+    .unselectable {
+           -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer */
+         -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+        -webkit-user-select: none; /* Chrome, Safari, and Opera */
+      -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+    }
 
   :host {
     display: block;
-    --brand-primary-color: #ff6600;
-    --brand-secondary-color: #636363;
-    --brand-light-color: #818181;
-    --brand-dark-color: #404040;
+    // --brand-primary-color: #ff6600;
+    // --brand-secondary-color: #636363;
+    // --brand-light-color: #818181;
+    // --brand-dark-color: #404040;
 
     // --font-bold:   "ING Me Bold";
     // --font-normal: "ING Me Regular";
+
+    --iron-icon-fill-color:var(--primary-color);
 
     .unselectable;
   }
@@ -54,20 +62,20 @@
     // }
 
     > div:nth-child(1) > h1 {
-      color: var(--brand-light-color);
+      // color: var(--light-primary-color);
       font-size: 1em;
       margin: 0;
       font-weight: normal;
     }
 
     > div:nth-child(1) > div {
-      color: var(--brand-dark-color);
+      //color: var(--brand-dark-color);
       font-size: 1.2em;
     }
 
     &.balance {
       > div:nth-child(1) > div {
-        color: var(--brand-primary-color);
+        color: var(--primary-color);
       }
 
       super {
@@ -81,6 +89,8 @@
     div[prefix] {
       padding-right: 5px;
     }
+
+    color:var(--light-primary-color)
   }
 
   .center {
@@ -94,16 +104,45 @@
     margin-bottom: 0.5em;
   }
 
+  .color--brand-primary {
+    color: var(--primary-color);
+  }
+
+  .color--light-primary {
+    color: var(--light-primary-color);
+  }
+
+
   // paper-button.primary[raised],
   // paper-button.btn-primary[raised],
   // paper-button[primary][raised] {
   //   background-color: var(--brand-primary-color); color: #fff;
   // }
 
-  .color--brand-primary {
-    color: var(--brand-primary-color);
+  // this should be defined global....
+  paper-button {
+    &[primary] {
+      color: var(--primary-background-color);
+      background: var(--primary-color);
+    }
   }
 
-  .color--light-primary {
-    color: var(--brand-light-color);
+
+  simple-dialog {
+    width: 80%;
+  }
+
+  .addressContent {
+    @apply(--layout);
+    width: 200px;
+    margin: 8px;
+  }
+
+  .addressContainer {
+    @media (max-width: 800px) {
+      width: calc(50% - 16px);
+    }
+    @media (max-width: 400px) {
+      width: 100%;
+    }
   }
