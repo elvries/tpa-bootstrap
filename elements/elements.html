@@ -23999,6 +23999,14 @@ of where they are in DOM.
                 </paper-card>
             </paper-material>
 
+            <paper-material elevation="3">
+                <div class="card-content">
+                    <paper-card>
+                        <tpa-mortgage-calculation></tpa-mortgage-calculation>
+                    </paper-card>
+                </div>
+            </paper-material>
+
             
         </div>
     </template>
@@ -24007,6 +24015,117 @@ of where they are in DOM.
             is: "tpa-app-layout"
         });
     </script>
+</dom-module>
+<dom-module name="tpa-mortgage-calculation-line">
+  <template>
+      <div>
+        <span>{{text}}</span>
+        <span style="float:right">{{amount}}</span>
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: "tpa-mortgage-calculation-line",
+      properties: {
+        "text": {
+          type: "String",
+          value: "",
+          notify:true
+        },
+        "amount": {
+          type: "String",
+          value: "",
+          notify:true
+        }
+      }
+    });
+  </script>
+</dom-module>
+<dom-module id="tpa-mortgage-calculation-i18n" assetpath="tpa-mortgage-calculation/">
+  <template>
+    <iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>
+  </template>
+  <script>
+    Polymer({
+      is: 'tpa-mortgage-calculation-i18n',
+      behaviors: [I18nBehavior],
+      properties: {
+        /*
+         * @private
+         */
+        i18n: {
+          type: Object,
+          value: function () {
+            return {
+              "en-au": {
+                "YourMortgageCalculation": "Your mortgage calculation",
+                "makeAnAppointment": "Make an appointment",
+                "editCalculation": "Edit calculation"
+              },
+              "de-de": {
+                "YourMortgageCalculation": "Ihre Hypothek Berechnung",
+                "makeAnAppointment": "Einen termin machen",
+                "editCalculation": "Berechnung bearbeiten"
+              },
+              "nl-nl": {
+                "YourMortgageCalculation": "Uw hypotheek berekening",
+                "makeAnAppointment": "Een afspraak maken",
+                "editCalculation": "Berekening bewerken"
+              }
+            }
+          },
+          notify: true
+        }
+      }
+    });
+  </script>
+</dom-module>
+<dom-module name="tpa-mortgage-calculation">
+  <template>
+    <style>
+      h3 {
+        color: var(--primary-color);
+      }
+
+      .main-text {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      paper-button.primary{
+        color: var(--primary-background-color);
+        background: var(--primary-color);
+      }
+
+      paper-button.secondary{
+        color: var(--primary-color);
+        background: var(--primary-background-color);
+      }
+    </style>
+
+    <tpa-mortgage-calculation-i18n id="i18ncontent" content="{{i18ncontent}}"></tpa-mortgage-calculation-i18n>
+
+    <h3>{{i18ncontent.YourMortgageCalculation}}</h3>
+    <section class="main-text">
+      <tpa-mortgage-calculation-line text="Maximum loan" amount="€ 253.450"></tpa-mortgage-calculation-line>
+      <tpa-mortgage-calculation-line text="Koopsom van de woning" amount="€ 230.200"></tpa-mortgage-calculation-line>
+    </section>
+    <section>
+      <paper-button class="primary" raised="">{{i18ncontent.makeAnAppointment}}</paper-button>
+      <paper-button class="secondary" raised="">{{i18ncontent.editCalculation}}</paper-button>
+    </section>
+  </template>
+  <script>
+    Polymer({
+      is: "tpa-mortgage-calculation",
+      properties: {
+        i18ncontent:{
+          type:Object,
+          notify:true
+        }
+      }
+    });
+  </script>
 </dom-module>
 <script>
   /**
