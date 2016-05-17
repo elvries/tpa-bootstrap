@@ -1,0 +1,27 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module name="tpa-mortgage-calculation-line">
+  <template>
+      <div>
+        <span>{{text}}</span>
+        <span style="float:right">{{amount}}</span>
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: "tpa-mortgage-calculation-line",
+      properties: {
+        "text": {
+          type: "String",
+          value: "",
+          notify:true
+        },
+        "amount": {
+          type: "String",
+          value: "",
+          notify:true
+        }
+      }
+    });
+  </script>
+</dom-module>

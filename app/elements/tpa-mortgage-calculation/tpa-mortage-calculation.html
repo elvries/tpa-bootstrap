@@ -2,9 +2,10 @@
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
-<!-- paper -->
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="tpa-mortgage-calculation-line.html">
 
 <dom-module name="tpa-mortgage-calculation">
   <template>
@@ -31,14 +32,8 @@
 
     <h3>Your mortgage calculation</h3>
     <section class="main-text">
-      <div>
-        <span>Maximum loan</span>
-        <span style="float:right">€ 253.450</span>
-      </div>
-      <div>
-        <span>Koopsom van de woning</span>
-        <span style="float:right">€ 230.200</span>
-      </div>
+      <tpa-mortgage-calculation-line text="Maximum loan" amount="€ 253.450"></tpa-mortgage-calculation-line>
+      <tpa-mortgage-calculation-line text="Koopsom van de woning" amount="€ 230.200"></tpa-mortgage-calculation-line>
     </section>
     <section>
       <paper-button class="primary" raised>Make appointment</paper-button>
