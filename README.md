@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ING-Group/tpa-bootstrap.svg?branch=master)](https://travis-ci.org/ING-Group/tpa-bootstrap)
+
 ![](https://cloud.githubusercontent.com/assets/110953/7877439/6a69d03e-0590-11e5-9fac-c614246606de.png)
 ## ING TPA Bootstrap with Polymer Starter Kit
 
@@ -14,7 +16,8 @@
 * [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, Mobile Chrome Apps and lint tools.
 
 ### Demo
-TBA
+
+[TPA Demo](https://ing-group.github.io/tpa-bootstrap/)
 
 ### Tutorials
 
@@ -73,7 +76,7 @@ The full starter kit requires the following major dependencies:
 node --version
 ```
 
-The version should be at or above 0.12.x.
+The version should be at or above 4.x.x.
 
 2)  If you don't have Node.js installed, or you have a lower version, go to [nodejs.org](https://nodejs.org) and click on the big green Install button.
 

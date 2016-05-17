@@ -15,8 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta charset="utf-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Polymer Starter Kit">
-  <title>Polymer Starter Kit</title>
+  <meta name="generator" content="TPA Bootstrap">
+  <title>TPA Bootstrap</title>
 
   <!-- Place favicon.ico in the `app/` directory -->
 
@@ -37,7 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <meta name="apple-mobile-web-app-title" content="TPA Bootstrap">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
   <!-- Tile icon for Win8 (144x144) -->
@@ -55,6 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Because this project uses vulcanize this should be your only html import
        in this file. All other imports should go in elements.html -->
   <link rel="import" href="elements/elements.html">
+  <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
@@ -117,24 +118,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
+            <!--<section data-route="home">
+              <div class="horizontal layout wrap">
+                <paper-material elevation="1">
+                  <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450" account-balance="5000"></tpa-money-transfer>
+                </paper-material>
+
+                <paper-material elevation="1">
+                  <tpa-transaction-list hide-sub-text title="Latest Transactions"></tpa-transaction-list>
+                </paper-material>
+
+                <paper-material elevation="1">
+                  <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
+                </paper-material>
+              </div>
+            </section>-->
+
             <section data-route="home">
-              <paper-material elevation="1">
-                <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450" account-balance="5000"></tpa-money-transfer>
-              </paper-material>
-
-              <paper-material elevation="1">
-                <tpa-transaction-list hide-sub-text title="Latest Transactions"></tpa-transaction-list>
-              </paper-material>
-
-              <paper-material elevation="1">
-                <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
-              </paper-material>
-
-              <paper-material elevation="1">
-                <tpa-mortgage-calculation></tpa-mortgage-calculation>
-              </paper-material>
-
+              <tpa-app-layout></tpa-app-layout>
             </section>
+
+
 
             <section data-route="users">
               <paper-material elevation="1">
