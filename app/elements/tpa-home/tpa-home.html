@@ -1,0 +1,53 @@
+<dom-module id="tpa-home">
+  <template>
+    <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px" force-narrow>
+      <!-- Drawer Scroll Header Panel -->
+      <paper-scroll-header-panel drawer fixed>
+
+        <!-- Drawer Toolbar -->
+        <paper-toolbar id="drawerToolbar">
+          <span class="menu-name">Menu</span>
+        </paper-toolbar>
+
+        <!-- Drawer Content -->
+        <paper-menu class="app-menu" attr-for-selected="data-route" selected="[[route]]">
+          <a data-route="home" href="{{baseUrl}}">
+            <iron-icon icon="home"></iron-icon>
+            <span>Home</span>
+          </a>
+
+          <a data-route="users" href="{{baseUrl}}users">
+            <iron-icon icon="info"></iron-icon>
+            <span>Users</span>
+          </a>
+
+          <a data-route="contact" href="{{baseUrl}}contact">
+            <iron-icon icon="mail"></iron-icon>
+            <span>Contact</span>
+          </a>
+        </paper-menu>
+      </paper-scroll-header-panel>
+
+      <!-- Main Area -->
+      <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header>
+        <!-- Main Toolbar -->
+
+        <tpa-top-bar class="paper-header"></tpa-top-bar>
+        <paper-toolbar id="mainToolbar">
+          <!-- Application sub title -->
+
+          <tpa-nav-bar></tpa-nav-bar>
+
+        </paper-toolbar>
+
+        <!-- Main Content -->
+        <content select=".main-content"></content>
+      </paper-scroll-header-panel>
+    </paper-drawer-panel>
+  </template>
+  <script>
+    Polymer({
+      is:"tpa-home"
+    });
+  </script>
+</dom-module>

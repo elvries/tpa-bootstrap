@@ -1,0 +1,42 @@
+<link rel="import" href="../ing-i18n/ing-i18n.html">
+<link rel="import" href="../iron-signals/iron-signals.html">
+<dom-module id="tpa-transaction-list-i18n">
+    <template>
+        <iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>
+    </template>
+    <script>
+        Polymer({
+            is: 'tpa-transaction-list-i18n',
+            behaviors: [I18nBehavior],
+            properties: {
+                /*
+                 * @private
+                 */
+                i18n: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            "en-au": {
+                                "latestTransactions":"Latest Transactions",
+                                "currencyName": "Dollar"
+                            },
+                            "de-de": {
+                                "latestTransactions":"Neueste Transaktionen",
+                                "currencyName": "Euro"
+                            },
+                            "nl-nl": {
+                                "latestTransactions":"Laatste transacties",
+                                "currencyName": "Euro"
+                            },
+                            "nl-be": {
+                                "latestTransactions":"Laatste transacties",
+                                "currencyName": "Euro"
+                            }
+                        }
+                    },
+                    notify: true
+                }
+            }
+        });
+    </script>
+</dom-module>
