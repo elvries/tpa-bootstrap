@@ -28,6 +28,7 @@ var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
 var ensureFiles = require('./tasks/ensure-files.js');
+var drakovMiddleware = require('drakov').middleware;
 
 // var ghPages = require('gulp-gh-pages');
 
