@@ -70,6 +70,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   //   Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   // });
 
+  window.addEventListener('open-menu',function(){
+    app.$.paperDrawerPanel.togglePanel();
+  });
   // Scroll page to top and expand header
   app.scrollPageToTop = function() {
     app.$.headerPanelMain.scrollToTop(true);

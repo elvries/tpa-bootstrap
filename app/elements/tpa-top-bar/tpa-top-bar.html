@@ -78,7 +78,10 @@
     </template>
     <script>
         Polymer({
-            is: "tpa-top-bar"
+            is: "tpa-top-bar",
+            menuAction: function(){
+              this.fire("open-menu")
+            }
         });
     </script>
 </dom-module>
