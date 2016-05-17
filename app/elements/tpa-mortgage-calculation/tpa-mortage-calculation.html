@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<!-- paper -->
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module name="tpa-mortgage-calculation">
+  <template>
+    <style>
+      h3 {
+        color: var(--primary-color);
+      }
+
+      .main-text {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      paper-button{
+        color: var(--primary-color)
+      }
+    </style>
+
+    <h3>Your mortgage calculation</h3>
+    <section class="main-text">
+      <div>
+        <span>Maximum loan</span>
+        <span style="float:right">€ 253.450</span>
+      </div>
+      <div>
+        <span>Koopsom van de woning</span>
+        <span style="float:right">€ 230.200</span>
+      </div>
+    </section>
+    <section>
+      <paper-button raised primary>Make appointment</paper-button>
+      <paper-button raised>Edit calculation</paper-button>
+    </section>
+  </template>
+  <script>
+    Polymer({
+      is: "tpa-mortgage-calculation"
+    });
+  </script>
+</dom-module>
