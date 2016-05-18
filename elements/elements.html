@@ -18537,7 +18537,6 @@ context. You should place this element as a child of `<body>` whenever possible.
                 color:#ffffff;
                 line-height:3.5em;
             }
-
         </style>
 
         <paper-tabs selected="0">
@@ -18576,6 +18575,2863 @@ context. You should place this element as a child of `<body>` whenever possible.
         });
     </script>
 </dom-module>
+<script>
+
+  /**
+   * `Polymer.IronScrollTargetBehavior` allows an element to respond to scroll events from a
+   * designated scroll target.
+   *
+   * Elements that consume this behavior can override the `_scrollHandler`
+   * method to add logic on the scroll event.
+   *
+   * @demo demo/scrolling-region.html Scrolling Region
+   * @demo demo/document.html Document Element
+   * @polymerBehavior
+   */
+  Polymer.IronScrollTargetBehavior = {
+
+    properties: {
+
+      /**
+       * Specifies the element that will handle the scroll event
+       * on the behalf of the current element. This is typically a reference to an element,
+       * but there are a few more posibilities:
+       *
+       * ### Elements id
+       *
+       *```html
+       * <div id="scrollable-element" style="overflow: auto;">
+       *  <x-element scroll-target="scrollable-element">
+       *    <!-- Content-->
+       *  </x-element>
+       * </div>
+       *```
+       * In this case, the `scrollTarget` will point to the outer div element. 
+       *
+       * ### Document scrolling
+       *
+       * For document scrolling, you can use the reserved word `document`:
+       *
+       *```html
+       * <x-element scroll-target="document">
+       *   <!-- Content -->
+       * </x-element>
+       *```
+       *
+       * ### Elements reference
+       *
+       *```js
+       * appHeader.scrollTarget = document.querySelector('#scrollable-element');
+       *```
+       * 
+       * @type {HTMLElement}
+       */
+      scrollTarget: {
+        type: HTMLElement,
+        value: function() {
+          return this._defaultScrollTarget;
+        }
+      }
+    },
+
+    observers: [
+      '_scrollTargetChanged(scrollTarget, isAttached)'
+    ],
+
+    _scrollTargetChanged: function(scrollTarget, isAttached) {
+      var eventTarget;
+
+      if (this._oldScrollTarget) {
+        eventTarget = this._oldScrollTarget === this._doc ? window : this._oldScrollTarget;
+        eventTarget.removeEventListener('scroll', this._boundScrollHandler);
+        this._oldScrollTarget = null;
+      }
+
+      if (!isAttached) {
+        return;
+      }
+      // Support element id references
+      if (scrollTarget === 'document') {
+
+        this.scrollTarget = this._doc;
+
+      } else if (typeof scrollTarget === 'string') {
+
+        this.scrollTarget = this.domHost ? this.domHost.$[scrollTarget] :
+            Polymer.dom(this.ownerDocument).querySelector('#' + scrollTarget);
+
+      } else if (this._isValidScrollTarget()) {
+
+        eventTarget = scrollTarget === this._doc ? window : scrollTarget;
+        this._boundScrollHandler = this._boundScrollHandler || this._scrollHandler.bind(this);
+        this._oldScrollTarget = scrollTarget;
+
+        eventTarget.addEventListener('scroll', this._boundScrollHandler);
+      }
+    },
+
+    /**
+     * Runs on every scroll event. Consumer of this behavior may override this method.
+     *
+     * @protected
+     */
+    _scrollHandler: function scrollHandler() {},
+
+    /**
+     * The default scroll target. Consumers of this behavior may want to customize
+     * the default scroll target.
+     *
+     * @type {Element}
+     */
+    get _defaultScrollTarget() {
+      return this._doc;
+    },
+
+    /**
+     * Shortcut for the document element
+     *
+     * @type {Element}
+     */
+    get _doc() {
+      return this.ownerDocument.documentElement;
+    },
+
+    /**
+     * Gets the number of pixels that the content of an element is scrolled upward.
+     *
+     * @type {number}
+     */
+    get _scrollTop() {
+      if (this._isValidScrollTarget()) {
+        return this.scrollTarget === this._doc ? window.pageYOffset : this.scrollTarget.scrollTop;
+      }
+      return 0;
+    },
+
+    /**
+     * Gets the number of pixels that the content of an element is scrolled to the left.
+     *
+     * @type {number}
+     */
+    get _scrollLeft() {
+      if (this._isValidScrollTarget()) {
+        return this.scrollTarget === this._doc ? window.pageXOffset : this.scrollTarget.scrollLeft;
+      }
+      return 0;
+    },
+
+    /**
+     * Sets the number of pixels that the content of an element is scrolled upward.
+     *
+     * @type {number}
+     */
+    set _scrollTop(top) {
+      if (this.scrollTarget === this._doc) {
+        window.scrollTo(window.pageXOffset, top);
+      } else if (this._isValidScrollTarget()) {
+        this.scrollTarget.scrollTop = top;
+      }
+    },
+
+    /**
+     * Sets the number of pixels that the content of an element is scrolled to the left.
+     *
+     * @type {number}
+     */
+    set _scrollLeft(left) {
+      if (this.scrollTarget === this._doc) {
+        window.scrollTo(left, window.pageYOffset);
+      } else if (this._isValidScrollTarget()) {
+        this.scrollTarget.scrollLeft = left;
+      }
+    },
+
+    /**
+     * Scrolls the content to a particular place.
+     *
+     * @method scroll
+     * @param {number} left The left position
+     * @param {number} top The top position
+     */
+    scroll: function(left, top) {
+       if (this.scrollTarget === this._doc) {
+        window.scrollTo(left, top);
+      } else if (this._isValidScrollTarget()) {
+        this.scrollTarget.scrollLeft = left;
+        this.scrollTarget.scrollTop = top;
+      }
+    },
+
+    /**
+     * Gets the width of the scroll target.
+     *
+     * @type {number}
+     */
+    get _scrollTargetWidth() {
+      if (this._isValidScrollTarget()) {
+        return this.scrollTarget === this._doc ? window.innerWidth : this.scrollTarget.offsetWidth;
+      }
+      return 0;
+    },
+
+    /**
+     * Gets the height of the scroll target.
+     *
+     * @type {number}
+     */
+    get _scrollTargetHeight() {
+      if (this._isValidScrollTarget()) {
+        return this.scrollTarget === this._doc ? window.innerHeight : this.scrollTarget.offsetHeight;
+      }
+      return 0;
+    },
+
+    /**
+     * Returns true if the scroll target is a valid HTMLElement.
+     *
+     * @return {boolean}
+     */
+    _isValidScrollTarget: function() {
+      return this.scrollTarget instanceof HTMLElement;
+    }
+  };
+
+</script>
+
+
+<dom-module id="iron-list" assetpath="../bower_components/iron-list/">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+
+      @media only screen and (-webkit-max-device-pixel-ratio: 1) {
+        :host {
+          will-change: transform;
+        }
+      }
+
+      #items {
+        @apply(--iron-list-items-container);
+        position: relative;
+      }
+
+      :host(:not([grid])) #items > ::content > * {
+        width: 100%;
+      };
+
+      #items > ::content > * {
+        box-sizing: border-box;
+        margin: 0;
+        position: absolute;
+        top: 0;
+        will-change: transform;
+      }
+    </style>
+
+    <array-selector id="selector" items="{{items}}" selected="{{selectedItems}}" selected-item="{{selectedItem}}">
+    </array-selector>
+
+    <div id="items">
+      <content></content>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+
+(function() {
+
+  var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
+  var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
+  var DEFAULT_PHYSICAL_COUNT = 3;
+  var HIDDEN_Y = '-10000px';
+  var DEFAULT_GRID_SIZE = 200;
+
+  Polymer({
+
+    is: 'iron-list',
+
+    properties: {
+
+      /**
+       * An array containing items determining how many instances of the template
+       * to stamp and that that each template instance should bind to.
+       */
+      items: {
+        type: Array
+      },
+
+      /**
+       * The max count of physical items the pool can extend to.
+       */
+      maxPhysicalCount: {
+        type: Number,
+        value: 500
+      },
+
+      /**
+       * The name of the variable to add to the binding scope for the array
+       * element associated with a given template instance.
+       */
+      as: {
+        type: String,
+        value: 'item'
+      },
+
+      /**
+       * The name of the variable to add to the binding scope with the index
+       * for the row.
+       */
+      indexAs: {
+        type: String,
+        value: 'index'
+      },
+
+      /**
+       * The name of the variable to add to the binding scope to indicate
+       * if the row is selected.
+       */
+      selectedAs: {
+        type: String,
+        value: 'selected'
+      },
+
+      /**
+       * When true, the list is rendered as a grid. Grid items must have
+       * fixed width and height set via CSS. e.g.
+       *
+       * ```html
+       * <iron-list grid>
+       *   <template>
+       *      <div style="width: 100px; height: 100px;"> 100x100 </div>
+       *   </template>
+       * </iron-list>
+       * ```
+       */
+      grid: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
+      /**
+       * When true, tapping a row will select the item, placing its data model
+       * in the set of selected items retrievable via the selection property.
+       *
+       * Note that tapping focusable elements within the list item will not
+       * result in selection, since they are presumed to have their * own action.
+       */
+      selectionEnabled: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * When `multiSelection` is false, this is the currently selected item, or `null`
+       * if no item is selected.
+       */
+      selectedItem: {
+        type: Object,
+        notify: true
+      },
+
+      /**
+       * When `multiSelection` is true, this is an array that contains the selected items.
+       */
+      selectedItems: {
+        type: Object,
+        notify: true
+      },
+
+      /**
+       * When `true`, multiple items may be selected at once (in this case,
+       * `selected` is an array of currently selected items).  When `false`,
+       * only one item may be selected at a time.
+       */
+      multiSelection: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    observers: [
+      '_itemsChanged(items.*)',
+      '_selectionEnabledChanged(selectionEnabled)',
+      '_multiSelectionChanged(multiSelection)',
+      '_setOverflow(scrollTarget)'
+    ],
+
+    behaviors: [
+      Polymer.Templatizer,
+      Polymer.IronResizableBehavior,
+      Polymer.IronA11yKeysBehavior,
+      Polymer.IronScrollTargetBehavior
+    ],
+
+    keyBindings: {
+      'up': '_didMoveUp',
+      'down': '_didMoveDown',
+      'enter': '_didEnter'
+    },
+
+    /**
+     * The ratio of hidden tiles that should remain in the scroll direction.
+     * Recommended value ~0.5, so it will distribute tiles evely in both directions.
+     */
+    _ratio: 0.5,
+
+    /**
+     * The padding-top value for the list.
+     */
+    _scrollerPaddingTop: 0,
+
+    /**
+     * This value is the same as `scrollTop`.
+     */
+    _scrollPosition: 0,
+
+    /**
+     * The sum of the heights of all the tiles in the DOM.
+     */
+    _physicalSize: 0,
+
+    /**
+     * The average `F` of the tiles observed till now.
+     */
+    _physicalAverage: 0,
+
+    /**
+     * The number of tiles which `offsetHeight` > 0 observed until now.
+     */
+    _physicalAverageCount: 0,
+
+    /**
+     * The Y position of the item rendered in the `_physicalStart`
+     * tile relative to the scrolling list.
+     */
+    _physicalTop: 0,
+
+    /**
+     * The number of items in the list.
+     */
+    _virtualCount: 0,
+
+    /**
+     * A map between an item key and its physical item index
+     */
+    _physicalIndexForKey: null,
+
+    /**
+     * The estimated scroll height based on `_physicalAverage`
+     */
+    _estScrollHeight: 0,
+
+    /**
+     * The scroll height of the dom node
+     */
+    _scrollHeight: 0,
+
+    /**
+     * The height of the list. This is referred as the viewport in the context of list.
+     */
+    _viewportHeight: 0,
+
+    /**
+     * The width of the list. This is referred as the viewport in the context of list.
+     */
+    _viewportWidth: 0,
+
+    /**
+     * An array of DOM nodes that are currently in the tree
+     * @type {?Array<!TemplatizerNode>}
+     */
+    _physicalItems: null,
+
+    /**
+     * An array of heights for each item in `_physicalItems`
+     * @type {?Array<number>}
+     */
+    _physicalSizes: null,
+
+    /**
+     * A cached value for the first visible index.
+     * See `firstVisibleIndex`
+     * @type {?number}
+     */
+    _firstVisibleIndexVal: null,
+
+    /**
+     * A cached value for the last visible index.
+     * See `lastVisibleIndex`
+     * @type {?number}
+     */
+    _lastVisibleIndexVal: null,
+
+    /**
+     * A Polymer collection for the items.
+     * @type {?Polymer.Collection}
+     */
+    _collection: null,
+
+    /**
+     * True if the current item list was rendered for the first time
+     * after attached.
+     */
+    _itemsRendered: false,
+
+    /**
+     * The page that is currently rendered.
+     */
+    _lastPage: null,
+
+    /**
+     * The max number of pages to render. One page is equivalent to the height of the list.
+     */
+    _maxPages: 3,
+
+    /**
+     * The currently focused physical item.
+     */
+    _focusedItem: null,
+
+    /**
+     * The index of the `_focusedItem`.
+     */
+    _focusedIndex: -1,
+
+    /**
+     * The the item that is focused if it is moved offscreen.
+     * @private {?TemplatizerNode}
+     */
+    _offscreenFocusedItem: null,
+
+    /**
+     * The item that backfills the `_offscreenFocusedItem` in the physical items
+     * list when that item is moved offscreen.
+     */
+    _focusBackfillItem: null,
+
+    /**
+     * The maximum items per row
+     */
+    _itemsPerRow: 1,
+
+    /**
+     * The width of each grid item
+     */
+    _itemWidth: 0,
+
+    /**
+     * The height of the row in grid layout.
+     */
+    _rowHeight: 0,
+
+    /**
+     * The bottom of the physical content.
+     */
+    get _physicalBottom() {
+      return this._physicalTop + this._physicalSize;
+    },
+
+    /**
+     * The bottom of the scroll.
+     */
+    get _scrollBottom() {
+      return this._scrollPosition + this._viewportHeight;
+    },
+
+    /**
+     * The n-th item rendered in the last physical item.
+     */
+    get _virtualEnd() {
+      return this._virtualStart + this._physicalCount - 1;
+    },
+
+    /**
+     * The height of the physical content that isn't on the screen.
+     */
+    get _hiddenContentSize() {
+      var size = this.grid ? this._physicalRows * this._rowHeight : this._physicalSize;
+      return size - this._viewportHeight;
+    },
+
+    /**
+     * The maximum scroll top value.
+     */
+    get _maxScrollTop() {
+      return this._estScrollHeight - this._viewportHeight + this._scrollerPaddingTop;
+    },
+
+    /**
+     * The lowest n-th value for an item such that it can be rendered in `_physicalStart`.
+     */
+    _minVirtualStart: 0,
+
+    /**
+     * The largest n-th value for an item such that it can be rendered in `_physicalStart`.
+     */
+    get _maxVirtualStart() {
+      return Math.max(0, this._virtualCount - this._physicalCount);
+    },
+
+    /**
+     * The n-th item rendered in the `_physicalStart` tile.
+     */
+    _virtualStartVal: 0,
+
+    set _virtualStart(val) {
+      this._virtualStartVal = Math.min(this._maxVirtualStart, Math.max(this._minVirtualStart, val));
+    },
+
+    get _virtualStart() {
+      return this._virtualStartVal || 0;
+    },
+
+    /**
+     * The k-th tile that is at the top of the scrolling list.
+     */
+    _physicalStartVal: 0,
+
+    set _physicalStart(val) {
+      this._physicalStartVal = val % this._physicalCount;
+      if (this._physicalStartVal < 0) {
+        this._physicalStartVal = this._physicalCount + this._physicalStartVal;
+      }
+      this._physicalEnd = (this._physicalStart + this._physicalCount - 1) % this._physicalCount;
+    },
+
+    get _physicalStart() {
+      return this._physicalStartVal || 0;
+    },
+
+    /**
+     * The number of tiles in the DOM.
+     */
+    _physicalCountVal: 0,
+
+    set _physicalCount(val) {
+      this._physicalCountVal = val;
+      this._physicalEnd = (this._physicalStart + this._physicalCount - 1) % this._physicalCount;
+    },
+
+    get _physicalCount() {
+      return this._physicalCountVal;
+    },
+
+    /**
+     * The k-th tile that is at the bottom of the scrolling list.
+     */
+    _physicalEnd: 0,
+
+    /**
+     * An optimal physical size such that we will have enough physical items
+     * to fill up the viewport and recycle when the user scrolls.
+     *
+     * This default value assumes that we will at least have the equivalent
+     * to a viewport of physical items above and below the user's viewport.
+     */
+    get _optPhysicalSize() {
+      if (this.grid) {
+        return this._estRowsInView * this._rowHeight * this._maxPages;
+      }
+      return this._viewportHeight * this._maxPages;
+    },
+
+    get _optPhysicalCount() {
+      return this._estRowsInView * this._itemsPerRow * this._maxPages;
+    },
+
+   /**
+    * True if the current list is visible.
+    */
+    get _isVisible() {
+      return this.scrollTarget && Boolean(this.scrollTarget.offsetWidth || this.scrollTarget.offsetHeight);
+    },
+
+    /**
+     * Gets the index of the first visible item in the viewport.
+     *
+     * @type {number}
+     */
+    get firstVisibleIndex() {
+      if (this._firstVisibleIndexVal === null) {
+        var physicalOffset = Math.floor(this._physicalTop + this._scrollerPaddingTop);
+
+        this._firstVisibleIndexVal = this._iterateItems(
+          function(pidx, vidx) {
+            physicalOffset += this._getPhysicalSizeIncrement(pidx);
+
+            if (physicalOffset > this._scrollPosition) {
+              return this.grid ? vidx - (vidx % this._itemsPerRow) : vidx;
+            }
+
+            // Handle a partially rendered final row in grid mode
+            if (this.grid && this._virtualCount - 1 === vidx) {
+              return vidx - (vidx % this._itemsPerRow);
+            }
+          }) || 0;
+      }
+      return this._firstVisibleIndexVal;
+    },
+
+    /**
+     * Gets the index of the last visible item in the viewport.
+     *
+     * @type {number}
+     */
+    get lastVisibleIndex() {
+      if (this._lastVisibleIndexVal === null) {
+        if (this.grid) {
+          var lastIndex = this.firstVisibleIndex + this._estRowsInView * this._itemsPerRow - 1;
+          this._lastVisibleIndexVal = lastIndex > this._virtualCount ? this._virtualCount : lastIndex;
+        } else {
+          var physicalOffset = this._physicalTop;
+
+          this._iterateItems(function(pidx, vidx) {
+            physicalOffset += this._getPhysicalSizeIncrement(pidx);
+
+            if(physicalOffset <= this._scrollBottom) {
+              if (this.grid) {
+                var lastIndex = vidx - vidx % this._itemsPerRow + this._itemsPerRow - 1;
+                this._lastVisibleIndexVal = lastIndex > this._virtualCount ? this._virtualCount : lastIndex;
+              } else {
+                this._lastVisibleIndexVal = vidx;
+              }
+            }
+          });
+        }
+      }
+      return this._lastVisibleIndexVal;
+    },
+
+    get _defaultScrollTarget() {
+      return this;
+    },
+    get _virtualRowCount() {
+      return Math.ceil(this._virtualCount / this._itemsPerRow);
+    },
+
+    get _estRowsInView() {
+      return Math.ceil(this._viewportHeight / this._rowHeight);
+    },
+
+    get _physicalRows() {
+      return Math.ceil(this._physicalCount / this._itemsPerRow);
+    },
+
+    ready: function() {
+      this.addEventListener('focus', this._didFocus.bind(this), true);
+    },
+
+    attached: function() {
+      this.updateViewportBoundaries();
+      this._render();
+      // `iron-resize` is fired when the list is attached if the event is added
+      // before attached causing unnecessary work.
+      this.listen(this, 'iron-resize', '_resizeHandler');
+    },
+
+    detached: function() {
+      this._itemsRendered = false;
+      this.unlisten(this, 'iron-resize', '_resizeHandler');
+    },
+
+    /**
+     * Set the overflow property if this element has its own scrolling region
+     */
+    _setOverflow: function(scrollTarget) {
+      this.style.webkitOverflowScrolling = scrollTarget === this ? 'touch' : '';
+      this.style.overflow = scrollTarget === this ? 'auto' : '';
+    },
+
+    /**
+     * Invoke this method if you dynamically update the viewport's
+     * size or CSS padding.
+     *
+     * @method updateViewportBoundaries
+     */
+    updateViewportBoundaries: function() {
+      this._scrollerPaddingTop = this.scrollTarget === this ? 0 :
+          parseInt(window.getComputedStyle(this)['padding-top'], 10);
+
+      this._viewportHeight = this._scrollTargetHeight;
+      if (this.grid) {
+        this._updateGridMetrics();
+      }
+    },
+
+    /**
+     * Update the models, the position of the
+     * items in the viewport and recycle tiles as needed.
+     */
+    _scrollHandler: function() {
+      // clamp the `scrollTop` value
+      var scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
+      var delta = scrollTop - this._scrollPosition;
+      var tileHeight, tileTop, kth, recycledTileSet, scrollBottom, physicalBottom;
+      var ratio = this._ratio;
+      var recycledTiles = 0;
+      var hiddenContentSize = this._hiddenContentSize;
+      var currentRatio = ratio;
+      var movingUp = [];
+
+      // track the last `scrollTop`
+      this._scrollPosition = scrollTop;
+
+      // clear cached visible indexes
+      this._firstVisibleIndexVal = null;
+      this._lastVisibleIndexVal = null;
+
+      scrollBottom = this._scrollBottom;
+      physicalBottom = this._physicalBottom;
+
+      // random access
+      if (Math.abs(delta) > this._physicalSize) {
+        this._physicalTop += delta;
+        recycledTiles =  Math.round(delta / this._physicalAverage);
+      }
+      // scroll up
+      else if (delta < 0) {
+        var topSpace = scrollTop - this._physicalTop;
+        var virtualStart = this._virtualStart;
+
+        recycledTileSet = [];
+
+        kth = this._physicalEnd;
+        currentRatio = topSpace / hiddenContentSize;
+
+        // move tiles from bottom to top
+        while (
+            // approximate `currentRatio` to `ratio`
+            currentRatio < ratio &&
+            // recycle less physical items than the total
+            recycledTiles < this._physicalCount &&
+            // ensure that these recycled tiles are needed
+            virtualStart - recycledTiles > 0 &&
+            // ensure that the tile is not visible
+            physicalBottom - this._getPhysicalSizeIncrement(kth) > scrollBottom
+        ) {
+
+          tileHeight = this._getPhysicalSizeIncrement(kth);
+          currentRatio += tileHeight / hiddenContentSize;
+          physicalBottom -= tileHeight;
+          recycledTileSet.push(kth);
+          recycledTiles++;
+          kth = (kth === 0) ? this._physicalCount - 1 : kth - 1;
+        }
+
+        movingUp = recycledTileSet;
+        recycledTiles = -recycledTiles;
+      }
+      // scroll down
+      else if (delta > 0) {
+        var bottomSpace = physicalBottom - scrollBottom;
+        var virtualEnd = this._virtualEnd;
+        var lastVirtualItemIndex = this._virtualCount-1;
+
+        recycledTileSet = [];
+
+        kth = this._physicalStart;
+        currentRatio = bottomSpace / hiddenContentSize;
+
+        // move tiles from top to bottom
+        while (
+            // approximate `currentRatio` to `ratio`
+            currentRatio < ratio &&
+            // recycle less physical items than the total
+            recycledTiles < this._physicalCount &&
+            // ensure that these recycled tiles are needed
+            virtualEnd + recycledTiles < lastVirtualItemIndex &&
+            // ensure that the tile is not visible
+            this._physicalTop + this._getPhysicalSizeIncrement(kth) < scrollTop
+          ) {
+
+          tileHeight = this._getPhysicalSizeIncrement(kth);
+          currentRatio += tileHeight / hiddenContentSize;
+
+          this._physicalTop += tileHeight;
+          recycledTileSet.push(kth);
+          recycledTiles++;
+          kth = (kth + 1) % this._physicalCount;
+        }
+      }
+
+      if (recycledTiles === 0) {
+        // Try to increase the pool if the list's client height isn't filled up with physical items
+        if (physicalBottom < scrollBottom || this._physicalTop > scrollTop) {
+          this._increasePoolIfNeeded();
+        }
+      } else {
+        this._virtualStart = this._virtualStart + recycledTiles;
+        this._physicalStart = this._physicalStart + recycledTiles;
+        this._update(recycledTileSet, movingUp);
+      }
+    },
+
+    /**
+     * Update the list of items, starting from the `_virtualStart` item.
+     * @param {!Array<number>=} itemSet
+     * @param {!Array<number>=} movingUp
+     */
+    _update: function(itemSet, movingUp) {
+      // manage focus
+      this._manageFocus();
+      // update models
+      this._assignModels(itemSet);
+      // measure heights
+      this._updateMetrics(itemSet);
+      // adjust offset after measuring
+      if (movingUp) {
+        while (movingUp.length) {
+          var idx = movingUp.pop();
+          this._physicalTop -= this._getPhysicalSizeIncrement(idx);
+        }
+      }
+      // update the position of the items
+      this._positionItems();
+      // set the scroller size
+      this._updateScrollerSize();
+      // increase the pool of physical items
+      this._increasePoolIfNeeded();
+    },
+
+    /**
+     * Creates a pool of DOM elements and attaches them to the local dom.
+     */
+    _createPool: function(size) {
+      var physicalItems = new Array(size);
+
+      this._ensureTemplatized();
+
+      for (var i = 0; i < size; i++) {
+        var inst = this.stamp(null);
+        // First element child is item; Safari doesn't support children[0]
+        // on a doc fragment
+        physicalItems[i] = inst.root.querySelector('*');
+        Polymer.dom(this).appendChild(inst.root);
+      }
+      return physicalItems;
+    },
+
+    /**
+     * Increases the pool of physical items only if needed.
+     *
+     * @return {boolean} True if the pool was increased.
+     */
+    _increasePoolIfNeeded: function() {
+      // Base case 1: the list has no height.
+      if (this._viewportHeight === 0) {
+        return false;
+      }
+      // Base case 2: If the physical size is optimal and the list's client height is full
+      // with physical items, don't increase the pool.
+      var isClientHeightFull = this._physicalBottom >= this._scrollBottom && this._physicalTop <= this._scrollPosition;
+      if (this._physicalSize >= this._optPhysicalSize && isClientHeightFull) {
+        return false;
+      }
+      // this value should range between [0 <= `currentPage` <= `_maxPages`]
+      var currentPage = Math.floor(this._physicalSize / this._viewportHeight);
+
+      if (currentPage === 0) {
+        // fill the first page
+        this._debounceTemplate(this._increasePool.bind(this, Math.round(this._physicalCount * 0.5)));
+      } else if (this._lastPage !== currentPage && isClientHeightFull) {
+        // paint the page and defer the next increase
+        // wait 16ms which is rough enough to get paint cycle.
+        Polymer.dom.addDebouncer(this.debounce('_debounceTemplate', this._increasePool.bind(this, this._itemsPerRow), 16));
+      } else {
+        // fill the rest of the pages
+        this._debounceTemplate(this._increasePool.bind(this, this._itemsPerRow));
+      }
+
+      this._lastPage = currentPage;
+
+      return true;
+    },
+
+    /**
+     * Increases the pool size.
+     */
+    _increasePool: function(missingItems) {
+      var nextPhysicalCount = Math.min(
+          this._physicalCount + missingItems,
+          this._virtualCount - this._virtualStart,
+          Math.max(this.maxPhysicalCount, DEFAULT_PHYSICAL_COUNT)
+        );
+      var prevPhysicalCount = this._physicalCount;
+      var delta = nextPhysicalCount - prevPhysicalCount;
+
+      if (delta <= 0) {
+        return;
+      }
+
+      [].push.apply(this._physicalItems, this._createPool(delta));
+      [].push.apply(this._physicalSizes, new Array(delta));
+
+      this._physicalCount = prevPhysicalCount + delta;
+
+      // update the physical start if we need to preserve the model of the focused item.
+      // In this situation, the focused item is currently rendered and its model would
+      // have changed after increasing the pool if the physical start remained unchanged.
+      if (this._physicalStart > this._physicalEnd &&
+          this._isIndexRendered(this._focusedIndex) &&
+          this._getPhysicalIndex(this._focusedIndex) < this._physicalEnd) {
+        this._physicalStart = this._physicalStart + delta;
+      }
+      this._update();
+    },
+
+    /**
+     * Render a new list of items. This method does exactly the same as `update`,
+     * but it also ensures that only one `update` cycle is created.
+     */
+    _render: function() {
+      var requiresUpdate = this._virtualCount > 0 || this._physicalCount > 0;
+
+      if (this.isAttached && !this._itemsRendered && this._isVisible && requiresUpdate) {
+        this._lastPage = 0;
+        this._update();
+        this._itemsRendered = true;
+      }
+    },
+
+    /**
+     * Templetizes the user template.
+     */
+    _ensureTemplatized: function() {
+      if (!this.ctor) {
+        // Template instance props that should be excluded from forwarding
+        var props = {};
+        props.__key__ = true;
+        props[this.as] = true;
+        props[this.indexAs] = true;
+        props[this.selectedAs] = true;
+        props.tabIndex = true;
+
+        this._instanceProps = props;
+        this._userTemplate = Polymer.dom(this).querySelector('template');
+
+        if (this._userTemplate) {
+          this.templatize(this._userTemplate);
+        } else {
+          console.warn('iron-list requires a template to be provided in light-dom');
+        }
+      }
+    },
+
+    /**
+     * Implements extension point from Templatizer mixin.
+     */
+    _getStampedChildren: function() {
+      return this._physicalItems;
+    },
+
+    /**
+     * Implements extension point from Templatizer
+     * Called as a side effect of a template instance path change, responsible
+     * for notifying items.<key-for-instance>.<path> change up to host.
+     */
+    _forwardInstancePath: function(inst, path, value) {
+      if (path.indexOf(this.as + '.') === 0) {
+        this.notifyPath('items.' + inst.__key__ + '.' +
+          path.slice(this.as.length + 1), value);
+      }
+    },
+
+    /**
+     * Implements extension point from Templatizer mixin
+     * Called as side-effect of a host property change, responsible for
+     * notifying parent path change on each row.
+     */
+    _forwardParentProp: function(prop, value) {
+      if (this._physicalItems) {
+        this._physicalItems.forEach(function(item) {
+          item._templateInstance[prop] = value;
+        }, this);
+      }
+    },
+
+    /**
+     * Implements extension point from Templatizer
+     * Called as side-effect of a host path change, responsible for
+     * notifying parent.<path> path change on each row.
+     */
+    _forwardParentPath: function(path, value) {
+      if (this._physicalItems) {
+        this._physicalItems.forEach(function(item) {
+          item._templateInstance.notifyPath(path, value, true);
+        }, this);
+      }
+    },
+
+    /**
+     * Called as a side effect of a host items.<key>.<path> path change,
+     * responsible for notifying item.<path> changes.
+     */
+    _forwardItemPath: function(path, value) {
+      if (!this._physicalIndexForKey) {
+        return;
+      }
+      var inst;
+      var dot = path.indexOf('.');
+      var key = path.substring(0, dot < 0 ? path.length : dot);
+      var idx = this._physicalIndexForKey[key];
+      var el = this._physicalItems[idx];
+
+
+      if (idx === this._focusedIndex && this._offscreenFocusedItem) {
+        el = this._offscreenFocusedItem;
+      }
+      if (!el) {
+        return;
+      }
+
+      inst = el._templateInstance;
+
+      if (inst.__key__ !== key) {
+        return;
+      }
+      if (dot >= 0) {
+        path = this.as + '.' + path.substring(dot+1);
+        inst.notifyPath(path, value, true);
+      } else {
+        inst[this.as] = value;
+      }
+    },
+
+    /**
+     * Called when the items have changed. That is, ressignments
+     * to `items`, splices or updates to a single item.
+     */
+    _itemsChanged: function(change) {
+      if (change.path === 'items') {
+        // reset items
+        this._virtualStart = 0;
+        this._physicalTop = 0;
+        this._virtualCount = this.items ? this.items.length : 0;
+        this._collection = this.items ? Polymer.Collection.get(this.items) : null;
+        this._physicalIndexForKey = {};
+
+        this._resetScrollPosition(0);
+        this._removeFocusedItem();
+
+        // create the initial physical items
+        if (!this._physicalItems) {
+          this._physicalCount = Math.max(1, Math.min(DEFAULT_PHYSICAL_COUNT, this._virtualCount));
+          this._physicalItems = this._createPool(this._physicalCount);
+          this._physicalSizes = new Array(this._physicalCount);
+        }
+
+        this._physicalStart = 0;
+
+      } else if (change.path === 'items.splices') {
+        this._adjustVirtualIndex(change.value.indexSplices);
+        this._virtualCount = this.items ? this.items.length : 0;
+
+      } else {
+        // update a single item
+        this._forwardItemPath(change.path.split('.').slice(1).join('.'), change.value);
+        return;
+      }
+
+      this._itemsRendered = false;
+      this._debounceTemplate(this._render);
+    },
+
+    /**
+     * @param {!Array<!PolymerSplice>} splices
+     */
+    _adjustVirtualIndex: function(splices) {
+      splices.forEach(function(splice) {
+        // deselect removed items
+        splice.removed.forEach(this._removeItem, this);
+        // We only need to care about changes happening above the current position
+        if (splice.index < this._virtualStart) {
+          var delta = Math.max(
+              splice.addedCount - splice.removed.length,
+              splice.index - this._virtualStart);
+
+          this._virtualStart = this._virtualStart + delta;
+
+          if (this._focusedIndex >= 0) {
+            this._focusedIndex = this._focusedIndex + delta;
+          }
+        }
+      }, this);
+    },
+
+    _removeItem: function(item) {
+      this.$.selector.deselect(item);
+      // remove the current focused item
+      if (this._focusedItem && this._focusedItem._templateInstance[this.as] === item) {
+        this._removeFocusedItem();
+      }
+    },
+
+    /**
+     * Executes a provided function per every physical index in `itemSet`
+     * `itemSet` default value is equivalent to the entire set of physical indexes.
+     *
+     * @param {!function(number, number)} fn
+     * @param {!Array<number>=} itemSet
+     */
+    _iterateItems: function(fn, itemSet) {
+      var pidx, vidx, rtn, i;
+
+      if (arguments.length === 2 && itemSet) {
+        for (i = 0; i < itemSet.length; i++) {
+          pidx = itemSet[i];
+          vidx = this._computeVidx(pidx);
+          if ((rtn = fn.call(this, pidx, vidx)) != null) {
+            return rtn;
+          }
+        }
+      } else {
+        pidx = this._physicalStart;
+        vidx = this._virtualStart;
+
+        for (; pidx < this._physicalCount; pidx++, vidx++) {
+          if ((rtn = fn.call(this, pidx, vidx)) != null) {
+            return rtn;
+          }
+        }
+        for (pidx = 0; pidx < this._physicalStart; pidx++, vidx++) {
+          if ((rtn = fn.call(this, pidx, vidx)) != null) {
+            return rtn;
+          }
+        }
+      }
+    },
+
+    /**
+     * Returns the virtual index for a given physical index
+     *
+     * @param {number} pidx Physical index
+     * @return {number}
+     */
+    _computeVidx: function(pidx) {
+      if (pidx >= this._physicalStart) {
+        return this._virtualStart + (pidx - this._physicalStart);
+      }
+      return this._virtualStart + (this._physicalCount - this._physicalStart) + pidx;
+    },
+
+    /**
+     * Assigns the data models to a given set of items.
+     * @param {!Array<number>=} itemSet
+     */
+    _assignModels: function(itemSet) {
+      this._iterateItems(function(pidx, vidx) {
+        var el = this._physicalItems[pidx];
+        var inst = el._templateInstance;
+        var item = this.items && this.items[vidx];
+
+        if (item != null) {
+          inst[this.as] = item;
+          inst.__key__ = this._collection.getKey(item);
+          inst[this.selectedAs] = /** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item);
+          inst[this.indexAs] = vidx;
+          inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
+          this._physicalIndexForKey[inst.__key__] = pidx;
+          el.removeAttribute('hidden');
+        } else {
+          inst.__key__ = null;
+          el.setAttribute('hidden', '');
+        }
+      }, itemSet);
+    },
+
+    /**
+     * Updates the height for a given set of items.
+     *
+     * @param {!Array<number>=} itemSet
+     */
+     _updateMetrics: function(itemSet) {
+      // Make sure we distributed all the physical items
+      // so we can measure them
+      Polymer.dom.flush();
+
+      var newPhysicalSize = 0;
+      var oldPhysicalSize = 0;
+      var prevAvgCount = this._physicalAverageCount;
+      var prevPhysicalAvg = this._physicalAverage;
+
+      this._iterateItems(function(pidx, vidx) {
+
+        oldPhysicalSize += this._physicalSizes[pidx] || 0;
+        this._physicalSizes[pidx] = this._physicalItems[pidx].offsetHeight;
+        newPhysicalSize += this._physicalSizes[pidx];
+        this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
+
+      }, itemSet);
+
+      this._viewportHeight = this._scrollTargetHeight;
+      if (this.grid) {
+        this._updateGridMetrics();
+        this._physicalSize = Math.ceil(this._physicalCount / this._itemsPerRow) * this._rowHeight;
+      } else {
+        this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
+      }
+
+      // update the average if we measured something
+      if (this._physicalAverageCount !== prevAvgCount) {
+        this._physicalAverage = Math.round(
+            ((prevPhysicalAvg * prevAvgCount) + newPhysicalSize) /
+            this._physicalAverageCount);
+      }
+    },
+
+    _updateGridMetrics: function() {
+      this._viewportWidth = this._scrollTargetWidth;
+      // Set item width to the value of the _physicalItems offsetWidth
+      this._itemWidth = this._physicalCount > 0 ? this._physicalItems[0].offsetWidth : DEFAULT_GRID_SIZE;
+      // Set row height to the value of the _physicalItems offsetHeight
+      this._rowHeight = this._physicalCount > 0 ? this._physicalItems[0].offsetHeight : DEFAULT_GRID_SIZE;
+      // If in grid mode compute how many items with exist in each row
+      this._itemsPerRow = this._itemWidth ? Math.floor(this._viewportWidth / this._itemWidth) : this._itemsPerRow;
+    },
+
+    /**
+     * Updates the position of the physical items.
+     */
+    _positionItems: function() {
+      this._adjustScrollPosition();
+
+      var y = this._physicalTop;
+
+      if (this.grid) {
+        var totalItemWidth = this._itemsPerRow * this._itemWidth;
+        var rowOffset = (this._viewportWidth - totalItemWidth) / 2;
+
+        this._iterateItems(function(pidx, vidx) {
+
+          var modulus = vidx % this._itemsPerRow;
+          var x = Math.floor((modulus * this._itemWidth) + rowOffset);
+
+          this.translate3d(x + 'px', y + 'px', 0, this._physicalItems[pidx]);
+
+          if (this._shouldRenderNextRow(vidx)) {
+            y += this._rowHeight;
+          }
+
+        });
+      } else {
+        this._iterateItems(function(pidx, vidx) {
+
+          this.translate3d(0, y + 'px', 0, this._physicalItems[pidx]);
+          y += this._physicalSizes[pidx];
+
+        });
+      }
+    },
+
+    _getPhysicalSizeIncrement: function(pidx) {
+      if (!this.grid) {
+        return this._physicalSizes[pidx];
+      }
+      if (this._computeVidx(pidx) % this._itemsPerRow !== this._itemsPerRow - 1) {
+        return 0;
+      }
+      return this._rowHeight;
+    },
+
+    /**
+     * Returns, based on the current index,
+     * whether or not the next index will need
+     * to be rendered on a new row.
+     *
+     * @param {number} vidx Virtual index
+     * @return {boolean}
+     */
+    _shouldRenderNextRow: function(vidx) {
+      return vidx % this._itemsPerRow === this._itemsPerRow - 1;
+    },
+
+    /**
+     * Adjusts the scroll position when it was overestimated.
+     */
+    _adjustScrollPosition: function() {
+      var deltaHeight = this._virtualStart === 0 ? this._physicalTop :
+          Math.min(this._scrollPosition + this._physicalTop, 0);
+
+      if (deltaHeight) {
+        this._physicalTop = this._physicalTop - deltaHeight;
+        // juking scroll position during interial scrolling on iOS is no bueno
+        if (!IOS_TOUCH_SCROLLING) {
+          this._resetScrollPosition(this._scrollTop - deltaHeight);
+        }
+      }
+    },
+
+    /**
+     * Sets the position of the scroll.
+     */
+    _resetScrollPosition: function(pos) {
+      if (this.scrollTarget) {
+        this._scrollTop = pos;
+        this._scrollPosition = this._scrollTop;
+      }
+    },
+
+    /**
+     * Sets the scroll height, that's the height of the content,
+     *
+     * @param {boolean=} forceUpdate If true, updates the height no matter what.
+     */
+    _updateScrollerSize: function(forceUpdate) {
+      if (this.grid) {
+        this._estScrollHeight = this._virtualRowCount * this._rowHeight;
+      } else {
+        this._estScrollHeight = (this._physicalBottom +
+            Math.max(this._virtualCount - this._physicalCount - this._virtualStart, 0) * this._physicalAverage);
+      }
+
+      forceUpdate = forceUpdate || this._scrollHeight === 0;
+      forceUpdate = forceUpdate || this._scrollPosition >= this._estScrollHeight - this._physicalSize;
+      forceUpdate = forceUpdate || this.grid && this.$.items.style.height < this._estScrollHeight;
+
+      // amortize height adjustment, so it won't trigger repaints very often
+      if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._optPhysicalSize) {
+        this.$.items.style.height = this._estScrollHeight + 'px';
+        this._scrollHeight = this._estScrollHeight;
+      }
+    },
+    /**
+     * Scroll to a specific item in the virtual list regardless
+     * of the physical items in the DOM tree.
+     *
+     * @method scrollToIndex
+     * @param {number} idx The index of the item
+     */
+    scrollToIndex: function(idx) {
+      if (typeof idx !== 'number') {
+        return;
+      }
+
+      Polymer.dom.flush();
+
+      idx = Math.min(Math.max(idx, 0), this._virtualCount-1);
+      // update the virtual start only when needed
+      if (!this._isIndexRendered(idx) || idx >= this._maxVirtualStart) {
+        this._virtualStart = this.grid ? (idx - this._itemsPerRow * 2) : (idx - 1);
+      }
+      // manage focus
+      this._manageFocus();
+      // assign new models
+      this._assignModels();
+      // measure the new sizes
+      this._updateMetrics();
+
+      // estimate new physical offset
+      var estPhysicalTop = Math.floor(this._virtualStart / this._itemsPerRow)  * this._physicalAverage;
+      this._physicalTop = estPhysicalTop;
+
+      var currentTopItem = this._physicalStart;
+      var currentVirtualItem = this._virtualStart;
+      var targetOffsetTop = 0;
+      var hiddenContentSize = this._hiddenContentSize;
+
+      // scroll to the item as much as we can
+      while (currentVirtualItem < idx && targetOffsetTop <= hiddenContentSize) {
+        targetOffsetTop = targetOffsetTop + this._getPhysicalSizeIncrement(currentTopItem);
+        currentTopItem = (currentTopItem + 1) % this._physicalCount;
+        currentVirtualItem++;
+      }
+      // update the scroller size
+      this._updateScrollerSize(true);
+      // update the position of the items
+      this._positionItems();
+      // set the new scroll position
+      this._resetScrollPosition(this._physicalTop + this._scrollerPaddingTop + targetOffsetTop);
+      // increase the pool of physical items if needed
+      this._increasePoolIfNeeded();
+      // clear cached visible index
+      this._firstVisibleIndexVal = null;
+      this._lastVisibleIndexVal = null;
+    },
+
+    /**
+     * Reset the physical average and the average count.
+     */
+    _resetAverage: function() {
+      this._physicalAverage = 0;
+      this._physicalAverageCount = 0;
+    },
+
+    /**
+     * A handler for the `iron-resize` event triggered by `IronResizableBehavior`
+     * when the element is resized.
+     */
+    _resizeHandler: function() {
+      // iOS fires the resize event when the address bar slides up
+      if (IOS && Math.abs(this._viewportHeight - this._scrollTargetHeight) < 100) {
+        return;
+      }
+      // In Desktop Safari 9.0.3, if the scroll bars are always shown,
+      // changing the scroll position from a resize handler would result in
+      // the scroll position being reset. Waiting 1ms fixes the issue.
+      Polymer.dom.addDebouncer(this.debounce('_debounceTemplate', function() {
+        this.updateViewportBoundaries();
+        this._render();
+
+        if (this._itemsRendered && this._physicalItems && this._isVisible) {
+          this._resetAverage();
+          this.scrollToIndex(this.firstVisibleIndex);
+        }
+      }.bind(this), 1));
+    },
+
+    _getModelFromItem: function(item) {
+      var key = this._collection.getKey(item);
+      var pidx = this._physicalIndexForKey[key];
+
+      if (pidx != null) {
+        return this._physicalItems[pidx]._templateInstance;
+      }
+      return null;
+    },
+
+    /**
+     * Gets a valid item instance from its index or the object value.
+     *
+     * @param {(Object|number)} item The item object or its index
+     */
+    _getNormalizedItem: function(item) {
+      if (this._collection.getKey(item) === undefined) {
+        if (typeof item === 'number') {
+          item = this.items[item];
+          if (!item) {
+            throw new RangeError('<item> not found');
+          }
+          return item;
+        }
+        throw new TypeError('<item> should be a valid item');
+      }
+      return item;
+    },
+
+    /**
+     * Select the list item at the given index.
+     *
+     * @method selectItem
+     * @param {(Object|number)} item The item object or its index
+     */
+    selectItem: function(item) {
+      item = this._getNormalizedItem(item);
+      var model = this._getModelFromItem(item);
+
+      if (!this.multiSelection && this.selectedItem) {
+        this.deselectItem(this.selectedItem);
+      }
+      if (model) {
+        model[this.selectedAs] = true;
+      }
+      this.$.selector.select(item);
+      this.updateSizeForItem(item);
+    },
+
+    /**
+     * Deselects the given item list if it is already selected.
+     *
+
+     * @method deselect
+     * @param {(Object|number)} item The item object or its index
+     */
+    deselectItem: function(item) {
+      item = this._getNormalizedItem(item);
+      var model = this._getModelFromItem(item);
+
+      if (model) {
+        model[this.selectedAs] = false;
+      }
+      this.$.selector.deselect(item);
+      this.updateSizeForItem(item);
+    },
+
+    /**
+     * Select or deselect a given item depending on whether the item
+     * has already been selected.
+     *
+     * @method toggleSelectionForItem
+     * @param {(Object|number)} item The item object or its index
+     */
+    toggleSelectionForItem: function(item) {
+      item = this._getNormalizedItem(item);
+      if (/** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item)) {
+        this.deselectItem(item);
+      } else {
+        this.selectItem(item);
+      }
+    },
+
+    /**
+     * Clears the current selection state of the list.
+     *
+     * @method clearSelection
+     */
+    clearSelection: function() {
+      function unselect(item) {
+        var model = this._getModelFromItem(item);
+        if (model) {
+          model[this.selectedAs] = false;
+        }
+      }
+
+      if (Array.isArray(this.selectedItems)) {
+        this.selectedItems.forEach(unselect, this);
+      } else if (this.selectedItem) {
+        unselect.call(this, this.selectedItem);
+      }
+
+      /** @type {!ArraySelectorElement} */ (this.$.selector).clearSelection();
+    },
+
+    /**
+     * Add an event listener to `tap` if `selectionEnabled` is true,
+     * it will remove the listener otherwise.
+     */
+    _selectionEnabledChanged: function(selectionEnabled) {
+      var handler = selectionEnabled ? this.listen : this.unlisten;
+      handler.call(this, this, 'tap', '_selectionHandler');
+    },
+
+    /**
+     * Select an item from an event object.
+     */
+    _selectionHandler: function(e) {
+      if (this.selectionEnabled) {
+        var model = this.modelForElement(e.target);
+        if (model) {
+          this.toggleSelectionForItem(model[this.as]);
+        }
+      }
+    },
+
+    _multiSelectionChanged: function(multiSelection) {
+      this.clearSelection();
+      this.$.selector.multi = multiSelection;
+    },
+
+    /**
+     * Updates the size of an item.
+     *
+     * @method updateSizeForItem
+     * @param {(Object|number)} item The item object or its index
+     */
+    updateSizeForItem: function(item) {
+      item = this._getNormalizedItem(item);
+      var key = this._collection.getKey(item);
+      var pidx = this._physicalIndexForKey[key];
+
+      if (pidx != null) {
+        this._updateMetrics([pidx]);
+        this._positionItems();
+      }
+    },
+
+    /**
+     * Creates a temporary backfill item in the rendered pool of physical items
+     * to replace the main focused item. The focused item has tabIndex = 0
+     * and might be currently focused by the user.
+     *
+     * This dynamic replacement helps to preserve the focus state.
+     */
+    _manageFocus: function() {
+      var fidx = this._focusedIndex;
+
+      if (fidx >= 0 && fidx < this._virtualCount) {
+        // if it's a valid index, check if that index is rendered
+        // in a physical item.
+        if (this._isIndexRendered(fidx)) {
+          this._restoreFocusedItem();
+        } else {
+          this._createFocusBackfillItem();
+        }
+      } else if (this._virtualCount > 0 && this._physicalCount > 0) {
+        // otherwise, assign the initial focused index.
+        this._focusedIndex = this._virtualStart;
+        this._focusedItem = this._physicalItems[this._physicalStart];
+      }
+    },
+
+    _isIndexRendered: function(idx) {
+      return idx >= this._virtualStart && idx <= this._virtualEnd;
+    },
+
+    _isIndexVisible: function(idx) {
+      return idx >= this.firstVisibleIndex && idx <= this.lastVisibleIndex;
+    },
+
+    _getPhysicalIndex: function(idx) {
+      return this._physicalIndexForKey[this._collection.getKey(this._getNormalizedItem(idx))];
+    },
+
+    _focusPhysicalItem: function(idx) {
+      if (idx < 0 || idx >= this._virtualCount) {
+        return;
+      }
+      this._restoreFocusedItem();
+      // scroll to index to make sure it's rendered
+      if (!this._isIndexRendered(idx)) {
+        this.scrollToIndex(idx);
+      }
+
+      var physicalItem = this._physicalItems[this._getPhysicalIndex(idx)];
+      var SECRET = ~(Math.random() * 100);
+      var model = physicalItem._templateInstance;
+      var focusable;
+
+      // set a secret tab index
+      model.tabIndex = SECRET;
+      // check if focusable element is the physical item
+      if (physicalItem.tabIndex === SECRET) {
+       focusable = physicalItem;
+      }
+      // search for the element which tabindex is bound to the secret tab index
+      if (!focusable) {
+        focusable = Polymer.dom(physicalItem).querySelector('[tabindex="' + SECRET + '"]');
+      }
+      // restore the tab index
+      model.tabIndex = 0;
+      // focus the focusable element
+      this._focusedIndex = idx;
+      focusable && focusable.focus();
+    },
+
+    _removeFocusedItem: function() {
+      if (this._offscreenFocusedItem) {
+        Polymer.dom(this).removeChild(this._offscreenFocusedItem);
+      }
+      this._offscreenFocusedItem = null;
+      this._focusBackfillItem = null;
+      this._focusedItem = null;
+      this._focusedIndex = -1;
+    },
+
+    _createFocusBackfillItem: function() {
+      var pidx, fidx = this._focusedIndex;
+      if (this._offscreenFocusedItem || fidx < 0) {
+        return;
+      }
+      if (!this._focusBackfillItem) {
+        // create a physical item, so that it backfills the focused item.
+        var stampedTemplate = this.stamp(null);
+        this._focusBackfillItem = stampedTemplate.root.querySelector('*');
+        Polymer.dom(this).appendChild(stampedTemplate.root);
+      }
+      // get the physical index for the focused index
+      pidx = this._getPhysicalIndex(fidx);
+
+      if (pidx != null) {
+        // set the offcreen focused physical item
+        this._offscreenFocusedItem = this._physicalItems[pidx];
+        // backfill the focused physical item
+        this._physicalItems[pidx] = this._focusBackfillItem;
+        // hide the focused physical
+        this.translate3d(0, HIDDEN_Y, 0, this._offscreenFocusedItem);
+      }
+    },
+
+    _restoreFocusedItem: function() {
+      var pidx, fidx = this._focusedIndex;
+
+      if (!this._offscreenFocusedItem || this._focusedIndex < 0) {
+        return;
+      }
+      // assign models to the focused index
+      this._assignModels();
+      // get the new physical index for the focused index
+      pidx = this._getPhysicalIndex(fidx);
+
+      if (pidx != null) {
+        // flip the focus backfill
+        this._focusBackfillItem = this._physicalItems[pidx];
+        // restore the focused physical item
+        this._physicalItems[pidx] = this._offscreenFocusedItem;
+        // reset the offscreen focused item
+        this._offscreenFocusedItem = null;
+        // hide the physical item that backfills
+        this.translate3d(0, HIDDEN_Y, 0, this._focusBackfillItem);
+      }
+    },
+
+    _didFocus: function(e) {
+      var targetModel = this.modelForElement(e.target);
+      var focusedModel = this._focusedItem ? this._focusedItem._templateInstance : null;
+      var hasOffscreenFocusedItem = this._offscreenFocusedItem !== null;
+      var fidx = this._focusedIndex;
+
+      if (!targetModel || !focusedModel) {
+        return;
+      }
+      if (focusedModel === targetModel) {
+        // if the user focused the same item, then bring it into view if it's not visible
+        if (!this._isIndexVisible(fidx)) {
+          this.scrollToIndex(fidx);
+        }
+      } else {
+        this._restoreFocusedItem();
+        // restore tabIndex for the currently focused item
+        focusedModel.tabIndex = -1;
+        // set the tabIndex for the next focused item
+        targetModel.tabIndex = 0;
+        fidx = targetModel[this.indexAs];
+        this._focusedIndex = fidx;
+        this._focusedItem = this._physicalItems[this._getPhysicalIndex(fidx)];
+
+        if (hasOffscreenFocusedItem && !this._offscreenFocusedItem) {
+          this._update();
+        }
+      }
+    },
+
+    _didMoveUp: function() {
+      this._focusPhysicalItem(this._focusedIndex - 1);
+    },
+
+    _didMoveDown: function(e) {
+      // disable scroll when pressing the down key
+      e.detail.keyboardEvent.preventDefault();
+      this._focusPhysicalItem(this._focusedIndex + 1);
+    },
+
+    _didEnter: function(e) {
+      this._focusPhysicalItem(this._focusedIndex);
+      this._selectionHandler(e.detail.keyboardEvent);
+    }
+  });
+
+})();
+
+</script>
+<script>function MakePromise (asap) {
+  function Promise(fn) {
+		if (typeof this !== 'object' || typeof fn !== 'function') throw new TypeError();
+		this._state = null;
+		this._value = null;
+		this._deferreds = []
+
+		doResolve(fn, resolve.bind(this), reject.bind(this));
+	}
+
+	function handle(deferred) {
+		var me = this;
+		if (this._state === null) {
+			this._deferreds.push(deferred);
+			return
+		}
+		asap(function() {
+			var cb = me._state ? deferred.onFulfilled : deferred.onRejected
+			if (typeof cb !== 'function') {
+				(me._state ? deferred.resolve : deferred.reject)(me._value);
+				return;
+			}
+			var ret;
+			try {
+				ret = cb(me._value);
+			}
+			catch (e) {
+				deferred.reject(e);
+				return;
+			}
+			deferred.resolve(ret);
+		})
+	}
+
+	function resolve(newValue) {
+		try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+			if (newValue === this) throw new TypeError();
+			if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+				var then = newValue.then;
+				if (typeof then === 'function') {
+					doResolve(then.bind(newValue), resolve.bind(this), reject.bind(this));
+					return;
+				}
+			}
+			this._state = true;
+			this._value = newValue;
+			finale.call(this);
+		} catch (e) { reject.call(this, e); }
+	}
+
+	function reject(newValue) {
+		this._state = false;
+		this._value = newValue;
+		finale.call(this);
+	}
+
+	function finale() {
+		for (var i = 0, len = this._deferreds.length; i < len; i++) {
+			handle.call(this, this._deferreds[i]);
+		}
+		this._deferreds = null;
+	}
+
+	/**
+	 * Take a potentially misbehaving resolver function and make sure
+	 * onFulfilled and onRejected are only called once.
+	 *
+	 * Makes no guarantees about asynchrony.
+	 */
+	function doResolve(fn, onFulfilled, onRejected) {
+		var done = false;
+		try {
+			fn(function (value) {
+				if (done) return;
+				done = true;
+				onFulfilled(value);
+			}, function (reason) {
+				if (done) return;
+				done = true;
+				onRejected(reason);
+			})
+		} catch (ex) {
+			if (done) return;
+			done = true;
+			onRejected(ex);
+		}
+	}
+
+	Promise.prototype['catch'] = function (onRejected) {
+		return this.then(null, onRejected);
+	};
+
+	Promise.prototype.then = function(onFulfilled, onRejected) {
+		var me = this;
+		return new Promise(function(resolve, reject) {
+      handle.call(me, {
+        onFulfilled: onFulfilled,
+        onRejected: onRejected,
+        resolve: resolve,
+        reject: reject
+      });
+		})
+	};
+
+	Promise.resolve = function (value) {
+		if (value && typeof value === 'object' && value.constructor === Promise) {
+			return value;
+		}
+
+		return new Promise(function (resolve) {
+			resolve(value);
+		});
+	};
+
+	Promise.reject = function (value) {
+		return new Promise(function (resolve, reject) {
+			reject(value);
+		});
+	};
+
+	
+  return Promise;
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = MakePromise;
+}
+
+</script>
+<script>
+if (!window.Promise) {
+  window.Promise = MakePromise(Polymer.Base.async);
+}
+</script>
+<script>
+  'use strict';
+
+  Polymer({
+    is: 'iron-request',
+
+    hostAttributes: {
+      hidden: true
+    },
+
+    properties: {
+
+      /**
+       * A reference to the XMLHttpRequest instance used to generate the
+       * network request.
+       *
+       * @type {XMLHttpRequest}
+       */
+      xhr: {
+        type: Object,
+        notify: true,
+        readOnly: true,
+        value: function() {
+          return new XMLHttpRequest();
+        }
+      },
+
+      /**
+       * A reference to the parsed response body, if the `xhr` has completely
+       * resolved.
+       *
+       * @type {*}
+       * @default null
+       */
+      response: {
+        type: Object,
+        notify: true,
+        readOnly: true,
+        value: function() {
+          return null;
+        }
+      },
+
+      /**
+       * A reference to the status code, if the `xhr` has completely resolved.
+       */
+      status: {
+        type: Number,
+        notify: true,
+        readOnly: true,
+        value: 0
+      },
+
+      /**
+       * A reference to the status text, if the `xhr` has completely resolved.
+       */
+      statusText: {
+        type: String,
+        notify: true,
+        readOnly: true,
+        value: ''
+      },
+
+      /**
+       * A promise that resolves when the `xhr` response comes back, or rejects
+       * if there is an error before the `xhr` completes.
+       *
+       * @type {Promise}
+       */
+      completes: {
+        type: Object,
+        readOnly: true,
+        notify: true,
+        value: function() {
+          return new Promise(function (resolve, reject) {
+            this.resolveCompletes = resolve;
+            this.rejectCompletes = reject;
+          }.bind(this));
+        }
+      },
+
+      /**
+       * An object that contains progress information emitted by the XHR if
+       * available.
+       *
+       * @default {}
+       */
+      progress: {
+        type: Object,
+        notify: true,
+        readOnly: true,
+        value: function() {
+          return {};
+        }
+      },
+
+      /**
+       * Aborted will be true if an abort of the request is attempted.
+       */
+      aborted: {
+        type: Boolean,
+        notify: true,
+        readOnly: true,
+        value: false,
+      },
+
+      /**
+       * Errored will be true if the browser fired an error event from the
+       * XHR object (mainly network errors).
+       */
+      errored: {
+        type: Boolean,
+        notify: true,
+        readOnly: true,
+        value: false
+      },
+
+      /**
+       * TimedOut will be true if the XHR threw a timeout event.
+       */
+      timedOut: {
+        type: Boolean,
+        notify: true,
+        readOnly: true,
+        value: false
+      }
+    },
+
+    /**
+     * Succeeded is true if the request succeeded. The request succeeded if it
+     * loaded without error, wasn't aborted, and the status code is ≥ 200, and
+     * < 300, or if the status code is 0.
+     *
+     * The status code 0 is accepted as a success because some schemes - e.g.
+     * file:// - don't provide status codes.
+     *
+     * @return {boolean}
+     */
+    get succeeded() {
+      if (this.errored || this.aborted || this.timedOut) {
+        return false;
+      }
+      var status = this.xhr.status || 0;
+
+      // Note: if we are using the file:// protocol, the status code will be 0
+      // for all outcomes (successful or otherwise).
+      return status === 0 ||
+        (status >= 200 && status < 300);
+    },
+
+    /**
+     * Sends an HTTP request to the server and returns the XHR object.
+     *
+     * The handling of the `body` parameter will vary based on the Content-Type
+     * header. See the docs for iron-ajax's `body` param for details.
+     *
+     * @param {{
+     *   url: string,
+     *   method: (string|undefined),
+     *   async: (boolean|undefined),
+     *   body: (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object),
+     *   headers: (Object|undefined),
+     *   handleAs: (string|undefined),
+     *   jsonPrefix: (string|undefined),
+     *   withCredentials: (boolean|undefined)}} options -
+     *     url The url to which the request is sent.
+     *     method The HTTP method to use, default is GET.
+     *     async By default, all requests are sent asynchronously. To send synchronous requests,
+     *         set to true.
+     *     body The content for the request body for POST method.
+     *     headers HTTP request headers.
+     *     handleAs The response type. Default is 'text'.
+     *     withCredentials Whether or not to send credentials on the request. Default is false.
+     *   timeout: (Number|undefined)
+     * @return {Promise}
+     */
+    send: function (options) {
+      var xhr = this.xhr;
+
+      if (xhr.readyState > 0) {
+        return null;
+      }
+
+      xhr.addEventListener('progress', function (progress) {
+        this._setProgress({
+          lengthComputable: progress.lengthComputable,
+          loaded: progress.loaded,
+          total: progress.total
+        });
+      }.bind(this))
+
+      xhr.addEventListener('error', function (error) {
+        this._setErrored(true);
+        this._updateStatus();
+        this.rejectCompletes(error);
+      }.bind(this));
+
+      xhr.addEventListener('timeout', function (error) {
+        this._setTimedOut(true);
+        this._updateStatus();
+        this.rejectCompletes(error);
+      }.bind(this));
+
+      xhr.addEventListener('abort', function () {
+        this._updateStatus();
+        this.rejectCompletes(new Error('Request aborted.'));
+      }.bind(this));
+
+
+      // Called after all of the above.
+      xhr.addEventListener('loadend', function () {
+        this._updateStatus();
+
+        if (!this.succeeded) {
+          this.rejectCompletes(new Error('The request failed with status code: ' + this.xhr.status));
+          return;
+        }
+
+        this._setResponse(this.parseResponse());
+        this.resolveCompletes(this);
+      }.bind(this));
+
+      this.url = options.url;
+      xhr.open(
+        options.method || 'GET',
+        options.url,
+        options.async !== false
+      );
+
+      var acceptType = {
+        'json': 'application/json',
+        'text': 'text/plain',
+        'html': 'text/html',
+        'xml': 'application/xml',
+        'arraybuffer': 'application/octet-stream'
+      }[options.handleAs];
+      var headers = options.headers || Object.create(null);
+      var newHeaders = Object.create(null);
+      for (var key in headers) {
+        newHeaders[key.toLowerCase()] = headers[key];
+      }
+      headers = newHeaders;
+
+      if (acceptType && !headers['accept']) {
+        headers['accept'] = acceptType;
+      }
+      Object.keys(headers).forEach(function (requestHeader) {
+        if (/[A-Z]/.test(requestHeader)) {
+          console.error('Headers must be lower case, got', requestHeader);
+        }
+        xhr.setRequestHeader(
+          requestHeader,
+          headers[requestHeader]
+        );
+      }, this);
+
+      if (options.async !== false) {
+        var handleAs = options.handleAs;
+
+        // If a JSON prefix is present, the responseType must be 'text' or the
+        // browser won’t be able to parse the response.
+        if (!!options.jsonPrefix || !handleAs) {
+          handleAs = 'text';
+        }
+
+        // In IE, `xhr.responseType` is an empty string when the response
+        // returns. Hence, caching it as `xhr._responseType`.
+        xhr.responseType = xhr._responseType = handleAs;
+
+        // Cache the JSON prefix, if it exists.
+        if (!!options.jsonPrefix) {
+          xhr._jsonPrefix = options.jsonPrefix;
+        }
+      }
+
+      xhr.withCredentials = !!options.withCredentials;
+      xhr.timeout = options.timeout;
+
+      var body = this._encodeBodyObject(options.body, headers['content-type']);
+
+      xhr.send(
+        /** @type {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|
+                   null|string|undefined} */
+        (body));
+
+      return this.completes;
+    },
+
+    /**
+     * Attempts to parse the response body of the XHR. If parsing succeeds,
+     * the value returned will be deserialized based on the `responseType`
+     * set on the XHR.
+     *
+     * @return {*} The parsed response,
+     * or undefined if there was an empty response or parsing failed.
+     */
+    parseResponse: function () {
+      var xhr = this.xhr;
+      var responseType = xhr.responseType || xhr._responseType;
+      var preferResponseText = !this.xhr.responseType;
+      var prefixLen = (xhr._jsonPrefix && xhr._jsonPrefix.length) || 0;
+
+      try {
+        switch (responseType) {
+          case 'json':
+            // If the xhr object doesn't have a natural `xhr.responseType`,
+            // we can assume that the browser hasn't parsed the response for us,
+            // and so parsing is our responsibility. Likewise if response is
+            // undefined, as there's no way to encode undefined in JSON.
+            if (preferResponseText || xhr.response === undefined) {
+              // Try to emulate the JSON section of the response body section of
+              // the spec: https://xhr.spec.whatwg.org/#response-body
+              // That is to say, we try to parse as JSON, but if anything goes
+              // wrong return null.
+              try {
+                return JSON.parse(xhr.responseText);
+              } catch (_) {
+                return null;
+              }
+            }
+
+            return xhr.response;
+          case 'xml':
+            return xhr.responseXML;
+          case 'blob':
+          case 'document':
+          case 'arraybuffer':
+            return xhr.response;
+          case 'text':
+          default: {
+            // If `prefixLen` is set, it implies the response should be parsed
+            // as JSON once the prefix of length `prefixLen` is stripped from
+            // it. Emulate the behavior above where null is returned on failure
+            // to parse.
+            if (prefixLen) {
+              try {
+                return JSON.parse(xhr.responseText.substring(prefixLen));
+              } catch (_) {
+                return null;
+              }
+            }
+            return xhr.responseText;
+          }
+        }
+      } catch (e) {
+        this.rejectCompletes(new Error('Could not parse response. ' + e.message));
+      }
+    },
+
+    /**
+     * Aborts the request.
+     */
+    abort: function () {
+      this._setAborted(true);
+      this.xhr.abort();
+    },
+
+    /**
+     * @param {*} body The given body of the request to try and encode.
+     * @param {?string} contentType The given content type, to infer an encoding
+     *     from.
+     * @return {*} Either the encoded body as a string, if successful,
+     *     or the unaltered body object if no encoding could be inferred.
+     */
+    _encodeBodyObject: function(body, contentType) {
+      if (typeof body == 'string') {
+        return body;  // Already encoded.
+      }
+      var bodyObj = /** @type {Object} */ (body);
+      switch(contentType) {
+        case('application/json'):
+          return JSON.stringify(bodyObj);
+        case('application/x-www-form-urlencoded'):
+          return this._wwwFormUrlEncode(bodyObj);
+      }
+      return body;
+    },
+
+    /**
+     * @param {Object} object The object to encode as x-www-form-urlencoded.
+     * @return {string} .
+     */
+    _wwwFormUrlEncode: function(object) {
+      if (!object) {
+        return '';
+      }
+      var pieces = [];
+      Object.keys(object).forEach(function(key) {
+        // TODO(rictic): handle array values here, in a consistent way with
+        //   iron-ajax params.
+        pieces.push(
+            this._wwwFormUrlEncodePiece(key) + '=' +
+            this._wwwFormUrlEncodePiece(object[key]));
+      }, this);
+      return pieces.join('&');
+    },
+
+    /**
+     * @param {*} str A key or value to encode as x-www-form-urlencoded.
+     * @return {string} .
+     */
+    _wwwFormUrlEncodePiece: function(str) {
+      // Spec says to normalize newlines to \r\n and replace %20 spaces with +.
+      // jQuery does this as well, so this is likely to be widely compatible.
+      return encodeURIComponent(str.toString().replace(/\r?\n/g, '\r\n'))
+          .replace(/%20/g, '+');
+    },
+
+    /**
+     * Updates the status code and status text.
+     */
+    _updateStatus: function() {
+      this._setStatus(this.xhr.status);
+      this._setStatusText((this.xhr.statusText === undefined) ? '' : this.xhr.statusText);
+    }
+  });
+</script>
+
+<script>
+  'use strict';
+
+  Polymer({
+
+    is: 'iron-ajax',
+
+    /**
+     * Fired when a request is sent.
+     *
+     * @event request
+     */
+
+    /**
+     * Fired when a response is received.
+     *
+     * @event response
+     */
+
+    /**
+     * Fired when an error is received.
+     *
+     * @event error
+     */
+
+    hostAttributes: {
+      hidden: true
+    },
+
+    properties: {
+      /**
+       * The URL target of the request.
+       */
+      url: {
+        type: String
+      },
+
+      /**
+       * An object that contains query parameters to be appended to the
+       * specified `url` when generating a request. If you wish to set the body
+       * content when making a POST request, you should use the `body` property
+       * instead.
+       */
+      params: {
+        type: Object,
+        value: function() {
+          return {};
+        }
+      },
+
+      /**
+       * The HTTP method to use such as 'GET', 'POST', 'PUT', or 'DELETE'.
+       * Default is 'GET'.
+       */
+      method: {
+        type: String,
+        value: 'GET'
+      },
+
+      /**
+       * HTTP request headers to send.
+       *
+       * Example:
+       *
+       *     <iron-ajax
+       *         auto
+       *         url="http://somesite.com"
+       *         headers='{"X-Requested-With": "XMLHttpRequest"}'
+       *         handle-as="json"></iron-ajax>
+       *
+       * Note: setting a `Content-Type` header here will override the value
+       * specified by the `contentType` property of this element.
+       */
+      headers: {
+        type: Object,
+        value: function() {
+          return {};
+        }
+      },
+
+      /**
+       * Content type to use when sending data. If the `contentType` property
+       * is set and a `Content-Type` header is specified in the `headers`
+       * property, the `headers` property value will take precedence.
+       *
+       * Varies the handling of the `body` param.
+       */
+      contentType: {
+        type: String,
+        value: null
+      },
+
+      /**
+       * Body content to send with the request, typically used with "POST"
+       * requests.
+       *
+       * If body is a string it will be sent unmodified.
+       *
+       * If Content-Type is set to a value listed below, then
+       * the body will be encoded accordingly.
+       *
+       *    * `content-type="application/json"`
+       *      * body is encoded like `{"foo":"bar baz","x":1}`
+       *    * `content-type="application/x-www-form-urlencoded"`
+       *      * body is encoded like `foo=bar+baz&x=1`
+       *
+       * Otherwise the body will be passed to the browser unmodified, and it
+       * will handle any encoding (e.g. for FormData, Blob, ArrayBuffer).
+       *
+       * @type (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object)
+       */
+      body: {
+        type: Object,
+        value: null
+      },
+
+      /**
+       * Toggle whether XHR is synchronous or asynchronous. Don't change this
+       * to true unless You Know What You Are Doing™.
+       */
+      sync: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * Specifies what data to store in the `response` property, and
+       * to deliver as `event.detail.response` in `response` events.
+       *
+       * One of:
+       *
+       *    `text`: uses `XHR.responseText`.
+       *
+       *    `xml`: uses `XHR.responseXML`.
+       *
+       *    `json`: uses `XHR.responseText` parsed as JSON.
+       *
+       *    `arraybuffer`: uses `XHR.response`.
+       *
+       *    `blob`: uses `XHR.response`.
+       *
+       *    `document`: uses `XHR.response`.
+       */
+      handleAs: {
+        type: String,
+        value: 'json'
+      },
+
+      /**
+       * Set the withCredentials flag on the request.
+       */
+      withCredentials: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * Set the timeout flag on the request.
+       */
+      timeout: {
+        type: Number,
+        value: 0
+      },
+
+      /**
+       * If true, automatically performs an Ajax request when either `url` or
+       * `params` changes.
+       */
+      auto: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * If true, error messages will automatically be logged to the console.
+       */
+      verbose: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * The most recent request made by this iron-ajax element.
+       */
+      lastRequest: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      },
+
+      /**
+       * True while lastRequest is in flight.
+       */
+      loading: {
+        type: Boolean,
+        notify: true,
+        readOnly: true
+      },
+
+      /**
+       * lastRequest's response.
+       *
+       * Note that lastResponse and lastError are set when lastRequest finishes,
+       * so if loading is true, then lastResponse and lastError will correspond
+       * to the result of the previous request.
+       *
+       * The type of the response is determined by the value of `handleAs` at
+       * the time that the request was generated.
+       *
+       * @type {Object}
+       */
+      lastResponse: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      },
+
+      /**
+       * lastRequest's error, if any.
+       *
+       * @type {Object}
+       */
+      lastError: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      },
+
+      /**
+       * An Array of all in-flight requests originating from this iron-ajax
+       * element.
+       */
+      activeRequests: {
+        type: Array,
+        notify: true,
+        readOnly: true,
+        value: function() {
+          return [];
+        }
+      },
+
+      /**
+       * Length of time in milliseconds to debounce multiple automatically generated requests.
+       */
+      debounceDuration: {
+        type: Number,
+        value: 0,
+        notify: true
+      },
+
+      /**
+       * Prefix to be stripped from a JSON response before parsing it.
+       *
+       * In order to prevent an attack using CSRF with Array responses
+       * (http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx/)
+       * many backends will mitigate this by prefixing all JSON response bodies
+       * with a string that would be nonsensical to a JavaScript parser.
+       *
+       */
+      jsonPrefix: {
+        type: String,
+        value: ''
+      },
+
+      /**
+       * By default, these events do not bubble largely because the `error` event has special
+       * meaning in the window object. Setting this attribute will cause iron-ajax's request,
+       * response, and error events to bubble to the window object.
+       */
+      bubbles: {
+        type: Boolean,
+        value: false
+      },
+
+      _boundHandleResponse: {
+        type: Function,
+        value: function() {
+          return this._handleResponse.bind(this);
+        }
+      }
+    },
+
+    observers: [
+      '_requestOptionsChanged(url, method, params.*, headers, contentType, ' +
+          'body, sync, handleAs, jsonPrefix, withCredentials, timeout, auto)'
+    ],
+
+    /**
+     * The query string that should be appended to the `url`, serialized from
+     * the current value of `params`.
+     *
+     * @return {string}
+     */
+    get queryString () {
+      var queryParts = [];
+      var param;
+      var value;
+
+      for (param in this.params) {
+        value = this.params[param];
+        param = window.encodeURIComponent(param);
+
+        if (Array.isArray(value)) {
+          for (var i = 0; i < value.length; i++) {
+            queryParts.push(param + '=' + window.encodeURIComponent(value[i]));
+          }
+        } else if (value !== null) {
+          queryParts.push(param + '=' + window.encodeURIComponent(value));
+        } else {
+          queryParts.push(param);
+        }
+      }
+
+      return queryParts.join('&');
+    },
+
+    /**
+     * The `url` with query string (if `params` are specified), suitable for
+     * providing to an `iron-request` instance.
+     *
+     * @return {string}
+     */
+    get requestUrl() {
+      var queryString = this.queryString;
+
+      if (queryString) {
+        var bindingChar = this.url.indexOf('?') >= 0 ? '&' : '?';
+        return this.url + bindingChar + queryString;
+      }
+
+      return this.url;
+    },
+
+    /**
+     * An object that maps header names to header values, first applying the
+     * the value of `Content-Type` and then overlaying the headers specified
+     * in the `headers` property.
+     *
+     * @return {Object}
+     */
+    get requestHeaders() {
+      var headers = {};
+      var contentType = this.contentType;
+      if (contentType == null && (typeof this.body === 'string')) {
+        contentType = 'application/x-www-form-urlencoded';
+      }
+      if (contentType) {
+        headers['content-type'] = contentType;
+      }
+      var header;
+
+      if (this.headers instanceof Object) {
+        for (header in this.headers) {
+          headers[header] = this.headers[header].toString();
+        }
+      }
+
+      return headers;
+    },
+
+    /**
+     * Request options suitable for generating an `iron-request` instance based
+     * on the current state of the `iron-ajax` instance's properties.
+     *
+     * @return {{
+     *   url: string,
+     *   method: (string|undefined),
+     *   async: (boolean|undefined),
+     *   body: (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object),
+     *   headers: (Object|undefined),
+     *   handleAs: (string|undefined),
+     *   jsonPrefix: (string|undefined),
+     *   withCredentials: (boolean|undefined)}}
+     */
+    toRequestOptions: function() {
+      return {
+        url: this.requestUrl || '',
+        method: this.method,
+        headers: this.requestHeaders,
+        body: this.body,
+        async: !this.sync,
+        handleAs: this.handleAs,
+        jsonPrefix: this.jsonPrefix,
+        withCredentials: this.withCredentials,
+        timeout: this.timeout
+      };
+    },
+
+    /**
+     * Performs an AJAX request to the specified URL.
+     *
+     * @return {!IronRequestElement}
+     */
+    generateRequest: function() {
+      var request = /** @type {!IronRequestElement} */ (document.createElement('iron-request'));
+      var requestOptions = this.toRequestOptions();
+
+      this.activeRequests.push(request);
+
+      request.completes.then(
+        this._boundHandleResponse
+      ).catch(
+        this._handleError.bind(this, request)
+      ).then(
+        this._discardRequest.bind(this, request)
+      );
+
+      request.send(requestOptions);
+
+      this._setLastRequest(request);
+      this._setLoading(true);
+
+      this.fire('request', {
+        request: request,
+        options: requestOptions
+      }, {bubbles: this.bubbles});
+
+      return request;
+    },
+
+    _handleResponse: function(request) {
+      if (request === this.lastRequest) {
+        this._setLastResponse(request.response);
+        this._setLastError(null);
+        this._setLoading(false);
+      }
+      this.fire('response', request, {bubbles: this.bubbles});
+    },
+
+    _handleError: function(request, error) {
+      if (this.verbose) {
+        console.error(error);
+      }
+
+      if (request === this.lastRequest) {
+        this._setLastError({
+          request: request,
+          error: error
+        });
+        this._setLastResponse(null);
+        this._setLoading(false);
+      }
+      this.fire('error', {
+        request: request,
+        error: error
+      }, {bubbles: this.bubbles});
+    },
+
+    _discardRequest: function(request) {
+      var requestIndex = this.activeRequests.indexOf(request);
+
+      if (requestIndex > -1) {
+        this.activeRequests.splice(requestIndex, 1);
+      }
+    },
+
+    _requestOptionsChanged: function() {
+      this.debounce('generate-request', function() {
+        if (this.url == null) {
+          return;
+        }
+
+        if (this.auto) {
+          this.generateRequest();
+        }
+      }, this.debounceDuration);
+    },
+
+  });
+</script>
+
+
 
 <dom-module id="iron-flex" assetpath="../bower_components/iron-flex-layout/">
   <template>
@@ -21341,1195 +24197,193 @@ is separate from validation, and `allowed-pattern` does not affect how the input
     ]
   });
 </script>
-
-
-
-
-<dom-module id="tpa-money-transfer" assetpath="tpa-money-transfer/">
-
-  <style>
-    .prefix{
-      margin-right:10px;
-    }
-
-    paper-button{
-      color: var(--primary-color)
-    }
-
-    paper-input{
-      color:var(--light-primary-color)
-    }
-
-    :host{
-      --iron-icon-fill-color:var(--primary-color);
-    }
-  </style>
-  
-
-  <template>
-
-    
-
-    <section class="my-card balance">
-      <div>
-        <h1>{{accountOwner}}</h1>
-        <div>{{accountNumber}}</div>
-      </div>
-      <div class="bold">
-        {{accountBalanceObj.wholeNumber}}{{decimalSeparator}}<sup>{{accountBalanceObj.decimals}}</sup>
-      </div>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="Amount" value="{{amount}}" type="number">
-        <div class="prefix" prefix="">€</div>
-      </paper-input>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="Recipient" value="{{recipient}}">
-      <div class="center" suffix="">
-        <paper-icon-button icon="book" class="color--brand-light"></paper-icon-button>
-      </div>
-      </paper-input>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="Account Number" value="{{accountNumber}}">
-      <div class="center" suffix="">
-        <paper-icon-button icon="add"></paper-icon-button>
-      </div>
-      </paper-input>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="Usage" value="{{usage}}"></paper-input>
-    </section>
-
-    <section class="my-card">
-      <div><paper-input label="Date" value="{{executionDate}}"></paper-input></div>
-    </section>
-
-    <section>
-      <paper-button raised="" primary="">Submit</paper-button>
-    </section>
-
-  </template>
-
-  <script>
-    (function() {
-      'use strict';
-
-      var format = function(a, n, x, s, c) {
-        //console.log("a", a)
-        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-            num = a.toFixed(Math.max(0, ~~n));
-        return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-      };
-
-      Polymer({
-        is: 'tpa-money-transfer',
-
-        behaviors: [/*@i18n-behavior*/],
-
-        properties: {
-          accountOwner: {
-            type: String
-          },
-          accountNumber: {
-            type: String
-          },
-          accountBalance: {
-            type: Number,
-            observer: 'accountBalanceChange'
-          },
-          accountBalanceObj: {
-            type: Object,
-          },
-          decimalSeparator: {
-            type: String,
-            value: ',',
-            //observer: 'accountBalanceChange'
-          },
-          thousendsSeparator: {
-            type: String,
-            value: '.',
-            //observer: 'accountBalanceChange'
-          },
-          /*@i18n-json*/
-        },
-
-        accountBalanceChange: function(n) {
-            //console.log("accountBalance", n)
-            var
-                    self = this
-                ,   decimalSeparator = self.decimalSeparator
-                ,   thousendsSeparator = self.thousendsSeparator
-                ,   balance = typeof(n) === 'number' ? n : self.accountBalance
-                ,   split = format(balance, 2, 3, thousendsSeparator, decimalSeparator).split(decimalSeparator)
-            ;
-            self.accountBalanceObj = { wholeNumber: split[0], decimals: split[1] };
-        },
-
-        ready: function() {}
-      });
-    })();
-  </script>
-</dom-module>
-<script>function MakePromise (asap) {
-  function Promise(fn) {
-		if (typeof this !== 'object' || typeof fn !== 'function') throw new TypeError();
-		this._state = null;
-		this._value = null;
-		this._deferreds = []
-
-		doResolve(fn, resolve.bind(this), reject.bind(this));
-	}
-
-	function handle(deferred) {
-		var me = this;
-		if (this._state === null) {
-			this._deferreds.push(deferred);
-			return
-		}
-		asap(function() {
-			var cb = me._state ? deferred.onFulfilled : deferred.onRejected
-			if (typeof cb !== 'function') {
-				(me._state ? deferred.resolve : deferred.reject)(me._value);
-				return;
-			}
-			var ret;
-			try {
-				ret = cb(me._value);
-			}
-			catch (e) {
-				deferred.reject(e);
-				return;
-			}
-			deferred.resolve(ret);
-		})
-	}
-
-	function resolve(newValue) {
-		try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-			if (newValue === this) throw new TypeError();
-			if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
-				var then = newValue.then;
-				if (typeof then === 'function') {
-					doResolve(then.bind(newValue), resolve.bind(this), reject.bind(this));
-					return;
-				}
-			}
-			this._state = true;
-			this._value = newValue;
-			finale.call(this);
-		} catch (e) { reject.call(this, e); }
-	}
-
-	function reject(newValue) {
-		this._state = false;
-		this._value = newValue;
-		finale.call(this);
-	}
-
-	function finale() {
-		for (var i = 0, len = this._deferreds.length; i < len; i++) {
-			handle.call(this, this._deferreds[i]);
-		}
-		this._deferreds = null;
-	}
-
-	/**
-	 * Take a potentially misbehaving resolver function and make sure
-	 * onFulfilled and onRejected are only called once.
-	 *
-	 * Makes no guarantees about asynchrony.
-	 */
-	function doResolve(fn, onFulfilled, onRejected) {
-		var done = false;
-		try {
-			fn(function (value) {
-				if (done) return;
-				done = true;
-				onFulfilled(value);
-			}, function (reason) {
-				if (done) return;
-				done = true;
-				onRejected(reason);
-			})
-		} catch (ex) {
-			if (done) return;
-			done = true;
-			onRejected(ex);
-		}
-	}
-
-	Promise.prototype['catch'] = function (onRejected) {
-		return this.then(null, onRejected);
-	};
-
-	Promise.prototype.then = function(onFulfilled, onRejected) {
-		var me = this;
-		return new Promise(function(resolve, reject) {
-      handle.call(me, {
-        onFulfilled: onFulfilled,
-        onRejected: onRejected,
-        resolve: resolve,
-        reject: reject
-      });
-		})
-	};
-
-	Promise.resolve = function (value) {
-		if (value && typeof value === 'object' && value.constructor === Promise) {
-			return value;
-		}
-
-		return new Promise(function (resolve) {
-			resolve(value);
-		});
-	};
-
-	Promise.reject = function (value) {
-		return new Promise(function (resolve, reject) {
-			reject(value);
-		});
-	};
-
-	
-  return Promise;
-}
-
-if (typeof module !== 'undefined') {
-  module.exports = MakePromise;
-}
-
-</script>
 <script>
-if (!window.Promise) {
-  window.Promise = MakePromise(Polymer.Base.async);
-}
-</script>
-<script>
-  'use strict';
 
-  Polymer({
-    is: 'iron-request',
+/**
+Use `Polymer.PaperDialogBehavior` and `paper-dialog-shared-styles.html` to implement a Material Design
+dialog.
+
+For example, if `<paper-dialog-impl>` implements this behavior:
+
+    <paper-dialog-impl>
+        <h2>Header</h2>
+        <div>Dialog body</div>
+        <div class="buttons">
+            <paper-button dialog-dismiss>Cancel</paper-button>
+            <paper-button dialog-confirm>Accept</paper-button>
+        </div>
+    </paper-dialog-impl>
+
+`paper-dialog-shared-styles.html` provide styles for a header, content area, and an action area for buttons.
+Use the `<h2>` tag for the header and the `buttons` class for the action area. You can use the
+`paper-dialog-scrollable` element (in its own repository) if you need a scrolling content area.
+
+Use the `dialog-dismiss` and `dialog-confirm` attributes on interactive controls to close the
+dialog. If the user dismisses the dialog with `dialog-confirm`, the `closingReason` will update
+to include `confirmed: true`.
+
+### Accessibility
+
+This element has `role="dialog"` by default. Depending on the context, it may be more appropriate
+to override this attribute with `role="alertdialog"`.
+
+If `modal` is set, the element will set `aria-modal` and prevent the focus from exiting the element.
+It will also ensure that focus remains in the dialog.
+
+@hero hero.svg
+@demo demo/index.html
+@polymerBehavior Polymer.PaperDialogBehavior
+*/
+
+  Polymer.PaperDialogBehaviorImpl = {
 
     hostAttributes: {
-      hidden: true
+      'role': 'dialog',
+      'tabindex': '-1'
     },
 
     properties: {
 
       /**
-       * A reference to the XMLHttpRequest instance used to generate the
-       * network request.
-       *
-       * @type {XMLHttpRequest}
+       * If `modal` is true, this implies `no-cancel-on-outside-click`, `no-cancel-on-esc-key` and `with-backdrop`.
        */
-      xhr: {
-        type: Object,
-        notify: true,
-        readOnly: true,
-        value: function() {
-          return new XMLHttpRequest();
-        }
-      },
-
-      /**
-       * A reference to the parsed response body, if the `xhr` has completely
-       * resolved.
-       *
-       * @type {*}
-       * @default null
-       */
-      response: {
-        type: Object,
-        notify: true,
-        readOnly: true,
-        value: function() {
-          return null;
-        }
-      },
-
-      /**
-       * A reference to the status code, if the `xhr` has completely resolved.
-       */
-      status: {
-        type: Number,
-        notify: true,
-        readOnly: true,
-        value: 0
-      },
-
-      /**
-       * A reference to the status text, if the `xhr` has completely resolved.
-       */
-      statusText: {
-        type: String,
-        notify: true,
-        readOnly: true,
-        value: ''
-      },
-
-      /**
-       * A promise that resolves when the `xhr` response comes back, or rejects
-       * if there is an error before the `xhr` completes.
-       *
-       * @type {Promise}
-       */
-      completes: {
-        type: Object,
-        readOnly: true,
-        notify: true,
-        value: function() {
-          return new Promise(function (resolve, reject) {
-            this.resolveCompletes = resolve;
-            this.rejectCompletes = reject;
-          }.bind(this));
-        }
-      },
-
-      /**
-       * An object that contains progress information emitted by the XHR if
-       * available.
-       *
-       * @default {}
-       */
-      progress: {
-        type: Object,
-        notify: true,
-        readOnly: true,
-        value: function() {
-          return {};
-        }
-      },
-
-      /**
-       * Aborted will be true if an abort of the request is attempted.
-       */
-      aborted: {
-        type: Boolean,
-        notify: true,
-        readOnly: true,
-        value: false,
-      },
-
-      /**
-       * Errored will be true if the browser fired an error event from the
-       * XHR object (mainly network errors).
-       */
-      errored: {
-        type: Boolean,
-        notify: true,
-        readOnly: true,
-        value: false
-      },
-
-      /**
-       * TimedOut will be true if the XHR threw a timeout event.
-       */
-      timedOut: {
-        type: Boolean,
-        notify: true,
-        readOnly: true,
-        value: false
-      }
-    },
-
-    /**
-     * Succeeded is true if the request succeeded. The request succeeded if it
-     * loaded without error, wasn't aborted, and the status code is ≥ 200, and
-     * < 300, or if the status code is 0.
-     *
-     * The status code 0 is accepted as a success because some schemes - e.g.
-     * file:// - don't provide status codes.
-     *
-     * @return {boolean}
-     */
-    get succeeded() {
-      if (this.errored || this.aborted || this.timedOut) {
-        return false;
-      }
-      var status = this.xhr.status || 0;
-
-      // Note: if we are using the file:// protocol, the status code will be 0
-      // for all outcomes (successful or otherwise).
-      return status === 0 ||
-        (status >= 200 && status < 300);
-    },
-
-    /**
-     * Sends an HTTP request to the server and returns the XHR object.
-     *
-     * The handling of the `body` parameter will vary based on the Content-Type
-     * header. See the docs for iron-ajax's `body` param for details.
-     *
-     * @param {{
-     *   url: string,
-     *   method: (string|undefined),
-     *   async: (boolean|undefined),
-     *   body: (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object),
-     *   headers: (Object|undefined),
-     *   handleAs: (string|undefined),
-     *   jsonPrefix: (string|undefined),
-     *   withCredentials: (boolean|undefined)}} options -
-     *     url The url to which the request is sent.
-     *     method The HTTP method to use, default is GET.
-     *     async By default, all requests are sent asynchronously. To send synchronous requests,
-     *         set to true.
-     *     body The content for the request body for POST method.
-     *     headers HTTP request headers.
-     *     handleAs The response type. Default is 'text'.
-     *     withCredentials Whether or not to send credentials on the request. Default is false.
-     *   timeout: (Number|undefined)
-     * @return {Promise}
-     */
-    send: function (options) {
-      var xhr = this.xhr;
-
-      if (xhr.readyState > 0) {
-        return null;
-      }
-
-      xhr.addEventListener('progress', function (progress) {
-        this._setProgress({
-          lengthComputable: progress.lengthComputable,
-          loaded: progress.loaded,
-          total: progress.total
-        });
-      }.bind(this))
-
-      xhr.addEventListener('error', function (error) {
-        this._setErrored(true);
-        this._updateStatus();
-        this.rejectCompletes(error);
-      }.bind(this));
-
-      xhr.addEventListener('timeout', function (error) {
-        this._setTimedOut(true);
-        this._updateStatus();
-        this.rejectCompletes(error);
-      }.bind(this));
-
-      xhr.addEventListener('abort', function () {
-        this._updateStatus();
-        this.rejectCompletes(new Error('Request aborted.'));
-      }.bind(this));
-
-
-      // Called after all of the above.
-      xhr.addEventListener('loadend', function () {
-        this._updateStatus();
-
-        if (!this.succeeded) {
-          this.rejectCompletes(new Error('The request failed with status code: ' + this.xhr.status));
-          return;
-        }
-
-        this._setResponse(this.parseResponse());
-        this.resolveCompletes(this);
-      }.bind(this));
-
-      this.url = options.url;
-      xhr.open(
-        options.method || 'GET',
-        options.url,
-        options.async !== false
-      );
-
-      var acceptType = {
-        'json': 'application/json',
-        'text': 'text/plain',
-        'html': 'text/html',
-        'xml': 'application/xml',
-        'arraybuffer': 'application/octet-stream'
-      }[options.handleAs];
-      var headers = options.headers || Object.create(null);
-      var newHeaders = Object.create(null);
-      for (var key in headers) {
-        newHeaders[key.toLowerCase()] = headers[key];
-      }
-      headers = newHeaders;
-
-      if (acceptType && !headers['accept']) {
-        headers['accept'] = acceptType;
-      }
-      Object.keys(headers).forEach(function (requestHeader) {
-        if (/[A-Z]/.test(requestHeader)) {
-          console.error('Headers must be lower case, got', requestHeader);
-        }
-        xhr.setRequestHeader(
-          requestHeader,
-          headers[requestHeader]
-        );
-      }, this);
-
-      if (options.async !== false) {
-        var handleAs = options.handleAs;
-
-        // If a JSON prefix is present, the responseType must be 'text' or the
-        // browser won’t be able to parse the response.
-        if (!!options.jsonPrefix || !handleAs) {
-          handleAs = 'text';
-        }
-
-        // In IE, `xhr.responseType` is an empty string when the response
-        // returns. Hence, caching it as `xhr._responseType`.
-        xhr.responseType = xhr._responseType = handleAs;
-
-        // Cache the JSON prefix, if it exists.
-        if (!!options.jsonPrefix) {
-          xhr._jsonPrefix = options.jsonPrefix;
-        }
-      }
-
-      xhr.withCredentials = !!options.withCredentials;
-      xhr.timeout = options.timeout;
-
-      var body = this._encodeBodyObject(options.body, headers['content-type']);
-
-      xhr.send(
-        /** @type {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|
-                   null|string|undefined} */
-        (body));
-
-      return this.completes;
-    },
-
-    /**
-     * Attempts to parse the response body of the XHR. If parsing succeeds,
-     * the value returned will be deserialized based on the `responseType`
-     * set on the XHR.
-     *
-     * @return {*} The parsed response,
-     * or undefined if there was an empty response or parsing failed.
-     */
-    parseResponse: function () {
-      var xhr = this.xhr;
-      var responseType = xhr.responseType || xhr._responseType;
-      var preferResponseText = !this.xhr.responseType;
-      var prefixLen = (xhr._jsonPrefix && xhr._jsonPrefix.length) || 0;
-
-      try {
-        switch (responseType) {
-          case 'json':
-            // If the xhr object doesn't have a natural `xhr.responseType`,
-            // we can assume that the browser hasn't parsed the response for us,
-            // and so parsing is our responsibility. Likewise if response is
-            // undefined, as there's no way to encode undefined in JSON.
-            if (preferResponseText || xhr.response === undefined) {
-              // Try to emulate the JSON section of the response body section of
-              // the spec: https://xhr.spec.whatwg.org/#response-body
-              // That is to say, we try to parse as JSON, but if anything goes
-              // wrong return null.
-              try {
-                return JSON.parse(xhr.responseText);
-              } catch (_) {
-                return null;
-              }
-            }
-
-            return xhr.response;
-          case 'xml':
-            return xhr.responseXML;
-          case 'blob':
-          case 'document':
-          case 'arraybuffer':
-            return xhr.response;
-          case 'text':
-          default: {
-            // If `prefixLen` is set, it implies the response should be parsed
-            // as JSON once the prefix of length `prefixLen` is stripped from
-            // it. Emulate the behavior above where null is returned on failure
-            // to parse.
-            if (prefixLen) {
-              try {
-                return JSON.parse(xhr.responseText.substring(prefixLen));
-              } catch (_) {
-                return null;
-              }
-            }
-            return xhr.responseText;
-          }
-        }
-      } catch (e) {
-        this.rejectCompletes(new Error('Could not parse response. ' + e.message));
-      }
-    },
-
-    /**
-     * Aborts the request.
-     */
-    abort: function () {
-      this._setAborted(true);
-      this.xhr.abort();
-    },
-
-    /**
-     * @param {*} body The given body of the request to try and encode.
-     * @param {?string} contentType The given content type, to infer an encoding
-     *     from.
-     * @return {*} Either the encoded body as a string, if successful,
-     *     or the unaltered body object if no encoding could be inferred.
-     */
-    _encodeBodyObject: function(body, contentType) {
-      if (typeof body == 'string') {
-        return body;  // Already encoded.
-      }
-      var bodyObj = /** @type {Object} */ (body);
-      switch(contentType) {
-        case('application/json'):
-          return JSON.stringify(bodyObj);
-        case('application/x-www-form-urlencoded'):
-          return this._wwwFormUrlEncode(bodyObj);
-      }
-      return body;
-    },
-
-    /**
-     * @param {Object} object The object to encode as x-www-form-urlencoded.
-     * @return {string} .
-     */
-    _wwwFormUrlEncode: function(object) {
-      if (!object) {
-        return '';
-      }
-      var pieces = [];
-      Object.keys(object).forEach(function(key) {
-        // TODO(rictic): handle array values here, in a consistent way with
-        //   iron-ajax params.
-        pieces.push(
-            this._wwwFormUrlEncodePiece(key) + '=' +
-            this._wwwFormUrlEncodePiece(object[key]));
-      }, this);
-      return pieces.join('&');
-    },
-
-    /**
-     * @param {*} str A key or value to encode as x-www-form-urlencoded.
-     * @return {string} .
-     */
-    _wwwFormUrlEncodePiece: function(str) {
-      // Spec says to normalize newlines to \r\n and replace %20 spaces with +.
-      // jQuery does this as well, so this is likely to be widely compatible.
-      return encodeURIComponent(str.toString().replace(/\r?\n/g, '\r\n'))
-          .replace(/%20/g, '+');
-    },
-
-    /**
-     * Updates the status code and status text.
-     */
-    _updateStatus: function() {
-      this._setStatus(this.xhr.status);
-      this._setStatusText((this.xhr.statusText === undefined) ? '' : this.xhr.statusText);
-    }
-  });
-</script>
-
-<script>
-  'use strict';
-
-  Polymer({
-
-    is: 'iron-ajax',
-
-    /**
-     * Fired when a request is sent.
-     *
-     * @event request
-     */
-
-    /**
-     * Fired when a response is received.
-     *
-     * @event response
-     */
-
-    /**
-     * Fired when an error is received.
-     *
-     * @event error
-     */
-
-    hostAttributes: {
-      hidden: true
-    },
-
-    properties: {
-      /**
-       * The URL target of the request.
-       */
-      url: {
-        type: String
-      },
-
-      /**
-       * An object that contains query parameters to be appended to the
-       * specified `url` when generating a request. If you wish to set the body
-       * content when making a POST request, you should use the `body` property
-       * instead.
-       */
-      params: {
-        type: Object,
-        value: function() {
-          return {};
-        }
-      },
-
-      /**
-       * The HTTP method to use such as 'GET', 'POST', 'PUT', or 'DELETE'.
-       * Default is 'GET'.
-       */
-      method: {
-        type: String,
-        value: 'GET'
-      },
-
-      /**
-       * HTTP request headers to send.
-       *
-       * Example:
-       *
-       *     <iron-ajax
-       *         auto
-       *         url="http://somesite.com"
-       *         headers='{"X-Requested-With": "XMLHttpRequest"}'
-       *         handle-as="json"></iron-ajax>
-       *
-       * Note: setting a `Content-Type` header here will override the value
-       * specified by the `contentType` property of this element.
-       */
-      headers: {
-        type: Object,
-        value: function() {
-          return {};
-        }
-      },
-
-      /**
-       * Content type to use when sending data. If the `contentType` property
-       * is set and a `Content-Type` header is specified in the `headers`
-       * property, the `headers` property value will take precedence.
-       *
-       * Varies the handling of the `body` param.
-       */
-      contentType: {
-        type: String,
-        value: null
-      },
-
-      /**
-       * Body content to send with the request, typically used with "POST"
-       * requests.
-       *
-       * If body is a string it will be sent unmodified.
-       *
-       * If Content-Type is set to a value listed below, then
-       * the body will be encoded accordingly.
-       *
-       *    * `content-type="application/json"`
-       *      * body is encoded like `{"foo":"bar baz","x":1}`
-       *    * `content-type="application/x-www-form-urlencoded"`
-       *      * body is encoded like `foo=bar+baz&x=1`
-       *
-       * Otherwise the body will be passed to the browser unmodified, and it
-       * will handle any encoding (e.g. for FormData, Blob, ArrayBuffer).
-       *
-       * @type (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object)
-       */
-      body: {
-        type: Object,
-        value: null
-      },
-
-      /**
-       * Toggle whether XHR is synchronous or asynchronous. Don't change this
-       * to true unless You Know What You Are Doing™.
-       */
-      sync: {
+      modal: {
         type: Boolean,
         value: false
-      },
-
-      /**
-       * Specifies what data to store in the `response` property, and
-       * to deliver as `event.detail.response` in `response` events.
-       *
-       * One of:
-       *
-       *    `text`: uses `XHR.responseText`.
-       *
-       *    `xml`: uses `XHR.responseXML`.
-       *
-       *    `json`: uses `XHR.responseText` parsed as JSON.
-       *
-       *    `arraybuffer`: uses `XHR.response`.
-       *
-       *    `blob`: uses `XHR.response`.
-       *
-       *    `document`: uses `XHR.response`.
-       */
-      handleAs: {
-        type: String,
-        value: 'json'
-      },
-
-      /**
-       * Set the withCredentials flag on the request.
-       */
-      withCredentials: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set the timeout flag on the request.
-       */
-      timeout: {
-        type: Number,
-        value: 0
-      },
-
-      /**
-       * If true, automatically performs an Ajax request when either `url` or
-       * `params` changes.
-       */
-      auto: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * If true, error messages will automatically be logged to the console.
-       */
-      verbose: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * The most recent request made by this iron-ajax element.
-       */
-      lastRequest: {
-        type: Object,
-        notify: true,
-        readOnly: true
-      },
-
-      /**
-       * True while lastRequest is in flight.
-       */
-      loading: {
-        type: Boolean,
-        notify: true,
-        readOnly: true
-      },
-
-      /**
-       * lastRequest's response.
-       *
-       * Note that lastResponse and lastError are set when lastRequest finishes,
-       * so if loading is true, then lastResponse and lastError will correspond
-       * to the result of the previous request.
-       *
-       * The type of the response is determined by the value of `handleAs` at
-       * the time that the request was generated.
-       *
-       * @type {Object}
-       */
-      lastResponse: {
-        type: Object,
-        notify: true,
-        readOnly: true
-      },
-
-      /**
-       * lastRequest's error, if any.
-       *
-       * @type {Object}
-       */
-      lastError: {
-        type: Object,
-        notify: true,
-        readOnly: true
-      },
-
-      /**
-       * An Array of all in-flight requests originating from this iron-ajax
-       * element.
-       */
-      activeRequests: {
-        type: Array,
-        notify: true,
-        readOnly: true,
-        value: function() {
-          return [];
-        }
-      },
-
-      /**
-       * Length of time in milliseconds to debounce multiple automatically generated requests.
-       */
-      debounceDuration: {
-        type: Number,
-        value: 0,
-        notify: true
-      },
-
-      /**
-       * Prefix to be stripped from a JSON response before parsing it.
-       *
-       * In order to prevent an attack using CSRF with Array responses
-       * (http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx/)
-       * many backends will mitigate this by prefixing all JSON response bodies
-       * with a string that would be nonsensical to a JavaScript parser.
-       *
-       */
-      jsonPrefix: {
-        type: String,
-        value: ''
-      },
-
-      /**
-       * By default, these events do not bubble largely because the `error` event has special
-       * meaning in the window object. Setting this attribute will cause iron-ajax's request,
-       * response, and error events to bubble to the window object.
-       */
-      bubbles: {
-        type: Boolean,
-        value: false
-      },
-
-      _boundHandleResponse: {
-        type: Function,
-        value: function() {
-          return this._handleResponse.bind(this);
-        }
       }
+
     },
 
     observers: [
-      '_requestOptionsChanged(url, method, params.*, headers, contentType, ' +
-          'body, sync, handleAs, jsonPrefix, withCredentials, timeout, auto)'
+      '_modalChanged(modal, _readied)'
     ],
 
+    listeners: {
+      'tap': '_onDialogClick'
+    },
+
+    ready: function () {
+      // Only now these properties can be read.
+      this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
+      this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
+      this.__prevWithBackdrop = this.withBackdrop;
+    },
+
+    _modalChanged: function(modal, readied) {
+      if (modal) {
+        this.setAttribute('aria-modal', 'true');
+      } else {
+        this.setAttribute('aria-modal', 'false');
+      }
+
+      // modal implies noCancelOnOutsideClick, noCancelOnEscKey and withBackdrop.
+      // We need to wait for the element to be ready before we can read the
+      // properties values.
+      if (!readied) {
+        return;
+      }
+
+      if (modal) {
+        this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
+        this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
+        this.__prevWithBackdrop = this.withBackdrop;
+        this.noCancelOnOutsideClick = true;
+        this.noCancelOnEscKey = true;
+        this.withBackdrop = true;
+      } else {
+        // If the value was changed to false, let it false.
+        this.noCancelOnOutsideClick = this.noCancelOnOutsideClick &&
+          this.__prevNoCancelOnOutsideClick;
+        this.noCancelOnEscKey = this.noCancelOnEscKey &&
+          this.__prevNoCancelOnEscKey;
+        this.withBackdrop = this.withBackdrop && this.__prevWithBackdrop;
+      }
+    },
+
+    _updateClosingReasonConfirmed: function(confirmed) {
+      this.closingReason = this.closingReason || {};
+      this.closingReason.confirmed = confirmed;
+    },
+
     /**
-     * The query string that should be appended to the `url`, serialized from
-     * the current value of `params`.
-     *
-     * @return {string}
+     * Will dismiss the dialog if user clicked on an element with dialog-dismiss
+     * or dialog-confirm attribute.
      */
-    get queryString () {
-      var queryParts = [];
-      var param;
-      var value;
-
-      for (param in this.params) {
-        value = this.params[param];
-        param = window.encodeURIComponent(param);
-
-        if (Array.isArray(value)) {
-          for (var i = 0; i < value.length; i++) {
-            queryParts.push(param + '=' + window.encodeURIComponent(value[i]));
-          }
-        } else if (value !== null) {
-          queryParts.push(param + '=' + window.encodeURIComponent(value));
-        } else {
-          queryParts.push(param);
+    _onDialogClick: function(event) {
+      // Search for the element with dialog-confirm or dialog-dismiss,
+      // from the root target until this (excluded).
+      var path = Polymer.dom(event).path;
+      for (var i = 0; i < path.indexOf(this); i++) {
+        var target = path[i];
+        if (target.hasAttribute && (target.hasAttribute('dialog-dismiss') || target.hasAttribute('dialog-confirm'))) {
+          this._updateClosingReasonConfirmed(target.hasAttribute('dialog-confirm'));
+          this.close();
+          event.stopPropagation();
+          break;
         }
       }
+    }
 
-      return queryParts.join('&');
-    },
+  };
 
-    /**
-     * The `url` with query string (if `params` are specified), suitable for
-     * providing to an `iron-request` instance.
-     *
-     * @return {string}
-     */
-    get requestUrl() {
-      var queryString = this.queryString;
+  /** @polymerBehavior */
+  Polymer.PaperDialogBehavior = [Polymer.IronOverlayBehavior, Polymer.PaperDialogBehaviorImpl];
 
-      if (queryString) {
-        var bindingChar = this.url.indexOf('?') >= 0 ? '&' : '?';
-        return this.url + bindingChar + queryString;
-      }
-
-      return this.url;
-    },
-
-    /**
-     * An object that maps header names to header values, first applying the
-     * the value of `Content-Type` and then overlaying the headers specified
-     * in the `headers` property.
-     *
-     * @return {Object}
-     */
-    get requestHeaders() {
-      var headers = {};
-      var contentType = this.contentType;
-      if (contentType == null && (typeof this.body === 'string')) {
-        contentType = 'application/x-www-form-urlencoded';
-      }
-      if (contentType) {
-        headers['content-type'] = contentType;
-      }
-      var header;
-
-      if (this.headers instanceof Object) {
-        for (header in this.headers) {
-          headers[header] = this.headers[header].toString();
-        }
-      }
-
-      return headers;
-    },
-
-    /**
-     * Request options suitable for generating an `iron-request` instance based
-     * on the current state of the `iron-ajax` instance's properties.
-     *
-     * @return {{
-     *   url: string,
-     *   method: (string|undefined),
-     *   async: (boolean|undefined),
-     *   body: (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object),
-     *   headers: (Object|undefined),
-     *   handleAs: (string|undefined),
-     *   jsonPrefix: (string|undefined),
-     *   withCredentials: (boolean|undefined)}}
-     */
-    toRequestOptions: function() {
-      return {
-        url: this.requestUrl || '',
-        method: this.method,
-        headers: this.requestHeaders,
-        body: this.body,
-        async: !this.sync,
-        handleAs: this.handleAs,
-        jsonPrefix: this.jsonPrefix,
-        withCredentials: this.withCredentials,
-        timeout: this.timeout
-      };
-    },
-
-    /**
-     * Performs an AJAX request to the specified URL.
-     *
-     * @return {!IronRequestElement}
-     */
-    generateRequest: function() {
-      var request = /** @type {!IronRequestElement} */ (document.createElement('iron-request'));
-      var requestOptions = this.toRequestOptions();
-
-      this.activeRequests.push(request);
-
-      request.completes.then(
-        this._boundHandleResponse
-      ).catch(
-        this._handleError.bind(this, request)
-      ).then(
-        this._discardRequest.bind(this, request)
-      );
-
-      request.send(requestOptions);
-
-      this._setLastRequest(request);
-      this._setLoading(true);
-
-      this.fire('request', {
-        request: request,
-        options: requestOptions
-      }, {bubbles: this.bubbles});
-
-      return request;
-    },
-
-    _handleResponse: function(request) {
-      if (request === this.lastRequest) {
-        this._setLastResponse(request.response);
-        this._setLastError(null);
-        this._setLoading(false);
-      }
-      this.fire('response', request, {bubbles: this.bubbles});
-    },
-
-    _handleError: function(request, error) {
-      if (this.verbose) {
-        console.error(error);
-      }
-
-      if (request === this.lastRequest) {
-        this._setLastError({
-          request: request,
-          error: error
-        });
-        this._setLastResponse(null);
-        this._setLoading(false);
-      }
-      this.fire('error', {
-        request: request,
-        error: error
-      }, {bubbles: this.bubbles});
-    },
-
-    _discardRequest: function(request) {
-      var requestIndex = this.activeRequests.indexOf(request);
-
-      if (requestIndex > -1) {
-        this.activeRequests.splice(requestIndex, 1);
-      }
-    },
-
-    _requestOptionsChanged: function() {
-      this.debounce('generate-request', function() {
-        if (this.url == null) {
-          return;
-        }
-
-        if (this.auto) {
-          this.generateRequest();
-        }
-      }, this.debounceDuration);
-    },
-
-  });
 </script>
 
 
-<dom-module id="tpa-transactions-list-styles" assetpath="tpa-transaction-list/">
-    <template>
-        <style include="shared-styles">
-            :host {
-                --iron-icon-fill-color:var(--primary-color);
-            }
+<dom-module id="paper-dialog-shared-styles" assetpath="../bower_components/paper-dialog-behavior/">
+  <template>
+    <style>
+      :host {
+        display: block;
+        margin: 24px 40px;
 
-            h3 {
-              color: var(--primary-color);
-            }
+        background: var(--paper-dialog-background-color, --primary-background-color);
+        color: var(--paper-dialog-color, --primary-text-color);
 
-            .date-header {
-                color:#aaaaaa;
-                margin-top:10px;
-            }
+        @apply(--paper-font-body1);
+        @apply(--shadow-elevation-16dp);
+        @apply(--paper-dialog);
+      }
 
-            .sub-text {
-                color: var(--primary-color);
-            }
+      :host > ::content > * {
+        margin-top: 20px;
+        padding: 0 24px;
+      }
 
-            .main-text {
-                padding-bottom: 10px;
-                padding-top: 10px;
-            }
+      :host > ::content > .no-padding {
+        padding: 0;
+      }
 
-            .no-icon {
-                padding-left: 10px;
-            }
-        </style>
-    </template>
+      :host > ::content > *:first-child {
+        margin-top: 24px;
+      }
+
+      :host > ::content > *:last-child {
+        margin-bottom: 24px;
+      }
+
+      :host > ::content h2 {
+        position: relative;
+        margin: 0;
+        @apply(--paper-font-title);
+
+        @apply(--paper-dialog-title);
+      }
+
+      :host > ::content .buttons {
+        position: relative;
+        padding: 8px 8px 8px 24px;
+        margin: 0;
+
+        color: var(--paper-dialog-button-color, --primary-color);
+
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+      }
+    </style>
+  </template>
 </dom-module>
 <script>
 /**
@@ -22680,7 +24534,381 @@ of where they are in DOM.
 
 })();
 </script>
-<dom-module id="tpa-transaction-list-i18n" assetpath="tpa-transaction-list/">
+<dom-module id="tpa-money-transfer" assetpath="tpa-money-transfer/">
+  
+  <template><style>
+.unselectable {
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer */
+  -khtml-user-select: none;
+  /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none;
+  /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none;
+  /* Disable Android and iOS callouts*/
+}
+:host {
+  display: block;
+  --iron-icon-fill-color: var(--primary-color);
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer */
+  -khtml-user-select: none;
+  /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none;
+  /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none;
+  /* Disable Android and iOS callouts*/
+}
+.bold {
+  font-weight: bold;
+}
+section {
+  margin-bottom: 1.8em;
+}
+.my-card {
+  @apply (--layout-horizontal);
+}
+.my-card > :nth-child(1) {
+  @apply (--layout-flex);
+}
+.my-card > :nth-child(2) {
+  @apply (--layout-flex-0);
+}
+.my-card > div:nth-child(1) > h1 {
+  font-size: 1em;
+  margin: 0;
+  font-weight: normal;
+}
+.my-card > div:nth-child(1) > div {
+  font-size: 1.2em;
+}
+.my-card.balance > div:nth-child(1) > div {
+  color: var(--primary-color);
+}
+.my-card.balance super {
+  font-size: 0.6em;
+}
+paper-input {
+  color: var(--light-primary-color);
+}
+paper-input div[prefix] {
+  padding-right: 5px;
+}
+.center {
+  @apply (--layout-horizontal);
+  @apply (--layout-center);
+}
+.transfer {
+  font-weight: bold;
+  font-size: 1.6em;
+  margin-bottom: 0.5em;
+}
+.color--brand-primary {
+  color: var(--primary-color);
+}
+.color--light-primary {
+  color: var(--light-primary-color);
+}
+paper-button[primary] {
+  color: var(--primary-background-color);
+  background: var(--primary-color);
+}
+simple-dialog {
+  width: 80%;
+}
+.addressContent {
+  @apply (--layout);
+  width: 200px;
+  margin: 8px;
+}
+@media (max-width: 800px) {
+  .addressContainer {
+    width: calc(34%);
+  }
+}
+@media (max-width: 400px) {
+  .addressContainer {
+    width: 100%;
+  }
+}
+
+</style>
+
+<iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>
+
+    <section class="my-card balance">
+      <div>
+        <h1>{{accountOwner}}</h1>
+        <div>{{accountNumber}}</div>
+      </div>
+      <div class="bold">
+        {{accountBalanceObj.wholeNumber}}{{decimalSeparator}}<sup>{{accountBalanceObj.decimals}}</sup>
+      </div>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{content.amount}}" type="number">
+        <div prefix="">€</div>
+      </paper-input>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{content.recipient}}"></paper-input>
+      <div class="center">
+        <paper-icon-button icon="book" class="color--brand-light" onclick="dialog.toggle()"></paper-icon-button>
+      </div>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{content.accountNumber}}"></paper-input>
+      <div class="center">
+        <paper-icon-button icon="add" class="color--brand-primary"></paper-icon-button>
+      </div>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{content.usage}}"></paper-input>
+    </section>
+
+    <section class="my-card">
+      <div><paper-input label="{{content.executionDate}}"></paper-input></div>
+    </section>
+
+    <section>
+      <paper-button raised="" primary="">{{content.submit}}</paper-button>
+    </section>
+
+    <simple-dialog id="dialog" title="Adress Book">
+      <div>
+        <iron-ajax id="ajax" loading="{{loadingAddresses}}" url="data.json" handle-as="json" on-response="_onAddressBookData" auto=""></iron-ajax>
+        <iron-list items="[[addresses]]" as="address" scroll-target="document" grid="">
+          <template>
+            <div class="addressContainer">
+              <div class="addressContent" tabindex$="[[tabIndex]]">
+                {{address.firstname}}&nbsp;{{address.lastname}}<br>
+                {{address.account}}<br>
+                {{address.institute}}
+              </div>
+            </div>
+          </template>
+        </iron-list>
+      </div>
+      <div class="buttons">
+        <paper-button dialog-dismiss="">Cancel</paper-button>
+        <paper-button dialog-confirm="" autofocus="">Discard</paper-button>
+      </div>
+    </simple-dialog>
+
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    'use strict';
+
+    var format = function(a, n, x, s, c) {
+      //console.log("a", a)
+      var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+          num = a.toFixed(Math.max(0, ~~n));
+      return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+    };
+
+    Polymer({
+      is: 'tpa-money-transfer',
+
+      behaviors: [I18nBehavior],
+
+      properties: {
+        accountOwner: {
+          type: String
+        },
+        accountNumber: {
+          type: String
+        },
+        accountBalance: {
+          type: Number,
+          observer: '_accountBalanceChange'
+        },
+        accountBalanceObj: {
+          type: Object
+        },
+        decimalSeparator: {
+          type: String,
+          value: ',',
+          observer: '_accountBalanceChange'
+        },
+        thousendsSeparator: {
+          type: String,
+          value: '.',
+          observer: '_accountBalanceChange'
+        },
+        loadingAddresses: Boolean,
+        addresses: Array,
+        i18n: { type: Object, value: function() { return { "de-de":{"recipient":"Empfänger","accountNumber":"Kontonummer","usage":"Verwendungszweck","executionDate":"Ausführungsdatum","submit":"Ausführen","amount":"Betrag"},
+"en-au":{"recipient":"Recipient","accountNumber":"Account number","usage":"Usage","executionDate":"Execution date","submit":"Submit","amount":"Amount"}};}, notify: true },
+      },
+
+      _accountBalanceChange: function(n) {
+          var
+                  self = this
+              ,   decimalSeparator = self.decimalSeparator
+              ,   thousendsSeparator = self.thousendsSeparator
+              ,   balance = typeof(n) !== 'number' ? self.accountBalance : n
+              ,   split
+          ;
+          if (balance) {
+              split = format(balance, 2, 3, thousendsSeparator, decimalSeparator).split(decimalSeparator);
+              self.accountBalanceObj = { wholeNumber: split[0], decimals: split[1] };
+          }
+      },
+
+      _onAddressBookData: function(e) {
+        var data;
+        this.addresses = e.detail.response;
+      },
+
+      ready: function() {}
+    });
+  })();
+</script>
+
+
+  <dom-module id="simple-dialog" assetpath="tpa-money-transfer/">
+    <template>
+      <style include="paper-dialog-shared-styles"></style>
+      <h2>{{title}}</h2>
+      <content></content>
+    </template>
+  </dom-module>
+
+
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'simple-dialog',
+
+        behaviors: [Polymer.PaperDialogBehavior, /*@i18n-behavior*/]
+
+      });
+    })();
+  </script>
+<dom-module id="tpa-transactions-list-styles" assetpath="../bower_components/tpa-transaction-list/">
+    <template>
+        <style include="shared-styles">
+            :host {
+                --iron-icon-fill-color:var(--primary-color);
+            }
+
+            h3 {
+              color: var(--primary-color);
+            }
+
+            .date-header {
+                color:#aaaaaa;
+                margin-top:10px;
+            }
+
+            .sub-text {
+                color: var(--primary-color);
+            }
+
+            .main-text {
+                padding-bottom: 10px;
+                padding-top: 10px;
+            }
+
+            .no-icon {
+                padding-left: 10px;
+            }
+        </style>
+    </template>
+</dom-module>
+<script>
+/**
+ * I18nBehavior
+ * @polymerBehavior I18nBehavior
+ */
+I18nBehavior = {
+    properties: {
+        dictionary: {
+            type: String,
+            value: 'en-au',
+            notify: true,
+            observer: 'dictionaryChanged'
+        },
+        content: {
+            type: Object,
+            notify: true,
+            value: function() {
+                return {};
+            }
+        },
+        i18n: {
+            type: Object,
+            notify: true
+        },
+        currencySymbolCodeMapping: {
+            type: Object,
+            value: {
+                "en-au": 36,
+                "de-de": 8364,
+                "nl-nl": 8364,
+                "nl-be": 8364
+            }
+        },
+        currencySymbolCode: {
+            type: String,
+            value: "$",
+            notify:true
+        }
+    },
+    handlei18nChange: function (e, detail, sender) {
+        this.dictionary = detail;
+    },
+    ready: function() {
+        if (this.i18n[this.dictionary]) {
+            this.content = this.i18n[this.dictionary];
+        } else {
+            this.content = this.i18n['en‐au'];
+        }
+        this.addDefaults();
+    },
+    dictionaryChanged: function() {
+        if (this.i18n) {
+            if (this.i18n[this.dictionary]) {
+                this.content = this.i18n[this.dictionary];
+            } else {
+                this.content = this.i18n['en‐au'];
+            }
+        }
+        this.addDefaults();
+    },
+    addDefaults: function() {
+        if (this.content) {
+            this.content.globals = {
+                "yes": "Yes",
+                "no": "No",
+                "na": "N/A"
+            };
+            this.content.error = {
+                "global": "Sorry, we should be up again shortly. Need help now? Call us on 133 464.",
+                "offline": "No internet connection available. Please try again later."
+            }
+        }
+    },
+    i18nSignal: function(e, detail, sender) {
+        this.dictionary = detail;
+        this.currencySymbolCode = String.fromCharCode(this.currencySymbolCodeMapping[this.dictionary]);
+    }
+}
+</script>
+<dom-module id="tpa-transaction-list-i18n" assetpath="../bower_components/tpa-transaction-list/">
     <template>
         <iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>
     </template>
@@ -24641,7 +26869,7 @@ of where they are in DOM.
     })();
   </script>
 </dom-module>
-<dom-module id="tpa-region-selection" assetpath="tpa-region-selection/">
+<dom-module id="tpa-region-selection" assetpath="../bower_components/tpa-region-selection/">
     <template>
       <style>
         :host {
@@ -24666,6 +26894,10 @@ of where they are in DOM.
                     value: "en-au",
                     notify:true,
                     observer:'selectedItemChanged'
+                },
+                selected: {
+                    type: String,
+                    value: "0"
                 }
             },
             selectedItemChanged: function(a){
