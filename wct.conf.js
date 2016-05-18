@@ -13,6 +13,17 @@ var ret = {
   'suites': ['app/test'],
   'webserver': {
     'pathMappings': []
+  },
+  'plugins': {
+    'istanbul': {
+        'dir': './coverage',
+        'reporters': ['text-summary', 'lcov'],
+        'include': [
+            '/app/**/*.html'
+        ],
+        'exclude': [
+        ]
+    }
   }
 };
 
