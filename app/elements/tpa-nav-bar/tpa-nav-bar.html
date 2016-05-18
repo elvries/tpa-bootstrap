@@ -23,30 +23,37 @@
 
         <paper-tabs selected="0">
             <paper-tab link>
-                <a href="/" class="link" tabindex="-1">Daily Banking</a>
+                <a href="{{baseUrl}}" class="link" tabindex="-1">Daily Banking</a>
             </paper-tab>
             <paper-tab link>
-                <a href="/page-2" class="link" tabindex="-1">Saving goals</a>
+                <a href="{{baseUrl}}page-2" class="link" tabindex="-1">Saving goals</a>
             </paper-tab>
             <paper-tab link>
-                <a href="/page-3" class="link" tabindex="-1">Trading</a>
+                <a href="{{baseUrl}}page-3" class="link" tabindex="-1">Trading</a>
             </paper-tab>
 
             <paper-tab link>
-                <a href="/page-4" class="link" tabindex="-1">Mortgage</a>
+                <a href="{{baseUrl}}page-4" class="link" tabindex="-1">Mortgage</a>
             </paper-tab>
             <paper-tab link>
-                <a href="/page-5" class="link" tabindex="-1">Loans</a>
+                <a href="{{baseUrl}}page-5" class="link" tabindex="-1">Loans</a>
             </paper-tab>
             <paper-tab link>
-                <a href="/page-5" class="link" tabindex="-1">Insurance</a>
+                <a href="{{baseUrl}}page-5" class="link" tabindex="-1">Insurance</a>
             </paper-tab>
         </paper-tabs>
 
     </template>
     <script>
         Polymer({
-            is: "tpa-nav-bar"
+            is: "tpa-nav-bar",
+            properties: {
+                baseUrl: {
+                    type: String,
+                    notify: true,
+                    value: "/"
+                }
+            }
         });
     </script>
 </dom-module>
