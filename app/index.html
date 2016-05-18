@@ -43,11 +43,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Tile icon for Win8 (144x144) -->
   <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
 
-  <link rel="import" href="fonts/tpa-fonts.html">
-  <!-- build:css styles/main.css -->
-  <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild-->
-
   <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
@@ -84,17 +79,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Home</span>
           </a>
 
-          <a data-route="users" href="{{baseUrl}}users">
+          <a data-route="page-1" href="{{baseUrl}}page-1">
             <iron-icon icon="info"></iron-icon>
             <span>Users</span>
           </a>
 
-          <a data-route="contact" href="{{baseUrl}}contact">
+          <a data-route="page-2" href="{{baseUrl}}page-2">
             <iron-icon icon="mail"></iron-icon>
             <span>Contact</span>
           </a>
 
-          <a data-route="settings" href="{{baseUrl}}settings">
+          <a data-route="page-3" href="{{baseUrl}}page-3">
             <iron-icon icon="settings"></iron-icon>
             <span>Settings</span>
           </a>
@@ -111,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
           <!-- Application sub title -->
 
-          <tpa-nav-bar></tpa-nav-bar>
+          <tpa-nav-bar base-url="{{baseUrl}}"></tpa-nav-bar>
 
         </paper-toolbar>
 
@@ -140,21 +135,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-            <section data-route="users">
+            <section data-route="page-2">
               <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Users</h1>
-                <p>This is the users section</p>
-                <a href$="{{baseUrl}}users/Addy">Addy</a><br>
-                <a href$="{{baseUrl}}users/Rob">Rob</a><br>
-                <a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
-                <a href$="{{baseUrl}}users/Sam">Sam</a>
+                <h1 class="page-title focus-target" tabindex="-1">Another page</h1>
+                <p>This is another page</p>
               </paper-material>
             </section>
 
-            <section data-route="user-info">
+            <section data-route="page-3">
               <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">User: {{params.name}}</h1>
-                <div>This is {{params.name}}'s section</div>
+                <h1 class="page-title focus-target" tabindex="-1">Yet another page</h1>
+                <div>Lorem ipsum...</div>
               </paper-material>
             </section>
 
