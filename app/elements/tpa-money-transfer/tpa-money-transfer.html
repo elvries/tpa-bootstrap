@@ -25,24 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="tpa-money-transfer">
 
-  <style>
-    .prefix{
-      margin-right:10px;
-    }
-
-    paper-button{
-      color: var(--primary-color)
-    }
-
-    paper-input{
-      color:var(--light-primary-color)
-    }
-
-    :host{
-      --iron-icon-fill-color:var(--primary-color);
-    }
-  </style>
-  <!--<link rel="import" type="css" href="%CSSPATH%component.css">-->
+  <style include="shared-styles"></style>
 
   <template>
 
@@ -60,13 +43,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <section class="my-card">
       <paper-input label="Amount" value="{{amount}}" type="number">
-        <div class="prefix" prefix>€</div>
+        <div prefix>€</div>
       </paper-input>
     </section>
 
     <section class="my-card">
       <paper-input label="Recipient" value="{{recipient}}">
-      <div class="center" suffix>
+      <div suffix>
         <paper-icon-button icon="book" class="color--brand-light"></paper-icon-button>
       </div>
       </paper-input>
@@ -74,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <section class="my-card">
       <paper-input label="Account Number" value="{{accountNumber}}">
-      <div class="center" suffix>
+      <div suffix>
         <paper-icon-button icon="add"></paper-icon-button>
       </div>
       </paper-input>
@@ -89,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </section>
 
     <section>
-      <paper-button raised primary>Submit</paper-button>
+      <paper-button raised class="primary">Submit</paper-button>
     </section>
 
   </template>

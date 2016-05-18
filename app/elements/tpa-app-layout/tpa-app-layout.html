@@ -1,25 +1,38 @@
 <dom-module id="tpa-app-layout">
     <template>
         <style include="shared-styles iron-flex iron-flex-alignment">
+            .layout {
+                margin-bottom: 20px;
+            }
+            paper-card {
+                width: calc(30% - 10px);
+                margin: 16px 0;
+            }
+            @media (max-width: 1200px) {
+                paper-card {
+                    width: calc(48.33% - 32px);
+                }
+            }
+
+            @media (max-width: 800px) {
+                paper-card {
+                    width: calc(97.33% - 32px);
+                }
+            }
+
         </style>
         <div class="horizontal around-justified layout wrap">
-            <paper-material elevation="3">
                 <paper-card heading="Money Transfer">
                       <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450" account-balance="5000"></tpa-money-transfer>
                 </paper-card>
-            </paper-material>
 
-            <paper-material elevation="3">
                 <paper-card>
                   <tpa-transaction-list hide-sub-text title="Latest Transactions"></tpa-transaction-list>
                 </paper-card>
-            </paper-material>
 
-            <paper-material elevation="3">
                 <paper-card heading="Accounts">
-                  <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
+                        <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
                 </paper-card>
-            </paper-material>
 
             <!--<paper-material elevation="3">
                 <paper-card>

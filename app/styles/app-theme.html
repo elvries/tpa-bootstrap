@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="typography.html">
-<link rel="import" href="color.html">
 
 <style is="custom-style">
 
@@ -26,19 +25,80 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* Application theme */
 
   :root {
-    --primary-text-color: var(--paper-grey-900);
+    --ing-lime-50: #f8fae2;
+    --ing-lime-100: #f8fae2;
+    --ing-lime-200: #f1f4c5;
+    --ing-lime-300: #f1f4c5;
+    --ing-lime-400: #d0d93c;
+    --ing-lime-500: #d0d93c;
+    --ing-lime-600: #d0d93c;
+    --ing-lime-700: #d0d93c;
+    --ing-lime-800: #a3e98a;
+    --ing-lime-900: #a3e98a;
+    --ing-lime-a100: #f4ff81;
+    --ing-lime-a200: #d0d93c;
+    --ing-lime-a400: #d0d93c;
+    --ing-lime-a700: #a3e98a;
+
+    --ing-orange-50: #ff6200;
+    --ing-orange-100: #ff6200;
+    --ing-orange-200: #ff6200;
+    --ing-orange-300: #ff6200;
+    --ing-orange-400: #ff6200;
+    --ing-orange-500: #ff6200;
+    --ing-orange-600: #ff6200;
+    --ing-orange-700: #ff6200;
+    --ing-orange-800: #ff6200;
+    --ing-orange-900: #ff6200;
+    --ing-orange-a100: #ff6200;
+    --ing-orange-a200: #ff6200;
+    --ing-orange-a400: #ff6200;
+    --ing-orange-a700: #ff6200;
+
+    --ing-grey-50: #f5f5f5;
+    --ing-grey-100: #f5f5f5;
+    --ing-grey-200: #ebebeb;
+    --ing-grey-300: #d5d5d5;
+    --ing-grey-400: #adadad;
+    --ing-grey-500: #adadad;
+    --ing-grey-600: #333333;
+    --ing-grey-700: #333333;
+    --ing-grey-800: #767676;
+    --ing-grey-900: #767676;
+
+    --primary-text-color: var(--ing-grey-900);
     --primary-background-color: #ffffff;
     --secondary-text-color: #737373;
     --disabled-text-color: #9b9b9b;
     --divider-color: #dbdbdb;
-    --primary-color: var(--paper-orange-500);
-    --light-primary-color: var(--paper-orange-100);
-    --dark-primary-color: var(--paper-orange-700);
-    --accent-color: var(--paper-orange-500);
-    --light-accent-color: var(--orange-100);
-    --dark-accent-color: var(--paper-orange-500);
+    --primary-color: var(--ing-orange-500);
+    --light-primary-color: var(--ing-orange-100);
+    --dark-primary-color: var(--ing-orange-700);
+    --accent-color: var(--ing-orange-500);
+    --light-accent-color: var(--ing-orange-100);
+    --dark-accent-color: var(--ing-orange-500);
 
     /* Components */
+
+    /* paper-button */
+    --paper-button: {
+      /*color:var(--light-primary-color);*/
+      height:35px;
+      text-transform: none;
+    }
+
+    /* paper-card */
+    --paper-card: {
+      padding: 10px;
+    }
+    --paper-card-header-text: {
+      color: var(--ing-orange-100);
+    }
+
+    /* paper-input */
+    --paper-input-prefix: {
+        margin-right:10px;
+    }
 
     /* paper-menu */
     --paper-menu-background-color: #fff;
@@ -46,9 +106,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     /* paper-toolbar */
     --paper-toolbar-height:auto;
+
+  }
+
+  :root paper-button.inverse:hover,
+  :root paper-button.primary {
+      background-color: var(--ing-orange-100);
+      color: #ffffff;
+  }
+
+  :root paper-button.inverse,
+  :root paper-button.primary:hover {
+      color: var(--ing-orange-100);
+      background-color: #ffffff;
   }
 
   /* General styles */
+
 
   body {
     @apply(--layout-fullbleed);
@@ -104,11 +178,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-left: 16px;
     }
 
-    paper-material {
-      --menu-container-display: none;
-      width: calc(97.33% - 32px);
-      padding: 16px;
-    }
+    /*paper-material {*/
+      /*--menu-container-display: none;*/
+      /*width: calc(97.33% - 32px);*/
+      /*padding: 16px;*/
+    /*}*/
 
   }
 
