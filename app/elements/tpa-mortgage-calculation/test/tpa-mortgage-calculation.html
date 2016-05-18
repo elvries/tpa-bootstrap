@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../bower_components/web-component-tester/browser.js"></script>
+  <link rel="import" href="../tpa-mortage-calculation.html">
+</head>
+<body>
+  <tpa-mortage-calculation id="fixture"></tpa-mortage-calculation>
+  <script>
+    suite('<tpa-transaction-list>', function() {
+      test('Element exists', function() {
+          var element = document.getElementById('fixture');
+          assert.isTrue(element !== undefined);
+      });
+    });
+  </script>
+</body>
+</html>
