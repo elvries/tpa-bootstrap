@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../bower_components/web-component-tester/browser.js"></script>
+  <link rel="import" href="../tpa-nav-bar.html">
+</head>
+<body>
+  <tpa-nav-bar id="fixture"></tpa-nav-bar>
+  <script>
+    suite('<tpa-nav-bar>', function() {
+      test('Element exists', function() {
+          var element = document.getElementById('fixture');
+          assert.isTrue(element !== undefined);
+      });
+    });
+  </script>
+</body>
+</html>

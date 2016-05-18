@@ -19,28 +19,22 @@
                 line-height:3.5em;
             }
 
+            paper-icon-button.white {
+              color: white;
+            }
+
         </style>
 
-        <paper-tabs selected="0">
-            <paper-tab link>
-                <a href="{{baseUrl}}" class="link" tabindex="-1">Daily Banking</a>
-            </paper-tab>
-            <paper-tab link>
-                <a href="{{baseUrl}}page-2" class="link" tabindex="-1">Saving goals</a>
-            </paper-tab>
-            <paper-tab link>
-                <a href="{{baseUrl}}page-3" class="link" tabindex="-1">Trading</a>
-            </paper-tab>
 
-            <paper-tab link>
-                <a href="{{baseUrl}}page-4" class="link" tabindex="-1">Mortgage</a>
+
+        <paper-tabs selected="0" scrollable>
+          <template is="dom-repeat" as="item" items="[[tabs]]">
+            <paper-tab>
+              <a href="{{baseUrl}}{{item.link}}" class="link" tabindex="-1">
+                <paper-icon-button disabled icon="[[item.icon]]" class="white"></paper-icon-button>[[item.label]]
+              </a>
             </paper-tab>
-            <paper-tab link>
-                <a href="{{baseUrl}}page-5" class="link" tabindex="-1">Loans</a>
-            </paper-tab>
-            <paper-tab link>
-                <a href="{{baseUrl}}page-5" class="link" tabindex="-1">Insurance</a>
-            </paper-tab>
+          </template>
         </paper-tabs>
 
     </template>
@@ -52,8 +46,51 @@
                     type: String,
                     notify: true,
                     value: "/"
+                },
+                tabs: {
+                    type: Array,
+                    value: []
                 }
+            },
+            ready:function(){
+              this.tabs = getTabs();
+              console.log('tabs length', this.tabs.length);
             }
         });
+
+        function getTabs () {
+          return [
+            {
+              label: 'Daily Banking',
+              link: '',
+              icon: 'account-balance-wallet'
+            },
+            {
+              label: 'Saving goals',
+              link: 'page-2',
+              icon: 'tpa:pig'
+            },
+            {
+              label: 'Trading',
+              link: 'page-3',
+              icon: 'tpa:wealth-increase'
+            },
+            {
+              label: 'Mortgage',
+              link: 'page-4',
+              icon: 'tpa:house'
+            },
+            {
+              label: 'Loans',
+              link: 'page-5',
+              icon: 'tpa:moneybag'
+            },
+            {
+              label: 'Insurance',
+              link: 'page-5',
+              icon: 'tpa:questionmark'
+            }
+          ];
+        }
     </script>
 </dom-module>
