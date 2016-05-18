@@ -28,7 +28,8 @@ var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
 var ensureFiles = require('./tasks/ensure-files.js');
-var drakovMiddleware = require('drakov').middleware;
+var drakov = require('drakov');
+var proxy = require('http-proxy-middleware');
 
 // var ghPages = require('gulp-gh-pages');
 
@@ -49,6 +50,19 @@ var DIST = 'dist';
 var dist = function(subpath) {
   return !subpath ? DIST : path.join(DIST, subpath);
 };
+
+
+function drakovProxy(){
+  var argv = {
+      sourceFiles: './*-mock.md',
+      serverPort: 5001        
+  };    
+  drakov.run(argv);
+  
+  return proxy('/api', {
+    target: 'http://localhost:5001/', 
+    logLevel: 'debug'});
+}
 
 var styleTask = function(stylesPath, srcs) {
   return gulp.src(srcs.map(function(src) {
@@ -195,8 +209,9 @@ gulp.task('clean', function() {
   return del(['.tmp', dist()]);
 });
 
+
 // Watch files for changes & reload
-gulp.task('serve', ['styles'], function() {
+gulp.task('serve', ['styles'], function() {    
   browserSync({
     port: 5000,
     notify: false,
@@ -215,7 +230,7 @@ gulp.task('serve', ['styles'], function() {
     // https: true,
     server: {
       baseDir: ['.tmp', 'app'],
-      middleware: [historyApiFallback()]
+      middleware: [historyApiFallback(), drakovProxy()]
     }
   });
 
@@ -244,7 +259,7 @@ gulp.task('serve:dist', ['default'], function() {
     //       will present a certificate warning in the browser.
     // https: true,
     server: dist(),
-    middleware: [historyApiFallback()]
+    middleware: [historyApiFallback(), drakovProxy()]
   });
 });
 
