@@ -18526,7 +18526,7 @@ context. You should place this element as a child of `<body>` whenever possible.
 <dom-module name="tpa-nav-bar">
     <template>
 
-        <style include="tpa-styles">
+        <style>
             :host{
               width:100%
             }
@@ -18537,28 +18537,23 @@ context. You should place this element as a child of `<body>` whenever possible.
                 color:#ffffff;
                 line-height:3.5em;
             }
+
+            paper-icon-button.white {
+                color: white;
+            }
+
         </style>
 
-        <paper-tabs selected="0">
-            <paper-tab link="">
-                <a href="{{baseUrl}}" class="link" tabindex="-1">Daily Banking</a>
-            </paper-tab>
-            <paper-tab link="">
-                <a href="{{baseUrl}}page-2" class="link" tabindex="-1">Saving goals</a>
-            </paper-tab>
-            <paper-tab link="">
-                <a href="{{baseUrl}}page-3" class="link" tabindex="-1">Trading</a>
-            </paper-tab>
 
-            <paper-tab link="">
-                <a href="{{baseUrl}}page-4" class="link" tabindex="-1">Mortgage</a>
-            </paper-tab>
-            <paper-tab link="">
-                <a href="{{baseUrl}}page-5" class="link" tabindex="-1">Loans</a>
-            </paper-tab>
-            <paper-tab link="">
-                <a href="{{baseUrl}}page-5" class="link" tabindex="-1">Insurance</a>
-            </paper-tab>
+
+        <paper-tabs selected="0" scrollable="">
+            <template is="dom-repeat" as="item" items="[[tabs]]">
+                <paper-tab>
+                    <a href="{{baseUrl}}{{item.link}}" class="link" tabindex="-1">
+                        <paper-icon-button disabled="" icon="[[item.icon]]" class="white"></paper-icon-button>[[item.label]]
+                    </a>
+                </paper-tab>
+            </template>
         </paper-tabs>
 
     </template>
@@ -18570,9 +18565,51 @@ context. You should place this element as a child of `<body>` whenever possible.
                     type: String,
                     notify: true,
                     value: "/"
+                },
+                tabs: {
+                    type: Array,
+                    value: []
                 }
+            },
+            ready:function(){
+                this.tabs = getTabs();
             }
         });
+
+        function getTabs () {
+            return [
+                {
+                    label: 'Daily Banking',
+                    link: '',
+                    icon: 'account-balance-wallet'
+                },
+                {
+                    label: 'Saving goals',
+                    link: 'page-2',
+                    icon: 'tpa:pig'
+                },
+                {
+                    label: 'Trading',
+                    link: 'page-3',
+                    icon: 'tpa:wealth-increase'
+                },
+                {
+                    label: 'Mortgage',
+                    link: 'page-4',
+                    icon: 'tpa:house'
+                },
+                {
+                    label: 'Loans',
+                    link: 'page-5',
+                    icon: 'tpa:moneybag'
+                },
+                {
+                    label: 'Insurance',
+                    link: 'page-5',
+                    icon: 'tpa:questionmark'
+                }
+            ];
+        }
     </script>
 </dom-module>
 <script>
@@ -24853,19 +24890,40 @@ I18nBehavior = {
             type: Object,
             notify: true
         },
+        /**
+         * The mapping from region to the asci code of the currency symbol
+         *
+         * @attribute currencySymbolCodeMapping
+         */
         currencySymbolCodeMapping: {
             type: Object,
             value: {
                 "en-au": 36,
                 "de-de": 8364,
-                "nl-nl": 8364,
-                "nl-be": 8364
+                "nl-nl": 8364
             }
         },
-        currencySymbolCode: {
+        /**
+         * The currency symbol for the currently selected region.
+         *
+         * @attribute currencySymbol
+         */
+        currencySymbol: {
             type: String,
             value: "$",
             notify:true
+        },
+        /**
+         * The regions that will be support by the website this component belongs to.
+         *
+         * @attribute supportedRegions
+         */
+        supportedRegions: {
+            type: Array,
+            value: function(){return [
+                "en-au",
+                "de-de",
+                "nl-nl"]}
         }
     },
     handlei18nChange: function (e, detail, sender) {
@@ -24904,7 +24962,7 @@ I18nBehavior = {
     },
     i18nSignal: function(e, detail, sender) {
         this.dictionary = detail;
-        this.currencySymbolCode = String.fromCharCode(this.currencySymbolCodeMapping[this.dictionary]);
+        this.currencySymbol = String.fromCharCode(this.currencySymbolCodeMapping[this.dictionary]);
     }
 }
 </script>
@@ -24948,21 +25006,15 @@ I18nBehavior = {
         });
     </script>
 </dom-module>
+
 <dom-module name="tpa-transaction-list">
     <template>
         <style include="tpa-transactions-list-styles">
         </style>
         <tpa-transaction-list-i18n id="i18ncontent" content="{{i18ncontent}}" currency-symbol-code="{{currencySymbolCode}}"></tpa-transaction-list-i18n>
-        
-                
-                
-                
-                
-                
-        
         <h3>{{title}}</h3>
         <div>
-            <template as="transactionGroup" is="dom-repeat" items="{{transactions}}">
+            <template as="transactionGroup" is="dom-repeat" items="{{transactionGroups}}">
                 <div class="date-header" style="padding-left:10px; padding-bottom:10px">{{getGroupTitle(transactionGroup)}} <span style="float:right"><span>{{i18ncontent.currencyName}}</span> ({{currencySymbolCode}})</span></div>
                 <template is="dom-repeat" as="item" items="{{transactionGroup.transactions}}">
                     <div class$="{{computeRowClass(hideIcon)}}">
@@ -24988,23 +25040,48 @@ I18nBehavior = {
                     type:String,
                     notify:true
                 },
+                /**
+                 * Use to show and hide icons that will prefix each transaction.
+                 *
+                 * @attribute hideIcon
+                 */
                 hideIcon: {
                     type: Boolean,
                     value: false
                 },
+                /**
+                 * Use to indicate if the sub text for transactions should be shown.
+                 *
+                 * @attribute hideSubText
+                 */
                 hideSubText: {
                     type: Boolean,
                     value: false
                 },
+                /**
+                 * The field to in the transactionGroup that will be used as the header for each group
+                 *
+                 * @attribute groupTitleField
+                 */
                 groupTitleField:{
                     type: String,
                     value: "date"
                 },
-                transactions: {
+                /**
+                 * The transactionGroups to display on this transaction list.
+                 *
+                 * @attribute transactionGroups
+                 */
+                transactionGroups: {
                     type: Array,
                     value: [],
                     notify:true
                 },
+                /**
+                 * The title that will be shown at the top of the list
+                 *
+                 * @attribute title
+                 */
                 title: {
                     type: "String",
                     value: "",
@@ -25012,8 +25089,7 @@ I18nBehavior = {
                 }
             },
             ready:function(){
-              this.transactions = getTransactions(this.groupTitleField);
-//                this.$.getTransactions.generateRequest();
+              this.transactionGroups = getTransactions(this.groupTitleField);
             },
             getGroupTitle: function(group){
                 return group[this.groupTitleField];
@@ -25026,9 +25102,6 @@ I18nBehavior = {
                 }
 
                 return className;
-            },
-            getResponse: function(data){
-                this.transactions = data.detail.response.transactionGroups;
             },
             getCurrencySymbol: function(currencyCode){
                 return String.fromCharCode(currencyCode);
@@ -26869,6 +26942,7 @@ I18nBehavior = {
     })();
   </script>
 </dom-module>
+
 <dom-module id="tpa-region-selection" assetpath="../bower_components/tpa-region-selection/">
     <template>
       <style>
@@ -26879,22 +26953,33 @@ I18nBehavior = {
       </style>
         <paper-dropdown-menu label="Region" value="{{selectedItem}}">
             <paper-listbox class="dropdown-content" selected="{{selected}}">
-                <paper-item>en-au</paper-item>
-                <paper-item>nl-nl</paper-item>
-                <paper-item>de-de</paper-item>
+                <template is="dom-repeat" as="item" items="{{supportedRegions}}">
+                    <paper-item>{{item}}</paper-item>
+                </template>
             </paper-listbox>
         </paper-dropdown-menu>
     </template>
     <script>
         Polymer({
             is: "tpa-region-selection",
+            behaviors: [I18nBehavior],
             properties:{
+                /**
+                 * The currently selected dom object.
+                 *
+                 * @attribute selectedItem
+                 */
                 selectedItem: {
                     type: String,
                     value: "en-au",
                     notify:true,
                     observer:'selectedItemChanged'
                 },
+                /**
+                 * Index of the currently selected item.
+                 *
+                 * @attribute selected
+                 */
                 selected: {
                     type: String,
                     value: "0"
@@ -26949,7 +27034,85 @@ I18nBehavior = {
         });
     </script>
 </dom-module>
-<dom-module name="tpa-mortgage-calculation-line">
+
+<dom-module id="tpa-dashboard-data" assetpath="../bower_components/tpa-dashboard/">
+  <template>
+    <iron-ajax id="getDashboardData" url="{{services.dashboard}}" handle-as="json" on-response="handleDashboardResponse"></iron-ajax>
+    <iron-meta-query key="services" value="{{services}}"></iron-meta-query>
+  </template>
+  <script>
+    Polymer({
+      is: "tpa-dashboard-data",
+      properties: {
+        services: {
+          type: Object,
+          notify:true
+        }
+      },
+      ready: function(){
+        this.$.getDashboardData.generateRequest();
+      },
+      handleDashboardResponse: function(e, data){
+        this.fire("iron-signal", {
+          name: "dashboard-data",
+          data: data.response
+        });
+      }
+    })
+  </script>
+</dom-module>
+
+<dom-module id="tpa-globals" assetpath="../bower_components/tpa-globals/">
+	<template>
+		<content>
+			
+			
+		</content>
+	</template>
+</dom-module>
+<script>
+	Polymer({
+		is: 'tpa-globals',
+		setValue: function(key,val) {
+			var el = Polymer.dom(this).querySelector('#'+key);			
+			if(el) {
+				el.value = val;
+				var allGlobals = document.querySelectorAll('tpa-globals-query');
+				for(i=0;i<allGlobals.length;i++) {
+					allGlobals[i].updateValue(key);
+				}
+			}
+		},
+		hostAttributes: {
+		        hidden: true
+		}
+	})
+</script>
+
+
+<script>
+	Polymer({
+		is: 'tpa-globals-query',
+		properties: {
+			key: {
+				type: String,
+				notify: true
+			},
+			value: {
+				type: Object,
+				notify: true
+			}
+		},
+		ready: function() {			
+			this.value = new Polymer.IronMetaQuery({key: this.key}).value;			
+		},
+		updateValue: function(key) {
+			if (key == this.key) {
+				this.value = new Polymer.IronMetaQuery({key: this.key}).value;
+			}
+		}
+	});
+</script><dom-module name="tpa-mortgage-calculation-line">
   <template>
       <div>
         <span>{{text}}</span>

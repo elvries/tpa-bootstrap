@@ -62,6 +62,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- endbuild -->
 
   <template is="dom-bind" id="app">
+    <tpa-globals>
+      <iron-meta key="services" value='{"dashboard":"http://localhost:5001/dashboard"}'></iron-meta>
+    </tpa-globals>
+
 
     <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px" force-narrow>
       <!-- Drawer Scroll Header Panel -->
@@ -97,6 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
 
       <div main>
+        <tpa-dashboard-data></tpa-dashboard-data>
         <tpa-top-bar class="paper-header"></tpa-top-bar>
 
         <!-- Main Area -->
