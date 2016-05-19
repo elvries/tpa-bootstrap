@@ -54,13 +54,13 @@ var dist = function(subpath) {
 
 function drakovProxy(){
   var argv = {
-      sourceFiles: './*-mock.md',
-      serverPort: 5001        
-  };    
+      sourceFiles: './**/*-mock.md',
+      serverPort: 5001
+  };
   drakov.run(argv);
-  
+
   return proxy('/api', {
-    target: 'http://localhost:5001/', 
+    target: 'http://localhost:5001/',
     logLevel: 'debug'});
 }
 
@@ -211,7 +211,7 @@ gulp.task('clean', function() {
 
 
 // Watch files for changes & reload
-gulp.task('serve', ['styles'], function() {    
+gulp.task('serve', ['styles'], function() {
   browserSync({
     port: 5000,
     notify: false,
