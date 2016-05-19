@@ -13,7 +13,9 @@
     "tpa-icons": "https://github.com/ING-Group/tpa-icons.git",
     "tpa-transaction-list": "https://github.com/ING-Group/tpa-transaction-list.git",
     "tpa-i18n": "https://github.com/ING-Group/tpa-i18n.git",
-    "tpa-region-selection": "https://github.com/ING-Group/tpa-region-selection.git"
+    "tpa-region-selection": "https://github.com/ING-Group/tpa-region-selection.git",
+    "tpa-globals": "https://github.com/ING-Group/tpa-globals.git",
+    "tpa-dashboard": "https://github.com/ING-Group/tpa-dashboard.git"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
