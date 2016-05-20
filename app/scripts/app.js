@@ -17,6 +17,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   // Sets app default base URL
+  app.apiBaseUrl = "http://localhost:5001/";
+
+  app.services = {
+    "dashboard": app.apiBaseUrl + "dashboard"
+  };
+
   app.baseUrl = '/';
   if (window.location.port === '') {  // if production
     // Uncomment app.baseURL below and
@@ -77,6 +83,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.scrollPageToTop = function() {
     app.$.headerPanelMain.scrollToTop(true);
   };
+
+  addEventListener("iron-deselect", function(e, data){
+    if(e.target.id === "mainPages") {
+      // Determine if the route will match anything in iron-pages
+      var matchingSection = e.target.items.find(function(f){ return f.attributes["data-route"].value == app.data.pageName });
+      if(app.data.pageName.length > 0 && !matchingSection){
+        app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+        app.$.toast.show();
+      }
+      app.$.paperDrawerPanel.closeDrawer();
+    }
+  });
 
   app.closeDrawer = function() {
     app.$.paperDrawerPanel.closeDrawer();
