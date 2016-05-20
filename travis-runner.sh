@@ -14,15 +14,17 @@ then
     # Deploying to GitHub Pages! (http://ING-Group.github.io/tpa-bootstrap)
     echo Deploying to GitHub Pages
     # sed -i.tmp1 "s/\/\/ app.baseUrl = '\/tpa-bootstrap/app.baseUrl = '\/tpa-bootstrap/" app/scripts/app.js
-    sed -i.tmp1 "s#// app.apiBase = '/tpa-bootstrap/api#app.apiBase = 'http://tpabootstrap.westeurope.cloudapp.azure.com:5001#" app/scripts/app.js             
-    sed -i.tmp2 "s/<\/head>/\  \<script>'https:'!==window.location.protocol\&\&(window.location.protocol='https')<\/script>&/g" app/index.html
+    # TODO: ENSURE THIS CHANGES TO HTTPS
+    sed -i.tmp1 "s#// app.apiBase = '/tpa-bootstrap/api#app.apiBase = 'http://tpabootstrap.westeurope.cloudapp.azure.com:5001#" app/scripts/app.js
+    # TODO: TURN BACK ON FOR PRODUCTION TO ENSURE HTTPS             
+    #sed -i.tmp2 "s/<\/head>/\  \<script>'https:'!==window.location.protocol\&\&(window.location.protocol='https')<\/script>&/g" app/index.html
         
     gulp build-deploy-gh-pages
     # Undoing Changes to PSK for GitHub Pages
     cp app/scripts/app.js.tmp1 app/scripts/app.js    
     rm app/scripts/app.js.tmp1
-    cp app/index.html.tmp2 app/index.html
-    rm app/index.html.tmp2        
+    #cp app/index.html.tmp2 app/index.html
+    #rm app/index.html.tmp2        
   }
 
   deploy_firebase () {
