@@ -19,6 +19,8 @@
 
 [TPA Demo](https://ing-group.github.io/tpa-bootstrap/)
 
+[TPA Demo with Mock](http://tpabootstrap.westeurope.cloudapp.azure.com/)
+
 ### Tutorials
 
 Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://www.polymer-project.org):

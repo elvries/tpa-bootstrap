@@ -30,6 +30,7 @@ var crypto = require('crypto');
 var ensureFiles = require('./tasks/ensure-files.js');
 var drakov = require('drakov');
 var proxy = require('http-proxy-middleware');
+var lec = require('gulp-line-ending-corrector');
 
 // var ghPages = require('gulp-gh-pages');
 
@@ -54,13 +55,13 @@ var dist = function(subpath) {
 
 function drakovProxy(){
   var argv = {
-      sourceFiles: './*-mock.md',
-      serverPort: 5001        
-  };    
+      sourceFiles: './**/*-mock.md',
+      serverPort: 5001
+  };
   drakov.run(argv);
-  
+
   return proxy('/api', {
-    target: 'http://localhost:5001/', 
+    target: 'http://localhost:5001/',
     logLevel: 'debug'});
 }
 
@@ -211,7 +212,7 @@ gulp.task('clean', function() {
 
 
 // Watch files for changes & reload
-gulp.task('serve', ['styles'], function() {    
+gulp.task('serve', ['styles'], function() {
   browserSync({
     port: 5000,
     notify: false,
@@ -291,6 +292,14 @@ gulp.task('deploy-gh-pages', function() {
       silent: true,
       branch: 'gh-pages'
     }), $.ghPages()));
+});
+
+// Bower is annoying on Windows and doesn't checkout API Blueprint Markdowns
+
+gulp.task('fix-api-eol', function() {
+  return gulp.src('./app/bower_components/**/*-mock.md')
+    .pipe(lec({verbose:true, eolc: 'LF', encoding:'utf8'}))    
+    .pipe(gulp.dest('./app/bower_components'));
 });
 
 // Load tasks for web-component-tester

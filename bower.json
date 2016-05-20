@@ -6,17 +6,24 @@
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
     "page": "visionmedia/page.js#~1.6.4",
     "paper-elements": "PolymerElements/paper-elements#^1.0.7",
-    "platinum-elements": "PolymerElements/platinum-elements#^1.2.0",
+    "platinum-elements": "PolymerElements/platinum-elements#^2.0.0",
     "polymer": "Polymer/polymer#^1.4.0",
     "tpa-top-bar": "https://github.com/ING-Group/tpa-top-bar.git",
     "tpa-nav-bar": "https://github.com/ING-Group/tpa-nav-bar.git",
     "tpa-icons": "https://github.com/ING-Group/tpa-icons.git",
     "tpa-transaction-list": "https://github.com/ING-Group/tpa-transaction-list.git",
     "tpa-i18n": "https://github.com/ING-Group/tpa-i18n.git",
-    "tpa-region-selection": "https://github.com/ING-Group/tpa-region-selection.git"
+    "tpa-region-selection": "https://github.com/ING-Group/tpa-region-selection.git",
+    "tpa-globals": "https://github.com/ING-Group/tpa-globals.git",
+    "tpa-dashboard": "https://github.com/ING-Group/tpa-dashboard.git",
+    "app-route": "PolymerElements/app-route#^0.9.1",
+    "app-layout": "PolymerElements/app-layout#^0.9.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
   },
-  "ignore": []
+  "ignore": [],
+  "scripts": {
+    "postinstall": "gulp fix-api-eol"
+  }
 }

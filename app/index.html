@@ -62,6 +62,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- endbuild -->
 
   <template is="dom-bind" id="app">
+    <app-location route="{{route}}" path="/{{data.pageName}}" use-hash-as-path></app-location>
+    <app-route route="{{route}}" pattern="/:pageName" data="{{data}}"></app-route>
+
+    <tpa-globals>
+      <iron-meta key="services" value="{{services}}"></iron-meta>
+    </tpa-globals>
+
 
     <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px" force-narrow>
       <!-- Drawer Scroll Header Panel -->
@@ -69,82 +76,75 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Toolbar -->
         <paper-toolbar id="drawerToolbar">
-          <span class="menu-name">Menu</span>
+          <span class="menu-name">TPA Bootstrap</span>
         </paper-toolbar>
 
         <!-- Drawer Content -->
-        <paper-menu class="app-menu" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="{{baseUrl}}">
-            <iron-icon icon="home"></iron-icon>
-            <span>Home</span>
-          </a>
-
-          <a data-route="page-1" href="{{baseUrl}}page-1">
-            <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
-          </a>
-
-          <a data-route="page-2" href="{{baseUrl}}page-2">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
-          </a>
-
-          <a data-route="page-3" href="{{baseUrl}}page-3">
-            <iron-icon icon="settings"></iron-icon>
-            <span>Settings</span>
-          </a>
+        <paper-menu class="app-menu" attr-for-selected="data-route" selected="{{data.pageName}}">
+          <template as="item" is="dom-repeat" items="{{menuItems}}">
+            <paper-item data-route="{{item.route}}" on-click="closeDrawer">
+                <iron-icon icon="{{item.icon}}"></iron-icon>
+                <span class="padding-left-sm">{{item.title}}</span>
+            </paper-item>
+          </template>
         </paper-menu>
       </paper-scroll-header-panel>
 
       <div main>
-        <tpa-top-bar class="paper-header"></tpa-top-bar>
-
-        <!-- Main Area -->
-        <paper-scroll-header-panel fixed main id="headerPanelMain">
-        <!-- Main Toolbar -->
-
-        <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
-          <!-- Application sub title -->
-
-          <tpa-nav-bar base-url="{{baseUrl}}"></tpa-nav-bar>
-
-        </paper-toolbar>
-
-        <!-- Main Content -->
-        <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
-            <!--<section data-route="home">
-              <div class="horizontal layout wrap">
-                <paper-material elevation="1">
-                  <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450" account-balance="5000"></tpa-money-transfer>
-                </paper-material>
-
-                <paper-material elevation="1">
-                  <tpa-transaction-list hide-sub-text title="Latest Transactions"></tpa-transaction-list>
-                </paper-material>
-
-                <paper-material elevation="1">
-                  <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
-                </paper-material>
-              </div>
-            </section>-->
-
+        <tpa-dashboard-data></tpa-dashboard-data>
+        <app-header-layout has-scrolling-region>
+          <app-header reveals>
+            <tpa-top-bar class="paper-header"></tpa-top-bar>
+            <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
+              <!-- Application sub title -->
+              <tpa-nav-bar base-url="{{baseUrl}}#/"></tpa-nav-bar>
+            </paper-toolbar>
+          </app-header>
+          <!-- Main Content -->
+          <div class="content">
+          <iron-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home">
             <section data-route="home">
               <tpa-app-layout></tpa-app-layout>
             </section>
 
-
-
-            <section data-route="page-2">
+            <section data-route="users">
               <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Another page</h1>
+                <h1 class="page-title focus-target" tabindex="-1">Users page</h1>
+                <p>Users Page</p>
+              </paper-material>
+            </section>
+
+            <section data-route="savingsgoals">
+              <paper-material elevation="1">
+                <h1 class="page-title focus-target" tabindex="-1">Savings goals</h1>
                 <p>This is another page</p>
               </paper-material>
             </section>
 
-            <section data-route="page-3">
+            <section data-route="trading">
               <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Yet another page</h1>
+                <h1 class="page-title focus-target" tabindex="-1">Trading</h1>
+                <div>Lorem ipsum...</div>
+              </paper-material>
+            </section>
+
+            <section data-route="mortgage">
+              <paper-material elevation="1">
+                <h1 class="page-title focus-target" tabindex="-1">Mortgage</h1>
+                <p>This is another page</p>
+              </paper-material>
+            </section>
+
+            <section data-route="loans">
+              <paper-material elevation="1">
+                <h1 class="page-title focus-target" tabindex="-1">Loans</h1>
+                <div>Lorem ipsum...</div>
+              </paper-material>
+            </section>
+
+            <section data-route="insurance">
+              <paper-material elevation="1">
+                <h1 class="page-title focus-target" tabindex="-1">Insurance</h1>
                 <div>Lorem ipsum...</div>
               </paper-material>
             </section>
@@ -164,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
           </iron-pages>
         </div>
-      </paper-scroll-header-panel>
+        </app-header-layout>
       </div>
     </paper-drawer-panel>
 

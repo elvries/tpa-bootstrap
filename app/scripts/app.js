@@ -17,12 +17,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   // Sets app default base URL
+  app.apiBaseUrl = "http://localhost:5001/";
+
+  app.services = {
+    "dashboard": app.apiBaseUrl + "dashboard"
+  };
+
   app.baseUrl = '/';
   if (window.location.port === '') {  // if production
     // Uncomment app.baseURL below and
     // set app.baseURL to '/your-pathname/' if running from folder in production
     app.baseUrl = '/tpa-bootstrap/';
   }
+
+  app.menuItems = [
+    {
+      route:"home",
+      title: "Home",
+      icon:"tpa:home"
+    },
+    {
+      route:"users",
+      title: "Users",
+      icon:"tpa:users"
+    },
+    {
+      route:"contact",
+      title: "Contact",
+      icon:"tpa:email"
+    },
+    {
+      route:"settings",
+      title: "Settings",
+      icon:"tpa:settings"
+    }
+  ];
+
 
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.
@@ -42,34 +72,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // imports are loaded and elements have been registered
   });
 
-  // Main area's paper-scroll-header-panel custom condensing transformation of
-  // the appName in the middle-container and the bottom title in the bottom-container.
-  // The appName is moved to top and shrunk on condensing. The bottom sub title
-  // is shrunk to nothing on condensing.
-  // window.addEventListener('paper-header-transform', function(e) {
-  //   var appName = Polymer.dom(document).querySelector('#mainToolbar .app-name');
-  //   var middleContainer = Polymer.dom(document).querySelector('#mainToolbar .middle-container');
-  //   var bottomContainer = Polymer.dom(document).querySelector('#mainToolbar .bottom-container');
-  //   var detail = e.detail;
-  //   var heightDiff = detail.height - detail.condensedHeight;
-  //   var yRatio = Math.min(1, detail.y / heightDiff);
-  //   // appName max size when condensed. The smaller the number the smaller the condensed size.
-  //   var maxMiddleScale = 0.50;
-  //   var auxHeight = heightDiff - detail.y;
-  //   var auxScale = heightDiff / (1 - maxMiddleScale);
-  //   var scaleMiddle = Math.max(maxMiddleScale, auxHeight / auxScale + maxMiddleScale);
-  //   var scaleBottom = 1 - yRatio;
-  //
-  //   // Move/translate middleContainer
-  //   Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
-  //
-  //   // Scale bottomContainer and bottom sub title to nothing and back
-  //   Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
-  //
-  //   // Scale middleContainer appName
-  //   Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
-  // });
-
   window.addEventListener('open-menu',function(){
     app.$.paperDrawerPanel.togglePanel();
   });
@@ -77,6 +79,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.scrollPageToTop = function() {
     app.$.headerPanelMain.scrollToTop(true);
   };
+
+  addEventListener("iron-deselect", function(e){
+    if(e.target.id === "mainPages") {
+      app.menuItemSelected(e.target);
+    }
+  });
+
+  app.menuItemSelected = function(selectedItem){
+      // Determine if the route will match anything in iron-pages
+      var matchingSection = selectedItem.items.find(function(f){ return f.attributes["data-route"].value == app.data.pageName });
+      if(app.data.pageName.length > 0 && !matchingSection){
+        app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+        app.$.toast.show();
+      }
+      app.$.paperDrawerPanel.closeDrawer();
+  }
 
   app.closeDrawer = function() {
     app.$.paperDrawerPanel.closeDrawer();
