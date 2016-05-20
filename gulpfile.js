@@ -30,6 +30,7 @@ var crypto = require('crypto');
 var ensureFiles = require('./tasks/ensure-files.js');
 var drakov = require('drakov');
 var proxy = require('http-proxy-middleware');
+var lec = require('gulp-line-ending-corrector');
 
 // var ghPages = require('gulp-gh-pages');
 
@@ -291,6 +292,14 @@ gulp.task('deploy-gh-pages', function() {
       silent: true,
       branch: 'gh-pages'
     }), $.ghPages()));
+});
+
+// Bower is annoying on Windows and doesn't checkout API Blueprint Markdowns
+
+gulp.task('fix-api-eol', function() {
+  return gulp.src('./app/bower_components/**/*-mock.md')
+    .pipe(lec({verbose:true, eolc: 'LF', encoding:'utf8'}))    
+    .pipe(gulp.dest('./app/bower_components'));
 });
 
 // Load tasks for web-component-tester
