@@ -17,7 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   // Sets app default base URL
-  app.apiBaseUrl = "http://localhost:5001/";
+  app.apiBaseUrl = "/api/";
+  //app.apiBaseUrl = "/tpa-bootstrap/api";  
 
   app.services = {
     "dashboard": app.apiBaseUrl + "dashboard"
@@ -27,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   if (window.location.port === '') {  // if production
     // Uncomment app.baseURL below and
     // set app.baseURL to '/your-pathname/' if running from folder in production
-    app.baseUrl = '/tpa-bootstrap/';
+    // app.baseUrl = '/tpa-bootstrap/';
   }
 
   app.menuItems = [
