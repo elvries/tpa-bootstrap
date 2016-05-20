@@ -16,7 +16,8 @@
     "tpa-region-selection": "https://github.com/ING-Group/tpa-region-selection.git",
     "tpa-globals": "https://github.com/ING-Group/tpa-globals.git",
     "tpa-dashboard": "https://github.com/ING-Group/tpa-dashboard.git",
-    "app-route": "PolymerElements/app-route#^0.9.1"
+    "app-route": "PolymerElements/app-route#^0.9.1",
+    "app-layout": "PolymerElements/app-layout#^0.9.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
