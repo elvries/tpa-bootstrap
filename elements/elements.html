@@ -18551,7 +18551,7 @@ context. You should place this element as a child of `<body>` whenever possible.
 
 
 
-        <paper-tabs selected="0" scrollable="">
+        <paper-tabs selected="0" scrollable="{{shouldScroll}}">
             <template is="dom-repeat" as="item" items="[[tabs]]">
                 <paper-tab>
                     <a href="{{baseUrl}}{{item.link}}" class="link" tabindex="-1">
@@ -18560,6 +18560,8 @@ context. You should place this element as a child of `<body>` whenever possible.
                 </paper-tab>
             </template>
         </paper-tabs>
+
+      <iron-media-query query="(max-width: 880px)" query-matches="{{shouldScroll}}"></iron-media-query>
 
     </template>
     <script>
@@ -18573,6 +18575,10 @@ context. You should place this element as a child of `<body>` whenever possible.
                     type: String,
                     notify: true,
                     value: "/"
+                },
+                shouldScroll: {
+                    type: Boolean,
+                    notify: true
                 },
                 /**
                  * An array of tabs with a label, link and the name of the icon from the icon set
@@ -18596,27 +18602,27 @@ context. You should place this element as a child of `<body>` whenever possible.
                 },
                 {
                     label: 'Saving goals',
-                    link: 'page-2',
+                    link: 'savingsgoals',
                     icon: 'tpa:pig'
                 },
                 {
                     label: 'Trading',
-                    link: 'page-3',
+                    link: 'trading',
                     icon: 'tpa:wealth-increase'
                 },
                 {
                     label: 'Mortgage',
-                    link: 'page-4',
+                    link: 'mortgage',
                     icon: 'tpa:house'
                 },
                 {
                     label: 'Loans',
-                    link: 'page-5',
+                    link: 'loans',
                     icon: 'tpa:moneybag'
                 },
                 {
                     label: 'Insurance',
-                    link: 'page-5',
+                    link: 'insurance',
                     icon: 'tpa:questionmark'
                 }
             ];
