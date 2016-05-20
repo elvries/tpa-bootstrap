@@ -62,8 +62,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- endbuild -->
 
   <template is="dom-bind" id="app">
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route route="{{route}}" pattern="/:pageName" data="{{data}}"></app-route>
+
     <tpa-globals>
-      <iron-meta key="services" value='{"dashboard":"http://localhost:5001/dashboard"}'></iron-meta>
+      <iron-meta key="services" value="{{services}}"></iron-meta>
     </tpa-globals>
 
 
@@ -77,23 +80,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
 
         <!-- Drawer Content -->
-        <paper-menu class="app-menu" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="{{baseUrl}}">
+        <paper-menu class="app-menu" attr-for-selected="data-route" selected="[[data.pageName]]" iron-select="{{closeDrawer}}">
+          <a data-route="home" href="{{baseUrl}}#/home">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
 
-          <a data-route="page-1" href="{{baseUrl}}page-1">
+          <a data-route="page-1" href="{{baseUrl}}#/page-1">
             <iron-icon icon="info"></iron-icon>
             <span>Users</span>
           </a>
 
-          <a data-route="page-2" href="{{baseUrl}}page-2">
+          <a data-route="page-2" href="{{baseUrl}}#/page-2">
             <iron-icon icon="mail"></iron-icon>
             <span>Contact</span>
           </a>
 
-          <a data-route="page-3" href="{{baseUrl}}page-3">
+          <a data-route="page-3" href="{{baseUrl}}#/page-3">
             <iron-icon icon="settings"></iron-icon>
             <span>Settings</span>
           </a>
@@ -111,13 +114,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
           <!-- Application sub title -->
 
-          <tpa-nav-bar base-url="{{baseUrl}}"></tpa-nav-bar>
+          <tpa-nav-bar base-url="{{baseUrl}}#/"></tpa-nav-bar>
 
         </paper-toolbar>
 
         <!-- Main Content -->
         <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
+          <iron-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home">
             <!--<section data-route="home">
               <div class="horizontal layout wrap">
                 <paper-material elevation="1">
