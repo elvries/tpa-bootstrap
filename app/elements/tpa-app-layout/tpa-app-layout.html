@@ -4,83 +4,78 @@
             .layout {
                 margin-bottom: 20px;
             }
+
             paper-card {
-                width: calc(30% - 10px);
-                margin: 16px 0;
+                width: calc(33.3% - 20px);
+                margin: 24px 0;
             }
+
             @media (max-width: 1200px) {
                 paper-card {
-                    width: calc(48.33% - 32px);
+                    width: calc(50% - 20px);
                 }
             }
 
             @media (max-width: 800px) {
                 paper-card {
-                    width: calc(97.33% - 32px);
+                    width: calc(100% - 0px);
                 }
             }
 
         </style>
         <div class="horizontal around-justified layout wrap">
-                <paper-card heading="Money Transfer">
-                      <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450" account-balance="5000"></tpa-money-transfer>
-                </paper-card>
+            <paper-card heading="Money Transfer">
+                <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450"
+                                    account-balance="5000"></tpa-money-transfer>
+            </paper-card>
+
+            <paper-card>
+                <tpa-transaction-list hide-sub-text title="Latest Transactions"></tpa-transaction-list>
+            </paper-card>
+
+            <paper-card heading="Accounts">
+                <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
+            </paper-card>
 
                 <paper-card>
-                  <tpa-transaction-list hide-sub-text title="Latest Transactions"></tpa-transaction-list>
+                    <tpa-mortgage-calculation></tpa-mortgage-calculation>
                 </paper-card>
 
-                <paper-card heading="Accounts">
-                        <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
+            <!--<paper-card>
+                    <div class="card-content">
+                        <tpa-money-transfer account-owner="Dagobert Duck" account-number="ING 0126162 232" account-balance="2432.32"></tpa-money-transfer>
+                    </div>
                 </paper-card>
 
-            <!--<paper-material elevation="3">
                 <paper-card>
                     <div class="card-content">
                         <tpa-money-transfer account-owner="Dagobert Duck" account-number="ING 0126162 232" account-balance="2432.32"></tpa-money-transfer>
                     </div>
                 </paper-card>
-            </paper-material>
 
-            <paper-material elevation="3">
                 <paper-card>
                     <div class="card-content">
                         <tpa-money-transfer account-owner="Dagobert Duck" account-number="ING 0126162 232" account-balance="2432.32"></tpa-money-transfer>
                     </div>
                 </paper-card>
-            </paper-material>
 
-            <paper-material elevation="3">
                 <paper-card>
                     <div class="card-content">
                         <tpa-money-transfer account-owner="Dagobert Duck" account-number="ING 0126162 232" account-balance="2432.32"></tpa-money-transfer>
                     </div>
                 </paper-card>
-            </paper-material>
 
-            <paper-material elevation="3">
                 <paper-card>
                     <div class="card-content">
                         <tpa-money-transfer account-owner="Dagobert Duck" account-number="ING 0126162 232" account-balance="2432.32"></tpa-money-transfer>
                     </div>
                 </paper-card>
-            </paper-material>
 
-            <paper-material elevation="3">
                 <paper-card>
                     <div class="card-content">
                         <tpa-money-transfer account-owner="Dagobert Duck" account-number="ING 0126162 232" account-balance="2432.32"></tpa-money-transfer>
                     </div>
-                </paper-card>
-            </paper-material>
-
-            <paper-material elevation="3">
-                <paper-card>
-                    <div class="card-content">
-                        <tpa-money-transfer account-owner="Dagobert Duck" account-number="ING 0126162 232" account-balance="2432.32"></tpa-money-transfer>
-                    </div>
-                </paper-card>
-            </paper-material>-->
+                </paper-card>-->
         </div>
     </template>
     <script>
