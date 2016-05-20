@@ -17,7 +17,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   // Sets app default base URL
-  app.apiBaseUrl = "http://localhost:5001/";
+  // app.apiBase = '/tpa-bootstrap/api';
+  app.apiPath = "/api/";
+  app.apiBaseUrl = [app.apiBase, app.apiPath].join('');
 
   app.services = {
     "dashboard": app.apiBaseUrl + "dashboard"
