@@ -28,6 +28,9 @@ var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
 var ensureFiles = require('./tasks/ensure-files.js');
+var drakov = require('drakov');
+var proxy = require('http-proxy-middleware');
+var lec = require('gulp-line-ending-corrector');
 
 // var ghPages = require('gulp-gh-pages');
 
@@ -48,6 +51,19 @@ var DIST = 'dist';
 var dist = function(subpath) {
   return !subpath ? DIST : path.join(DIST, subpath);
 };
+
+
+function drakovProxy(){
+  var argv = {
+      sourceFiles: './**/*-mock.md',
+      serverPort: 5001
+  };
+  drakov.run(argv);
+
+  return proxy('/api', {
+    target: 'http://localhost:5001/',
+    logLevel: 'debug'});
+}
 
 var styleTask = function(stylesPath, srcs) {
   return gulp.src(srcs.map(function(src) {
@@ -194,6 +210,7 @@ gulp.task('clean', function() {
   return del(['.tmp', dist()]);
 });
 
+
 // Watch files for changes & reload
 gulp.task('serve', ['styles'], function() {
   browserSync({
@@ -214,7 +231,7 @@ gulp.task('serve', ['styles'], function() {
     // https: true,
     server: {
       baseDir: ['.tmp', 'app'],
-      middleware: [historyApiFallback()]
+      middleware: [historyApiFallback(), drakovProxy()]
     }
   });
 
@@ -243,7 +260,7 @@ gulp.task('serve:dist', ['default'], function() {
     //       will present a certificate warning in the browser.
     // https: true,
     server: dist(),
-    middleware: [historyApiFallback()]
+    middleware: [historyApiFallback(), drakovProxy()]
   });
 });
 
@@ -275,6 +292,14 @@ gulp.task('deploy-gh-pages', function() {
       silent: true,
       branch: 'gh-pages'
     }), $.ghPages()));
+});
+
+// Bower is annoying on Windows and doesn't checkout API Blueprint Markdowns
+
+gulp.task('fix-api-eol', function() {
+  return gulp.src('./app/bower_components/**/*-mock.md')
+    .pipe(lec({verbose:true, eolc: 'LF', encoding:'utf8'}))    
+    .pipe(gulp.dest('./app/bower_components'));
 });
 
 // Load tasks for web-component-tester

@@ -10,9 +10,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 var path = require('path');
 
 var ret = {
-  'suites': ['app/test'],
+  'suites': ['app/elements/**/test'],
   'webserver': {
     'pathMappings': []
+  },
+  'plugins': {
+    'istanbul': {
+        'dir': './coverage',
+        'reporters': ['text-summary', 'lcov'],
+        'include': [
+            '/app/elements/**/*.html'
+        ],
+        'exclude': [
+        ]
+    }
   }
 };
 
