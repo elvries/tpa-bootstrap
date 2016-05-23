@@ -56,12 +56,12 @@ var dist = function(subpath) {
 function drakovProxy(){
   var argv = {
       sourceFiles: './**/*-mock.md',
-      serverPort: 5002
+      serverPort: 5001
   };
   drakov.run(argv);
 
   return proxy('/api', {
-    target: 'http://localhost:5002/',
+    target: 'http://localhost:5001/',
     logLevel: 'debug'});
 }
 
@@ -244,7 +244,7 @@ gulp.task('serve', ['styles'], function() {
 // Build and serve the output from the dist build
 gulp.task('serve:dist', ['default'], function() {
   browserSync({
-    port: 5001,
+    port: 5002,
     notify: false,
     logPrefix: 'PSK',
     snippetOptions: {
