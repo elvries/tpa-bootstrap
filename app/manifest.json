@@ -2,44 +2,45 @@
   "name": "ING TPA Bootstrap",
   "short_name": "ING TPA",
   "icons": [{
-        "src": "images/pw/72.png",
+
+        "src": "images/ingtouch/72.png",
         "sizes": "72x72",
         "type": "image/png"
       }, {
-        "src": "images/pw/96.png",
+        "src": "images/ingtouch/96.png",
         "sizes": "96x96",
         "type": "image/png"
       }, {
-        "src": "images/pw/128.png",
+        "src": "images/ingtouch/128.png",
         "sizes": "128x128",
         "type": "image/png"
       },{
-        "src": "images/pw/114.png",
+        "src": "images/ingtouch/114.png",
         "sizes": "114x114",
         "type": "image/png"
       }, {
-        "src": "images/pw/144.png",
+        "src": "images/ingtouch/144.png",
         "sizes": "144x144",
         "type": "image/png"
       }, {
-        "src": "images/pw/152.png",
+        "src": "images/ingtouch/152.png",
         "sizes": "152x152",
         "type": "image/png"
       }, {
-        "src": "images/pw/192.png",
+        "src": "images/ingtouch/192.png",
         "sizes": "192x192",
         "type": "image/png"
       },{
-        "src": "images/pw/384.png",
+        "src": "images/ingtouch/384.png",
         "sizes": "384x384",
         "type": "image/png"
       },{
-        "src": "images/pw/512.png",
+        "src": "images/ingtouch/512.png",
         "sizes": "512x512",
         "type": "image/png"
       }],
-  "background_color": "#FF6200",
+  "background_color": "#FF6600",
   "display": "standalone",
-  "theme_color": "#FF6200",
-  "start_url": "./#/home"
+  "theme_color": "#FF6600",
+  "start_url": "./index.html"
 }
