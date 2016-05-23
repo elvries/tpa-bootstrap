@@ -19,7 +19,8 @@
     "tpa-styles": "https://github.com/ING-Group/tpa-styles.git",
     "tpa-font": "https://github.com/ING-Group/tpa-font.git",
     "app-route": "PolymerElements/app-route#^0.9.1",
-    "app-layout": "PolymerElements/app-layout#^0.9.0"
+    "app-layout": "PolymerElements/app-layout#^0.9.0",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior#^0.9.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
