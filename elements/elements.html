@@ -14876,10 +14876,15 @@ Use `noOverlap` to position the element around another element without overlappi
      * Equivalent to calling `resetFit()` and `fit()`. Useful to call this after
      * the element or the `fitInto` element has been resized, or if any of the
      * positioning properties (e.g. `horizontalAlign, verticalAlign`) is updated.
+     * It preserves the scroll position of the sizingTarget.
      */
     refit: function() {
+      var scrollLeft = this.sizingTarget.scrollLeft;
+      var scrollTop = this.sizingTarget.scrollTop;
       this.resetFit();
       this.fit();
+      this.sizingTarget.scrollLeft = scrollLeft;
+      this.sizingTarget.scrollTop = scrollTop;
     },
 
     /**
@@ -16900,16 +16905,17 @@ context. You should place this element as a child of `<body>` whenever possible.
 
 <dom-module id="paper-button" assetpath="../bower_components/paper-button/">
   <template strip-whitespace="">
-
     <style include="paper-material">
       :host {
-        display: inline-block;
+        @apply(--layout-inline);
+        @apply(--layout-center-center);
         position: relative;
         box-sizing: border-box;
         min-width: 5.14em;
         margin: 0 0.29em;
         background: transparent;
-        text-align: center;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
         font: inherit;
         text-transform: uppercase;
         outline-width: 0;
@@ -16922,6 +16928,7 @@ context. You should place this element as a child of `<body>` whenever possible.
         z-index: 0;
         padding: 0.7em 0.57em;
 
+        @apply(--paper-font-common-base);
         @apply(--paper-button);
       }
 
@@ -16947,53 +16954,50 @@ context. You should place this element as a child of `<body>` whenever possible.
       paper-ripple {
         color: var(--paper-button-ink-color);
       }
-
-      :host > ::content * {
-        text-transform: inherit;
-      }
     </style>
+
     <content></content>
   </template>
-</dom-module>
 
-<script>
-  Polymer({
-    is: 'paper-button',
+  <script>
+    Polymer({
+      is: 'paper-button',
 
-    behaviors: [
-      Polymer.PaperButtonBehavior
-    ],
+      behaviors: [
+        Polymer.PaperButtonBehavior
+      ],
 
-    properties: {
+      properties: {
+        /**
+         * If true, the button should be styled with a shadow.
+         */
+        raised: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false,
+          observer: '_calculateElevation'
+        }
+      },
+
+      _calculateElevation: function() {
+        if (!this.raised) {
+          this._setElevation(0);
+        } else {
+          Polymer.PaperButtonBehaviorImpl._calculateElevation.apply(this);
+        }
+      }
+
       /**
-       * If true, the button should be styled with a shadow.
-       */
-      raised: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: false,
-        observer: '_calculateElevation'
-      }
-    },
+      Fired when the animation finishes.
+      This is useful if you want to wait until
+      the ripple animation finishes to perform some action.
 
-    _calculateElevation: function() {
-      if (!this.raised) {
-        this._setElevation(0);
-      } else {
-        Polymer.PaperButtonBehaviorImpl._calculateElevation.apply(this);
-      }
-    }
-    /**
-
-    Fired when the animation finishes.
-    This is useful if you want to wait until
-    the ripple animation finishes to perform some action.
-
-    @event transitionend
-    @param {{node: Object}} detail Contains the animated node.
-    */
-  });
-</script>
+      @event transitionend
+      Event param: {{node: Object}} detail Contains the animated node.
+      */
+    });
+  </script>
+</dom-module>
 <dom-module name="tpa-top-bar">
     <template>
 
@@ -17921,6 +17925,109 @@ context. You should place this element as a child of `<body>` whenever possible.
         }
     </script>
 </dom-module>
+<script>
+/**
+ * I18nBehavior
+ * @polymerBehavior I18nBehavior
+ */
+I18nBehavior = {
+    properties: {
+        dictionary: {
+            type: String,
+            value: 'en-au',
+            notify: true,
+            observer: 'dictionaryChanged'
+        },
+        content: {
+            type: Object,
+            notify: true,
+            value: function() {
+                return {};
+            }
+        },
+        i18n: {
+            type: Object,
+            notify: true,
+            value: function(){
+                return {};
+            }
+        },
+        /**
+         * The mapping from region to the asci code of the currency symbol
+         *
+         * @attribute currencySymbolCodeMapping
+         */
+        currencySymbolCodeMapping: {
+            type: Object,
+            value: {
+                "en-au": 36,
+                "de-de": 8364,
+                "nl-nl": 8364
+            }
+        },
+        /**
+         * The currency symbol for the currently selected region.
+         *
+         * @attribute currencySymbol
+         */
+        currencySymbol: {
+            type: String,
+            value: "$",
+            notify:true
+        },
+        /**
+         * The regions that will be support by the website this component belongs to.
+         *
+         * @attribute supportedRegions
+         */
+        supportedRegions: {
+            type: Array,
+            value: function(){return [
+                "en-au",
+                "de-de",
+                "nl-nl"]}
+        }
+    },
+    handlei18nChange: function (e, detail, sender) {
+        this.dictionary = detail;
+    },
+    ready: function() {
+        if (this.i18n[this.dictionary]) {
+            this.content = this.i18n[this.dictionary];
+        } else {
+            this.content = this.i18n['en‐au'];
+        }
+        this.addDefaults();
+    },
+    dictionaryChanged: function() {
+        if (this.i18n) {
+            if (this.i18n[this.dictionary]) {
+                this.content = this.i18n[this.dictionary];
+            } else {
+                this.content = this.i18n['en‐au'];
+            }
+        }
+        this.addDefaults();
+    },
+    addDefaults: function() {
+        if (this.content) {
+            this.content.globals = {
+                "yes": "Yes",
+                "no": "No",
+                "na": "N/A"
+            };
+            this.content.error = {
+                "global": "Sorry, we should be up again shortly. Need help now? Call us on 133 464.",
+                "offline": "No internet connection available. Please try again later."
+            }
+        }
+    },
+    i18nSignal: function(e, detail, sender) {
+        this.dictionary = detail;
+        this.currencySymbol = String.fromCharCode(this.currencySymbolCodeMapping[this.dictionary]);
+    }
+}
+</script>
 <script>
 
   /**
@@ -20778,404 +20885,6 @@ if (!window.Promise) {
 </script>
 
 
-
-<dom-module id="iron-flex" assetpath="../bower_components/iron-flex-layout/">
-  <template>
-    <style>
-      .layout.horizontal,
-      .layout.vertical {
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-      }
-
-      .layout.inline {
-        display: -ms-inline-flexbox;
-        display: -webkit-inline-flex;
-        display: inline-flex;
-      }
-
-      .layout.horizontal {
-        -ms-flex-direction: row;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-      }
-
-      .layout.vertical {
-        -ms-flex-direction: column;
-        -webkit-flex-direction: column;
-        flex-direction: column;
-      }
-
-      .layout.wrap {
-        -ms-flex-wrap: wrap;
-        -webkit-flex-wrap: wrap;
-        flex-wrap: wrap;
-      }
-
-      .layout.center,
-      .layout.center-center {
-        -ms-flex-align: center;
-        -webkit-align-items: center;
-        align-items: center;
-      }
-
-      .layout.center-justified,
-      .layout.center-center {
-        -ms-flex-pack: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-      }
-
-      .flex {
-        -ms-flex: 1 1 0.000000001px;
-        -webkit-flex: 1;
-        flex: 1;
-        -webkit-flex-basis: 0.000000001px;
-        flex-basis: 0.000000001px;
-      }
-
-      .flex-auto {
-        -ms-flex: 1 1 auto;
-        -webkit-flex: 1 1 auto;
-        flex: 1 1 auto;
-      }
-
-      .flex-none {
-        -ms-flex: none;
-        -webkit-flex: none;
-        flex: none;
-      }
-    </style>
-  </template>
-</dom-module>
-
-
-<dom-module id="iron-flex-reverse" assetpath="../bower_components/iron-flex-layout/">
-  <template>
-    <style>
-      .layout.horizontal-reverse,
-      .layout.vertical-reverse {
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-      }
-
-      .layout.horizontal-reverse {
-        -ms-flex-direction: row-reverse;
-        -webkit-flex-direction: row-reverse;
-        flex-direction: row-reverse;
-      }
-
-      .layout.vertical-reverse {
-        -ms-flex-direction: column-reverse;
-        -webkit-flex-direction: column-reverse;
-        flex-direction: column-reverse;
-      }
-
-      .layout.wrap-reverse {
-        -ms-flex-wrap: wrap-reverse;
-        -webkit-flex-wrap: wrap-reverse;
-        flex-wrap: wrap-reverse;
-      }
-    </style>
-  </template>
-</dom-module>
-
-
-<dom-module id="iron-flex-alignment" assetpath="../bower_components/iron-flex-layout/">
-  <template>
-    <style>
-      /**
-       * Alignment in cross axis.
-       */
-      .layout.start {
-        -ms-flex-align: start;
-        -webkit-align-items: flex-start;
-        align-items: flex-start;
-      }
-
-      .layout.center,
-      .layout.center-center {
-        -ms-flex-align: center;
-        -webkit-align-items: center;
-        align-items: center;
-      }
-
-      .layout.end {
-        -ms-flex-align: end;
-        -webkit-align-items: flex-end;
-        align-items: flex-end;
-      }
-
-      .layout.baseline {
-        -ms-flex-align: baseline;
-        -webkit-align-items: baseline;
-        align-items: baseline;
-      }
-
-      /**
-       * Alignment in main axis.
-       */
-      .layout.start-justified {
-        -ms-flex-pack: start;
-        -webkit-justify-content: flex-start;
-        justify-content: flex-start;
-      }
-
-      .layout.center-justified,
-      .layout.center-center {
-        -ms-flex-pack: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-      }
-
-      .layout.end-justified {
-        -ms-flex-pack: end;
-        -webkit-justify-content: flex-end;
-        justify-content: flex-end;
-      }
-
-      .layout.around-justified {
-        -ms-flex-pack: distribute;
-        -webkit-justify-content: space-around;
-        justify-content: space-around;
-      }
-
-      .layout.justified {
-        -ms-flex-pack: justify;
-        -webkit-justify-content: space-between;
-        justify-content: space-between;
-      }
-
-      /**
-       * Self alignment.
-       */
-      .self-start {
-        -ms-align-self: flex-start;
-        -webkit-align-self: flex-start;
-        align-self: flex-start;
-      }
-
-      .self-center {
-        -ms-align-self: center;
-        -webkit-align-self: center;
-        align-self: center;
-      }
-
-      .self-end {
-        -ms-align-self: flex-end;
-        -webkit-align-self: flex-end;
-        align-self: flex-end;
-      }
-
-      .self-stretch {
-        -ms-align-self: stretch;
-        -webkit-align-self: stretch;
-        align-self: stretch;
-      }
-
-      .self-baseline {
-        -ms-align-self: baseline;
-        -webkit-align-self: baseline;
-        align-self: baseline;
-      };
-
-      /**
-       * multi-line alignment in main axis.
-       */
-      .layout.start-aligned {
-        -ms-flex-line-pack: start;  /* IE10 */
-        -ms-align-content: flex-start;
-        -webkit-align-content: flex-start;
-        align-content: flex-start;
-      }
-
-      .layout.end-aligned {
-        -ms-flex-line-pack: end;  /* IE10 */
-        -ms-align-content: flex-end;
-        -webkit-align-content: flex-end;
-        align-content: flex-end;
-      }
-
-      .layout.center-aligned {
-        -ms-flex-line-pack: center;  /* IE10 */
-        -ms-align-content: center;
-        -webkit-align-content: center;
-        align-content: center;
-      }
-
-      .layout.between-aligned {
-        -ms-flex-line-pack: justify;  /* IE10 */
-        -ms-align-content: space-between;
-        -webkit-align-content: space-between;
-        align-content: space-between;
-      }
-
-      .layout.around-aligned {
-        -ms-flex-line-pack: distribute;  /* IE10 */
-        -ms-align-content: space-around;
-        -webkit-align-content: space-around;
-        align-content: space-around;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="iron-flex-factors" assetpath="../bower_components/iron-flex-layout/">
-  <template>
-    <style>
-      .flex,
-      .flex-1 {
-        -ms-flex: 1 1 0.000000001px;
-        -webkit-flex: 1;
-        flex: 1;
-        -webkit-flex-basis: 0.000000001px;
-        flex-basis: 0.000000001px;
-      }
-
-      .flex-2 {
-        -ms-flex: 2;
-        -webkit-flex: 2;
-        flex: 2;
-      }
-
-      .flex-3 {
-        -ms-flex: 3;
-        -webkit-flex: 3;
-        flex: 3;
-      }
-
-      .flex-4 {
-        -ms-flex: 4;
-        -webkit-flex: 4;
-        flex: 4;
-      }
-
-      .flex-5 {
-        -ms-flex: 5;
-        -webkit-flex: 5;
-        flex: 5;
-      }
-
-      .flex-6 {
-        -ms-flex: 6;
-        -webkit-flex: 6;
-        flex: 6;
-      }
-
-      .flex-7 {
-        -ms-flex: 7;
-        -webkit-flex: 7;
-        flex: 7;
-      }
-
-      .flex-8 {
-        -ms-flex: 8;
-        -webkit-flex: 8;
-        flex: 8;
-      }
-
-      .flex-9 {
-        -ms-flex: 9;
-        -webkit-flex: 9;
-        flex: 9;
-      }
-
-      .flex-10 {
-        -ms-flex: 10;
-        -webkit-flex: 10;
-        flex: 10;
-      }
-
-      .flex-11 {
-        -ms-flex: 11;
-        -webkit-flex: 11;
-        flex: 11;
-      }
-
-      .flex-12 {
-        -ms-flex: 12;
-        -webkit-flex: 12;
-        flex: 12;
-      }
-    </style>
-  </template>
-</dom-module>
-
-
-<dom-module id="iron-positioning" assetpath="../bower_components/iron-flex-layout/">
-  <template>
-    <style>
-      .block {
-        display: block;
-      }
-
-      /* IE 10 support for HTML5 hidden attr */
-      [hidden] {
-        display: none !important;
-      }
-
-      .invisible {
-        visibility: hidden !important;
-      }
-
-      .relative {
-        position: relative;
-      }
-
-      .fit {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-      }
-
-      body.fullbleed {
-        margin: 0;
-        height: 100vh;
-      }
-
-      .scroll {
-        -webkit-overflow-scrolling: touch;
-        overflow: auto;
-      }
-
-      /* fixed position */
-      .fixed-bottom,
-      .fixed-left,
-      .fixed-right,
-      .fixed-top {
-        position: fixed;
-      }
-
-      .fixed-top {
-        top: 0;
-        left: 0;
-        right: 0;
-      }
-
-      .fixed-right {
-        top: 0;
-        right: 0;
-        bottom: 0;
-      }
-
-      .fixed-bottom {
-        right: 0;
-        bottom: 0;
-        left: 0;
-      }
-
-      .fixed-left {
-        top: 0;
-        bottom: 0;
-        left: 0;
-      }
-    </style>
-  </template>
-</dom-module>
 <script>
   console.warn('This file is deprecated. Please use `iron-flex-layout/iron-flex-layout-classes.html`, and one of the specific dom-modules instead');
 </script>
@@ -23545,890 +23254,6 @@ is separate from validation, and `allowed-pattern` does not affect how the input
 </script>
 <script>
 
-/**
-Use `Polymer.PaperDialogBehavior` and `paper-dialog-shared-styles.html` to implement a Material Design
-dialog.
-
-For example, if `<paper-dialog-impl>` implements this behavior:
-
-    <paper-dialog-impl>
-        <h2>Header</h2>
-        <div>Dialog body</div>
-        <div class="buttons">
-            <paper-button dialog-dismiss>Cancel</paper-button>
-            <paper-button dialog-confirm>Accept</paper-button>
-        </div>
-    </paper-dialog-impl>
-
-`paper-dialog-shared-styles.html` provide styles for a header, content area, and an action area for buttons.
-Use the `<h2>` tag for the header and the `buttons` class for the action area. You can use the
-`paper-dialog-scrollable` element (in its own repository) if you need a scrolling content area.
-
-Use the `dialog-dismiss` and `dialog-confirm` attributes on interactive controls to close the
-dialog. If the user dismisses the dialog with `dialog-confirm`, the `closingReason` will update
-to include `confirmed: true`.
-
-### Accessibility
-
-This element has `role="dialog"` by default. Depending on the context, it may be more appropriate
-to override this attribute with `role="alertdialog"`.
-
-If `modal` is set, the element will set `aria-modal` and prevent the focus from exiting the element.
-It will also ensure that focus remains in the dialog.
-
-@hero hero.svg
-@demo demo/index.html
-@polymerBehavior Polymer.PaperDialogBehavior
-*/
-
-  Polymer.PaperDialogBehaviorImpl = {
-
-    hostAttributes: {
-      'role': 'dialog',
-      'tabindex': '-1'
-    },
-
-    properties: {
-
-      /**
-       * If `modal` is true, this implies `no-cancel-on-outside-click`, `no-cancel-on-esc-key` and `with-backdrop`.
-       */
-      modal: {
-        type: Boolean,
-        value: false
-      }
-
-    },
-
-    observers: [
-      '_modalChanged(modal, _readied)'
-    ],
-
-    listeners: {
-      'tap': '_onDialogClick'
-    },
-
-    ready: function () {
-      // Only now these properties can be read.
-      this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
-      this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
-      this.__prevWithBackdrop = this.withBackdrop;
-    },
-
-    _modalChanged: function(modal, readied) {
-      if (modal) {
-        this.setAttribute('aria-modal', 'true');
-      } else {
-        this.setAttribute('aria-modal', 'false');
-      }
-
-      // modal implies noCancelOnOutsideClick, noCancelOnEscKey and withBackdrop.
-      // We need to wait for the element to be ready before we can read the
-      // properties values.
-      if (!readied) {
-        return;
-      }
-
-      if (modal) {
-        this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
-        this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
-        this.__prevWithBackdrop = this.withBackdrop;
-        this.noCancelOnOutsideClick = true;
-        this.noCancelOnEscKey = true;
-        this.withBackdrop = true;
-      } else {
-        // If the value was changed to false, let it false.
-        this.noCancelOnOutsideClick = this.noCancelOnOutsideClick &&
-          this.__prevNoCancelOnOutsideClick;
-        this.noCancelOnEscKey = this.noCancelOnEscKey &&
-          this.__prevNoCancelOnEscKey;
-        this.withBackdrop = this.withBackdrop && this.__prevWithBackdrop;
-      }
-    },
-
-    _updateClosingReasonConfirmed: function(confirmed) {
-      this.closingReason = this.closingReason || {};
-      this.closingReason.confirmed = confirmed;
-    },
-
-    /**
-     * Will dismiss the dialog if user clicked on an element with dialog-dismiss
-     * or dialog-confirm attribute.
-     */
-    _onDialogClick: function(event) {
-      // Search for the element with dialog-confirm or dialog-dismiss,
-      // from the root target until this (excluded).
-      var path = Polymer.dom(event).path;
-      for (var i = 0; i < path.indexOf(this); i++) {
-        var target = path[i];
-        if (target.hasAttribute && (target.hasAttribute('dialog-dismiss') || target.hasAttribute('dialog-confirm'))) {
-          this._updateClosingReasonConfirmed(target.hasAttribute('dialog-confirm'));
-          this.close();
-          event.stopPropagation();
-          break;
-        }
-      }
-    }
-
-  };
-
-  /** @polymerBehavior */
-  Polymer.PaperDialogBehavior = [Polymer.IronOverlayBehavior, Polymer.PaperDialogBehaviorImpl];
-
-</script>
-
-
-<dom-module id="paper-dialog-shared-styles" assetpath="../bower_components/paper-dialog-behavior/">
-  <template>
-    <style>
-      :host {
-        display: block;
-        margin: 24px 40px;
-
-        background: var(--paper-dialog-background-color, --primary-background-color);
-        color: var(--paper-dialog-color, --primary-text-color);
-
-        @apply(--paper-font-body1);
-        @apply(--shadow-elevation-16dp);
-        @apply(--paper-dialog);
-      }
-
-      :host > ::content > * {
-        margin-top: 20px;
-        padding: 0 24px;
-      }
-
-      :host > ::content > .no-padding {
-        padding: 0;
-      }
-
-      :host > ::content > *:first-child {
-        margin-top: 24px;
-      }
-
-      :host > ::content > *:last-child {
-        margin-bottom: 24px;
-      }
-
-      :host > ::content h2 {
-        position: relative;
-        margin: 0;
-        @apply(--paper-font-title);
-
-        @apply(--paper-dialog-title);
-      }
-
-      :host > ::content .buttons {
-        position: relative;
-        padding: 8px 8px 8px 24px;
-        margin: 0;
-
-        color: var(--paper-dialog-button-color, --primary-color);
-
-        @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
-      }
-    </style>
-  </template>
-</dom-module>
-<script>
-/**
- * I18nBehavior
- * @polymerBehavior I18nBehavior
- */
-I18nBehavior = {
-    properties: {
-        dictionary: {
-            type: String,
-            value: 'en-au',
-            notify: true,
-            observer: 'dictionaryChanged'
-        },
-        content: {
-            type: Object,
-            notify: true,
-            value: function() {
-                return {};
-            }
-        },
-        i18n: {
-            type: Object,
-            notify: true
-        },
-        currencySymbolCodeMapping: {
-            type: Object,
-            value: {
-                "en-au": 36,
-                "de-de": 8364,
-                "nl-nl": 8364,
-                "nl-be": 8364
-            }
-        },
-        currencySymbolCode: {
-            type: String,
-            value: "$",
-            notify:true
-        }
-    },
-    handlei18nChange: function (e, detail, sender) {
-        this.dictionary = detail;
-    },
-    ready: function() {
-        if (this.i18n[this.dictionary]) {
-            this.content = this.i18n[this.dictionary];
-        } else {
-            this.content = this.i18n['en‐au'];
-        }
-        this.addDefaults();
-    },
-    dictionaryChanged: function() {
-        if (this.i18n) {
-            if (this.i18n[this.dictionary]) {
-                this.content = this.i18n[this.dictionary];
-            } else {
-                this.content = this.i18n['en‐au'];
-            }
-        }
-        this.addDefaults();
-    },
-    addDefaults: function() {
-        if (this.content) {
-            this.content.globals = {
-                "yes": "Yes",
-                "no": "No",
-                "na": "N/A"
-            };
-            this.content.error = {
-                "global": "Sorry, we should be up again shortly. Need help now? Call us on 133 464.",
-                "offline": "No internet connection available. Please try again later."
-            }
-        }
-    },
-    i18nSignal: function(e, detail, sender) {
-        this.dictionary = detail;
-        this.currencySymbolCode = String.fromCharCode(this.currencySymbolCodeMapping[this.dictionary]);
-    }
-}
-</script>
-<script>
-(function(){
-/**
-`iron-signals` provides basic publish-subscribe functionality.
-
-Note: avoid using `iron-signals` whenever you can use
-a controller (parent element) to mediate communication
-instead.
-
-To send a signal, fire a custom event of type `iron-signal`, with
-a detail object containing `name` and `data` fields.
-
-    this.fire('iron-signal', {name: 'hello', data: null});
-
-To receive a signal, listen for `iron-signal-<name>` event on a
-`iron-signals` element.
-
-  <iron-signals on-iron-signal-hello="{{helloSignal}}">
-
-You can fire a signal event from anywhere, and all
-`iron-signals` elements will receive the event, regardless
-of where they are in DOM.
-
-@demo demo/index.html
-*/
-  Polymer({
-    is: 'iron-signals',
-
-    attached: function() {
-      signals.push(this);
-    },
-    detached: function() {
-      var i = signals.indexOf(this);
-      if (i >= 0) {
-        signals.splice(i, 1);
-      }
-    }
-  });
-
-  // private shared database
-  var signals = [];
-
-  // signal dispatcher
-  function notify(name, data) {
-    // convert generic-signal event to named-signal event
-    var signal = new CustomEvent('iron-signal-' + name, {
-      // if signals bubble, it's easy to get confusing duplicates
-      // (1) listen on a container on behalf of local child
-      // (2) some deep child ignores the event and it bubbles
-      //     up to said container
-      // (3) local child event bubbles up to container
-      // also, for performance, we avoid signals flying up the
-      // tree from all over the place
-      bubbles: false,
-      detail: data
-    });
-    // dispatch named-signal to all 'signals' instances,
-    // only interested listeners will react
-    signals.forEach(function(s) {
-      s.dispatchEvent(signal);
-    });
-  }
-
-  // signal listener at document
-  document.addEventListener('iron-signal', function(e) {
-    notify(e.detail.name, e.detail.data);
-  });
-
-})();
-</script>
-<dom-module id="tpa-money-transfer" assetpath="tpa-money-transfer/">
-  
-  <template><style>
-.unselectable {
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer */
-  -khtml-user-select: none;
-  /* KHTML browsers (e.g. Konqueror) */
-  -webkit-user-select: none;
-  /* Chrome, Safari, and Opera */
-  -webkit-touch-callout: none;
-  /* Disable Android and iOS callouts*/
-}
-:host {
-  display: block;
-  --iron-icon-fill-color: var(--primary-color);
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer */
-  -khtml-user-select: none;
-  /* KHTML browsers (e.g. Konqueror) */
-  -webkit-user-select: none;
-  /* Chrome, Safari, and Opera */
-  -webkit-touch-callout: none;
-  /* Disable Android and iOS callouts*/
-}
-.bold {
-  font-weight: bold;
-}
-section {
-  margin-bottom: 1.8em;
-}
-.my-card {
-  @apply (--layout-horizontal);
-}
-.my-card > :nth-child(1) {
-  @apply (--layout-flex);
-}
-.my-card > :nth-child(2) {
-  @apply (--layout-flex-0);
-}
-.my-card > div:nth-child(1) > h1 {
-  font-size: 1em;
-  margin: 0;
-  font-weight: normal;
-}
-.my-card > div:nth-child(1) > div {
-  font-size: 1.2em;
-}
-.my-card.balance > div:nth-child(1) > div {
-  color: var(--primary-color);
-}
-.my-card.balance super {
-  font-size: 0.6em;
-}
-paper-input {
-  color: var(--light-primary-color);
-}
-paper-input div[prefix] {
-  padding-right: 5px;
-}
-.center {
-  @apply (--layout-horizontal);
-  @apply (--layout-center);
-}
-.transfer {
-  font-weight: bold;
-  font-size: 1.6em;
-  margin-bottom: 0.5em;
-}
-.color--brand-primary {
-  color: var(--primary-color);
-}
-.color--light-primary {
-  color: var(--light-primary-color);
-}
-paper-button[primary] {
-  color: var(--primary-background-color);
-  background: var(--primary-color);
-}
-simple-dialog {
-  width: 80%;
-}
-.addressContent {
-  @apply (--layout);
-  width: 200px;
-  margin: 8px;
-}
-@media (max-width: 800px) {
-  .addressContainer {
-    width: calc(34%);
-  }
-}
-@media (max-width: 400px) {
-  .addressContainer {
-    width: 100%;
-  }
-}
-
-</style>
-
-<iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>
-
-    <section class="my-card balance">
-      <div>
-        <h1>{{accountOwner}}</h1>
-        <div>{{accountNumber}}</div>
-      </div>
-      <div class="bold">
-        {{accountBalanceObj.wholeNumber}}{{decimalSeparator}}<sup>{{accountBalanceObj.decimals}}</sup>
-      </div>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="{{content.amount}}" type="number">
-        <div prefix="">€</div>
-      </paper-input>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="{{content.recipient}}"></paper-input>
-      <div class="center">
-        <paper-icon-button icon="book" class="color--brand-light" onclick="dialog.toggle()"></paper-icon-button>
-      </div>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="{{content.accountNumber}}"></paper-input>
-      <div class="center">
-        <paper-icon-button icon="add" class="color--brand-primary"></paper-icon-button>
-      </div>
-    </section>
-
-    <section class="my-card">
-      <paper-input label="{{content.usage}}"></paper-input>
-    </section>
-
-    <section class="my-card">
-      <div><paper-input label="{{content.executionDate}}"></paper-input></div>
-    </section>
-
-    <section>
-      <paper-button raised="" primary="">{{content.submit}}</paper-button>
-    </section>
-
-    <simple-dialog id="dialog" title="Adress Book">
-      <div>
-        <iron-ajax id="ajax" loading="{{loadingAddresses}}" url="data.json" handle-as="json" on-response="_onAddressBookData" auto=""></iron-ajax>
-        <iron-list items="[[addresses]]" as="address" scroll-target="document" grid="">
-          <template>
-            <div class="addressContainer">
-              <div class="addressContent" tabindex$="[[tabIndex]]">
-                {{address.firstname}}&nbsp;{{address.lastname}}<br>
-                {{address.account}}<br>
-                {{address.institute}}
-              </div>
-            </div>
-          </template>
-        </iron-list>
-      </div>
-      <div class="buttons">
-        <paper-button dialog-dismiss="">Cancel</paper-button>
-        <paper-button dialog-confirm="" autofocus="">Discard</paper-button>
-      </div>
-    </simple-dialog>
-
-  </template>
-</dom-module>
-
-<script>
-  (function() {
-    'use strict';
-
-    var format = function(a, n, x, s, c) {
-      //console.log("a", a)
-      var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-          num = a.toFixed(Math.max(0, ~~n));
-      return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-    };
-
-    Polymer({
-      is: 'tpa-money-transfer',
-
-      behaviors: [I18nBehavior],
-
-      properties: {
-        accountOwner: {
-          type: String
-        },
-        accountNumber: {
-          type: String
-        },
-        accountBalance: {
-          type: Number,
-          observer: '_accountBalanceChange'
-        },
-        accountBalanceObj: {
-          type: Object
-        },
-        decimalSeparator: {
-          type: String,
-          value: ',',
-          observer: '_accountBalanceChange'
-        },
-        thousendsSeparator: {
-          type: String,
-          value: '.',
-          observer: '_accountBalanceChange'
-        },
-        loadingAddresses: Boolean,
-        addresses: Array,
-        i18n: { type: Object, value: function() { return { "de-de":{"recipient":"Empfänger","accountNumber":"Kontonummer","usage":"Verwendungszweck","executionDate":"Ausführungsdatum","submit":"Ausführen","amount":"Betrag"},
-"en-au":{"recipient":"Recipient","accountNumber":"Account number","usage":"Usage","executionDate":"Execution date","submit":"Submit","amount":"Amount"}};}, notify: true },
-      },
-
-      _accountBalanceChange: function(n) {
-          var
-                  self = this
-              ,   decimalSeparator = self.decimalSeparator
-              ,   thousendsSeparator = self.thousendsSeparator
-              ,   balance = typeof(n) !== 'number' ? self.accountBalance : n
-              ,   split
-          ;
-          if (balance) {
-              split = format(balance, 2, 3, thousendsSeparator, decimalSeparator).split(decimalSeparator);
-              self.accountBalanceObj = { wholeNumber: split[0], decimals: split[1] };
-          }
-      },
-
-      _onAddressBookData: function(e) {
-        var data;
-        this.addresses = e.detail.response;
-      },
-
-      ready: function() {}
-    });
-  })();
-</script>
-
-
-  <dom-module id="simple-dialog" assetpath="tpa-money-transfer/">
-    <template>
-      <style include="paper-dialog-shared-styles"></style>
-      <h2>{{title}}</h2>
-      <content></content>
-    </template>
-  </dom-module>
-
-
-
-  <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'simple-dialog',
-
-        behaviors: [Polymer.PaperDialogBehavior, /*@i18n-behavior*/]
-
-      });
-    })();
-  </script>
-<dom-module id="tpa-transactions-list-styles" assetpath="../bower_components/tpa-transaction-list/">
-    <template>
-        <style include="shared-styles">
-            :host {
-                --iron-icon-fill-color:var(--primary-color);
-            }
-
-            h3 {
-              color: var(--primary-color);
-            }
-
-            .date-header {
-                color:#aaaaaa;
-                margin-top:10px;
-            }
-
-            .sub-text {
-                color: var(--primary-color);
-            }
-
-            .main-text {
-                padding-bottom: 10px;
-                padding-top: 10px;
-            }
-
-            .no-icon {
-                padding-left: 10px;
-            }
-        </style>
-    </template>
-</dom-module>
-<script>
-/**
- * I18nBehavior
- * @polymerBehavior I18nBehavior
- */
-I18nBehavior = {
-    properties: {
-        dictionary: {
-            type: String,
-            value: 'en-au',
-            notify: true,
-            observer: 'dictionaryChanged'
-        },
-        content: {
-            type: Object,
-            notify: true,
-            value: function() {
-                return {};
-            }
-        },
-        i18n: {
-            type: Object,
-            notify: true,
-            value: function(){
-                return {};
-            }
-        },
-        /**
-         * The mapping from region to the asci code of the currency symbol
-         *
-         * @attribute currencySymbolCodeMapping
-         */
-        currencySymbolCodeMapping: {
-            type: Object,
-            value: {
-                "en-au": 36,
-                "de-de": 8364,
-                "nl-nl": 8364
-            }
-        },
-        /**
-         * The currency symbol for the currently selected region.
-         *
-         * @attribute currencySymbol
-         */
-        currencySymbol: {
-            type: String,
-            value: "$",
-            notify:true
-        },
-        /**
-         * The regions that will be support by the website this component belongs to.
-         *
-         * @attribute supportedRegions
-         */
-        supportedRegions: {
-            type: Array,
-            value: function(){return [
-                "en-au",
-                "de-de",
-                "nl-nl"]}
-        }
-    },
-    handlei18nChange: function (e, detail, sender) {
-        this.dictionary = detail;
-    },
-    ready: function() {
-        if (this.i18n[this.dictionary]) {
-            this.content = this.i18n[this.dictionary];
-        } else {
-            this.content = this.i18n['en‐au'];
-        }
-        this.addDefaults();
-    },
-    dictionaryChanged: function() {
-        if (this.i18n) {
-            if (this.i18n[this.dictionary]) {
-                this.content = this.i18n[this.dictionary];
-            } else {
-                this.content = this.i18n['en‐au'];
-            }
-        }
-        this.addDefaults();
-    },
-    addDefaults: function() {
-        if (this.content) {
-            this.content.globals = {
-                "yes": "Yes",
-                "no": "No",
-                "na": "N/A"
-            };
-            this.content.error = {
-                "global": "Sorry, we should be up again shortly. Need help now? Call us on 133 464.",
-                "offline": "No internet connection available. Please try again later."
-            }
-        }
-    },
-    i18nSignal: function(e, detail, sender) {
-        this.dictionary = detail;
-        this.currencySymbol = String.fromCharCode(this.currencySymbolCodeMapping[this.dictionary]);
-    }
-}
-</script>
-<dom-module id="tpa-transaction-list-i18n" assetpath="../bower_components/tpa-transaction-list/">
-    <template>
-        <iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>
-    </template>
-    <script>
-        Polymer({
-            is: 'tpa-transaction-list-i18n',
-            behaviors: [I18nBehavior],
-            properties: {
-                /*
-                 * @private
-                 */
-                i18n: {
-                    type: Object,
-                    value: function () {
-                        return {
-                            "en-au": {
-                                "latestTransactions":"Latest Transactions",
-                                "currencyName": "Dollar"
-                            },
-                            "de-de": {
-                                "latestTransactions":"Neueste Transaktionen",
-                                "currencyName": "Euro"
-                            },
-                            "nl-nl": {
-                                "latestTransactions":"Laatste transacties",
-                                "currencyName": "Euro"
-                            },
-                            "nl-be": {
-                                "latestTransactions":"Laatste transacties",
-                                "currencyName": "Euro"
-                            }
-                        }
-                    },
-                    notify: true
-                }
-            }
-        });
-    </script>
-</dom-module>
-
-<dom-module name="tpa-transaction-list">
-    <template>
-        <iron-signals on-iron-signal-dashboard-data="onDashboardData"></iron-signals>
-        <style include="tpa-transactions-list-styles">
-        </style>
-        <tpa-transaction-list-i18n id="i18ncontent" content="{{i18ncontent}}" currency-symbol-code="{{currencySymbolCode}}"></tpa-transaction-list-i18n>
-        <h3>{{title}}</h3>
-        <div>
-            <template as="transactionGroup" is="dom-repeat" items="{{transactionGroups}}">
-                <div class="date-header" style="padding-left:10px; padding-bottom:10px">{{getGroupTitle(transactionGroup)}} <span style="float:right"><span>{{i18ncontent.currencyName}}</span> ({{currencySymbolCode}})</span></div>
-                <template is="dom-repeat" as="item" items="{{transactionGroup.transactions}}">
-                    <div class$="{{computeRowClass(hideIcon)}}">
-                        <div class="main-text">
-                            <paper-icon-button hidden$="{{hideIcon}}" disabled="" icon="{{item.icon}}"></paper-icon-button>{{item.name}}
-                            <span style="float:right">{{currencySymbolCode}}<span>{{item.amount}}</span></span>
-                        </div>
-                        <div hidden$="{{hideSubText}}" class="sub-text">{{item.subText}}</div>
-                    </div>
-                </template>
-            </template>
-        </div>
-    </template>
-    <script>
-        Polymer({
-            is: "tpa-transaction-list",
-            properties: {
-                i18ncontent:{
-                    type:Object,
-                    notify:true
-                },
-                currencySymbolCode:{
-                    type:String,
-                    notify:true
-                },
-                /**
-                 * Use to show and hide icons that will prefix each transaction.
-                 *
-                 * @attribute hideIcon
-                 */
-                hideIcon: {
-                    type: Boolean,
-                    value: false
-                },
-                /**
-                 * Use to indicate if the sub text for transactions should be shown.
-                 *
-                 * @attribute hideSubText
-                 */
-                hideSubText: {
-                    type: Boolean,
-                    value: false
-                },
-                /**
-                 * The field to in the transactionGroup that will be used as the header for each group
-                 *
-                 * @attribute groupTitleField
-                 */
-                groupTitleField:{
-                    type: String,
-                    value: "date"
-                },
-                /**
-                 * The transactionGroups to display on this transaction list.
-                 *
-                 * @attribute transactionGroups
-                 */
-                transactionGroups: {
-                    type: Array,
-                    value: [],
-                    notify:true
-                },
-                /**
-                 * The title that will be shown at the top of the list
-                 *
-                 * @attribute title
-                 */
-                title: {
-                    type: "String",
-                    value: "",
-                    notify:true
-                },
-                dataSource: {
-                    type: "String",
-                    value: "transactionGroups",
-                    notify:true
-                }
-            },
-            getGroupTitle: function(group){
-                return group[this.groupTitleField];
-            },
-            computeRowClass : function(hideIcon){
-                var className = "row";
-
-                if (hideIcon){
-                    className += " no-icon";
-                }
-
-                return className;
-            },
-            getCurrencySymbol: function(currencyCode){
-                return String.fromCharCode(currencyCode);
-            },
-            onDashboardData: function(e, data){
-                this.transactionGroups = data[this.dataSource];
-            }
-        });
-    </script>
-</dom-module>
-<script>
-
   /**
    * `Polymer.NeonAnimatableBehavior` is implemented by elements containing animations for use with
    * elements implementing `Polymer.NeonAnimationRunnerBehavior`.
@@ -24668,6 +23493,1368 @@ I18nBehavior = {
     Polymer.NeonAnimationRunnerBehaviorImpl
   ];
 </script>
+<script>
+
+/**
+Use `Polymer.PaperDialogBehavior` and `paper-dialog-shared-styles.html` to implement a Material Design
+dialog.
+
+For example, if `<paper-dialog-impl>` implements this behavior:
+
+    <paper-dialog-impl>
+        <h2>Header</h2>
+        <div>Dialog body</div>
+        <div class="buttons">
+            <paper-button dialog-dismiss>Cancel</paper-button>
+            <paper-button dialog-confirm>Accept</paper-button>
+        </div>
+    </paper-dialog-impl>
+
+`paper-dialog-shared-styles.html` provide styles for a header, content area, and an action area for buttons.
+Use the `<h2>` tag for the header and the `buttons` class for the action area. You can use the
+`paper-dialog-scrollable` element (in its own repository) if you need a scrolling content area.
+
+Use the `dialog-dismiss` and `dialog-confirm` attributes on interactive controls to close the
+dialog. If the user dismisses the dialog with `dialog-confirm`, the `closingReason` will update
+to include `confirmed: true`.
+
+### Accessibility
+
+This element has `role="dialog"` by default. Depending on the context, it may be more appropriate
+to override this attribute with `role="alertdialog"`.
+
+If `modal` is set, the element will set `aria-modal` and prevent the focus from exiting the element.
+It will also ensure that focus remains in the dialog.
+
+@hero hero.svg
+@demo demo/index.html
+@polymerBehavior Polymer.PaperDialogBehavior
+*/
+
+  Polymer.PaperDialogBehaviorImpl = {
+
+    hostAttributes: {
+      'role': 'dialog',
+      'tabindex': '-1'
+    },
+
+    properties: {
+
+      /**
+       * If `modal` is true, this implies `no-cancel-on-outside-click`, `no-cancel-on-esc-key` and `with-backdrop`.
+       */
+      modal: {
+        type: Boolean,
+        value: false
+      }
+
+    },
+
+    observers: [
+      '_modalChanged(modal, _readied)'
+    ],
+
+    listeners: {
+      'tap': '_onDialogClick'
+    },
+
+    ready: function () {
+      // Only now these properties can be read.
+      this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
+      this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
+      this.__prevWithBackdrop = this.withBackdrop;
+    },
+
+    _modalChanged: function(modal, readied) {
+      if (modal) {
+        this.setAttribute('aria-modal', 'true');
+      } else {
+        this.setAttribute('aria-modal', 'false');
+      }
+
+      // modal implies noCancelOnOutsideClick, noCancelOnEscKey and withBackdrop.
+      // We need to wait for the element to be ready before we can read the
+      // properties values.
+      if (!readied) {
+        return;
+      }
+
+      if (modal) {
+        this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
+        this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
+        this.__prevWithBackdrop = this.withBackdrop;
+        this.noCancelOnOutsideClick = true;
+        this.noCancelOnEscKey = true;
+        this.withBackdrop = true;
+      } else {
+        // If the value was changed to false, let it false.
+        this.noCancelOnOutsideClick = this.noCancelOnOutsideClick &&
+          this.__prevNoCancelOnOutsideClick;
+        this.noCancelOnEscKey = this.noCancelOnEscKey &&
+          this.__prevNoCancelOnEscKey;
+        this.withBackdrop = this.withBackdrop && this.__prevWithBackdrop;
+      }
+    },
+
+    _updateClosingReasonConfirmed: function(confirmed) {
+      this.closingReason = this.closingReason || {};
+      this.closingReason.confirmed = confirmed;
+    },
+
+    /**
+     * Will dismiss the dialog if user clicked on an element with dialog-dismiss
+     * or dialog-confirm attribute.
+     */
+    _onDialogClick: function(event) {
+      // Search for the element with dialog-confirm or dialog-dismiss,
+      // from the root target until this (excluded).
+      var path = Polymer.dom(event).path;
+      for (var i = 0; i < path.indexOf(this); i++) {
+        var target = path[i];
+        if (target.hasAttribute && (target.hasAttribute('dialog-dismiss') || target.hasAttribute('dialog-confirm'))) {
+          this._updateClosingReasonConfirmed(target.hasAttribute('dialog-confirm'));
+          this.close();
+          event.stopPropagation();
+          break;
+        }
+      }
+    }
+
+  };
+
+  /** @polymerBehavior */
+  Polymer.PaperDialogBehavior = [Polymer.IronOverlayBehavior, Polymer.PaperDialogBehaviorImpl];
+
+</script>
+
+
+<dom-module id="paper-dialog-shared-styles" assetpath="../bower_components/paper-dialog-behavior/">
+  <template>
+    <style>
+      :host {
+        display: block;
+        margin: 24px 40px;
+
+        background: var(--paper-dialog-background-color, --primary-background-color);
+        color: var(--paper-dialog-color, --primary-text-color);
+
+        @apply(--paper-font-body1);
+        @apply(--shadow-elevation-16dp);
+        @apply(--paper-dialog);
+      }
+
+      :host > ::content > * {
+        margin-top: 20px;
+        padding: 0 24px;
+      }
+
+      :host > ::content > .no-padding {
+        padding: 0;
+      }
+
+      :host > ::content > *:first-child {
+        margin-top: 24px;
+      }
+
+      :host > ::content > *:last-child {
+        margin-bottom: 24px;
+      }
+
+      :host > ::content h2 {
+        position: relative;
+        margin: 0;
+        @apply(--paper-font-title);
+
+        @apply(--paper-dialog-title);
+      }
+
+      :host > ::content .buttons {
+        position: relative;
+        padding: 8px 8px 8px 24px;
+        margin: 0;
+
+        color: var(--paper-dialog-button-color, --primary-color);
+
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="paper-dialog" assetpath="../bower_components/paper-dialog/">
+  <template>
+    <style include="paper-dialog-shared-styles"></style>
+    <content></content>
+  </template>
+</dom-module>
+
+<script>
+
+(function() {
+
+  Polymer({
+
+    is: 'paper-dialog',
+
+    behaviors: [
+      Polymer.PaperDialogBehavior,
+      Polymer.NeonAnimationRunnerBehavior
+    ],
+
+    listeners: {
+      'neon-animation-finish': '_onNeonAnimationFinish'
+    },
+
+    _renderOpened: function() {
+      this.cancelAnimation();
+      if (this.withBackdrop) {
+        this.backdropElement.open();
+      }
+      this.playAnimation('entry');
+    },
+
+    _renderClosed: function() {
+      this.cancelAnimation();
+      if (this.withBackdrop) {
+        this.backdropElement.close();
+      }
+      this.playAnimation('exit');
+    },
+
+    _onNeonAnimationFinish: function() {
+      if (this.opened) {
+        this._finishRenderOpened();
+      } else {
+        this._finishRenderClosed();
+      }
+    }
+
+  });
+
+})();
+
+</script>
+<script>
+(function(){
+/**
+`iron-signals` provides basic publish-subscribe functionality.
+
+Note: avoid using `iron-signals` whenever you can use
+a controller (parent element) to mediate communication
+instead.
+
+To send a signal, fire a custom event of type `iron-signal`, with
+a detail object containing `name` and `data` fields.
+
+    this.fire('iron-signal', {name: 'hello', data: null});
+
+To receive a signal, listen for `iron-signal-<name>` event on a
+`iron-signals` element.
+
+  <iron-signals on-iron-signal-hello="{{helloSignal}}">
+
+You can fire a signal event from anywhere, and all
+`iron-signals` elements will receive the event, regardless
+of where they are in DOM.
+
+@demo demo/index.html
+*/
+  Polymer({
+    is: 'iron-signals',
+
+    attached: function() {
+      signals.push(this);
+    },
+    detached: function() {
+      var i = signals.indexOf(this);
+      if (i >= 0) {
+        signals.splice(i, 1);
+      }
+    }
+  });
+
+  // private shared database
+  var signals = [];
+
+  // signal dispatcher
+  function notify(name, data) {
+    // convert generic-signal event to named-signal event
+    var signal = new CustomEvent('iron-signal-' + name, {
+      // if signals bubble, it's easy to get confusing duplicates
+      // (1) listen on a container on behalf of local child
+      // (2) some deep child ignores the event and it bubbles
+      //     up to said container
+      // (3) local child event bubbles up to container
+      // also, for performance, we avoid signals flying up the
+      // tree from all over the place
+      bubbles: false,
+      detail: data
+    });
+    // dispatch named-signal to all 'signals' instances,
+    // only interested listeners will react
+    signals.forEach(function(s) {
+      s.dispatchEvent(signal);
+    });
+  }
+
+  // signal listener at document
+  document.addEventListener('iron-signal', function(e) {
+    notify(e.detail.name, e.detail.data);
+  });
+
+})();
+</script>
+<script>(function(){"use strict";function a(a){var b,c,d,e,f=Array.prototype.slice.call(arguments,1);for(b=0,c=f.length;c>b;b+=1)if(d=f[b])for(e in d)h.call(d,e)&&(a[e]=d[e]);return a}function b(a,b,c){this.locales=a,this.formats=b,this.pluralFn=c}function c(a){this.id=a}function d(a,b,c,d,e){this.id=a,this.useOrdinal=b,this.offset=c,this.options=d,this.pluralFn=e}function e(a,b,c,d){this.id=a,this.offset=b,this.numberFormat=c,this.string=d}function f(a,b){this.id=a,this.options=b}function g(a,b,c){var d="string"==typeof a?g.__parse(a):a;if(!d||"messageFormatPattern"!==d.type)throw new TypeError("A message must be provided as a String or AST.");c=this._mergeFormats(g.formats,c),j(this,"_locale",{value:this._resolveLocale(b)});var e=this._findPluralRuleFunction(this._locale),f=this._compilePattern(d,b,c,e),h=this;this.format=function(a){return h._format(f,a)}}var h=Object.prototype.hasOwnProperty,i=function(){try{return!!Object.defineProperty({},"a",{})}catch(a){return!1}}(),j=(!i&&!Object.prototype.__defineGetter__,i?Object.defineProperty:function(a,b,c){"get"in c&&a.__defineGetter__?a.__defineGetter__(b,c.get):(!h.call(a,b)||"value"in c)&&(a[b]=c.value)}),k=Object.create||function(a,b){function c(){}var d,e;c.prototype=a,d=new c;for(e in b)h.call(b,e)&&j(d,e,b[e]);return d},l=b;b.prototype.compile=function(a){return this.pluralStack=[],this.currentPlural=null,this.pluralNumberFormat=null,this.compileMessage(a)},b.prototype.compileMessage=function(a){if(!a||"messageFormatPattern"!==a.type)throw new Error('Message AST is not of type: "messageFormatPattern"');var b,c,d,e=a.elements,f=[];for(b=0,c=e.length;c>b;b+=1)switch(d=e[b],d.type){case"messageTextElement":f.push(this.compileMessageText(d));break;case"argumentElement":f.push(this.compileArgument(d));break;default:throw new Error("Message element does not have a valid type")}return f},b.prototype.compileMessageText=function(a){return this.currentPlural&&/(^|[^\\])#/g.test(a.value)?(this.pluralNumberFormat||(this.pluralNumberFormat=new Intl.NumberFormat(this.locales)),new e(this.currentPlural.id,this.currentPlural.format.offset,this.pluralNumberFormat,a.value)):a.value.replace(/\\#/g,"#")},b.prototype.compileArgument=function(a){var b=a.format;if(!b)return new c(a.id);var e,g=this.formats,h=this.locales,i=this.pluralFn;switch(b.type){case"numberFormat":return e=g.number[b.style],{id:a.id,format:new Intl.NumberFormat(h,e).format};case"dateFormat":return e=g.date[b.style],{id:a.id,format:new Intl.DateTimeFormat(h,e).format};case"timeFormat":return e=g.time[b.style],{id:a.id,format:new Intl.DateTimeFormat(h,e).format};case"pluralFormat":return e=this.compileOptions(a),new d(a.id,b.ordinal,b.offset,e,i);case"selectFormat":return e=this.compileOptions(a),new f(a.id,e);default:throw new Error("Message element does not have a valid format type")}},b.prototype.compileOptions=function(a){var b=a.format,c=b.options,d={};this.pluralStack.push(this.currentPlural),this.currentPlural="pluralFormat"===b.type?a:null;var e,f,g;for(e=0,f=c.length;f>e;e+=1)g=c[e],d[g.selector]=this.compileMessage(g.value);return this.currentPlural=this.pluralStack.pop(),d},c.prototype.format=function(a){return a?"string"==typeof a?a:String(a):""},d.prototype.getOption=function(a){var b=this.options,c=b["="+a]||b[this.pluralFn(a-this.offset,this.useOrdinal)];return c||b.other},e.prototype.format=function(a){var b=this.numberFormat.format(a-this.offset);return this.string.replace(/(^|[^\\])#/g,"$1"+b).replace(/\\#/g,"#")},f.prototype.getOption=function(a){var b=this.options;return b[a]||b.other};var m=function(){function a(a,b){function c(){this.constructor=a}c.prototype=b.prototype,a.prototype=new c}function b(a,b,c,d,e,f){this.message=a,this.expected=b,this.found=c,this.offset=d,this.line=e,this.column=f,this.name="SyntaxError"}function c(a){function c(b){function c(b,c,d){var e,f;for(e=c;d>e;e++)f=a.charAt(e),"\n"===f?(b.seenCR||b.line++,b.column=1,b.seenCR=!1):"\r"===f||"\u2028"===f||"\u2029"===f?(b.line++,b.column=1,b.seenCR=!0):(b.column++,b.seenCR=!1)}return Xa!==b&&(Xa>b&&(Xa=0,Ya={line:1,column:1,seenCR:!1}),c(Ya,Xa,b),Xa=b),Ya}function d(a){Za>Va||(Va>Za&&(Za=Va,$a=[]),$a.push(a))}function e(d,e,f){function g(a){var b=1;for(a.sort(function(a,b){return a.description<b.description?-1:a.description>b.description?1:0});b<a.length;)a[b-1]===a[b]?a.splice(b,1):b++}function h(a,b){function c(a){function b(a){return a.charCodeAt(0).toString(16).toUpperCase()}return a.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\x08/g,"\\b").replace(/\t/g,"\\t").replace(/\n/g,"\\n").replace(/\f/g,"\\f").replace(/\r/g,"\\r").replace(/[\x00-\x07\x0B\x0E\x0F]/g,function(a){return"\\x0"+b(a)}).replace(/[\x10-\x1F\x80-\xFF]/g,function(a){return"\\x"+b(a)}).replace(/[\u0180-\u0FFF]/g,function(a){return"\\u0"+b(a)}).replace(/[\u1080-\uFFFF]/g,function(a){return"\\u"+b(a)})}var d,e,f,g=new Array(a.length);for(f=0;f<a.length;f++)g[f]=a[f].description;return d=a.length>1?g.slice(0,-1).join(", ")+" or "+g[a.length-1]:g[0],e=b?'"'+c(b)+'"':"end of input","Expected "+d+" but "+e+" found."}var i=c(f),j=f<a.length?a.charAt(f):null;return null!==e&&g(e),new b(null!==d?d:h(e,j),e,j,f,i.line,i.column)}function f(){var a;return a=g()}function g(){var a,b,c;for(a=Va,b=[],c=h();c!==E;)b.push(c),c=h();return b!==E&&(Wa=a,b=H(b)),a=b}function h(){var a;return a=j(),a===E&&(a=l()),a}function i(){var b,c,d,e,f,g;if(b=Va,c=[],d=Va,e=w(),e!==E?(f=B(),f!==E?(g=w(),g!==E?(e=[e,f,g],d=e):(Va=d,d=I)):(Va=d,d=I)):(Va=d,d=I),d!==E)for(;d!==E;)c.push(d),d=Va,e=w(),e!==E?(f=B(),f!==E?(g=w(),g!==E?(e=[e,f,g],d=e):(Va=d,d=I)):(Va=d,d=I)):(Va=d,d=I);else c=I;return c!==E&&(Wa=b,c=J(c)),b=c,b===E&&(b=Va,c=v(),c!==E&&(c=a.substring(b,Va)),b=c),b}function j(){var a,b;return a=Va,b=i(),b!==E&&(Wa=a,b=K(b)),a=b}function k(){var b,c,e;if(b=z(),b===E){if(b=Va,c=[],L.test(a.charAt(Va))?(e=a.charAt(Va),Va++):(e=E,0===_a&&d(M)),e!==E)for(;e!==E;)c.push(e),L.test(a.charAt(Va))?(e=a.charAt(Va),Va++):(e=E,0===_a&&d(M));else c=I;c!==E&&(c=a.substring(b,Va)),b=c}return b}function l(){var b,c,e,f,g,h,i,j,l;return b=Va,123===a.charCodeAt(Va)?(c=N,Va++):(c=E,0===_a&&d(O)),c!==E?(e=w(),e!==E?(f=k(),f!==E?(g=w(),g!==E?(h=Va,44===a.charCodeAt(Va)?(i=Q,Va++):(i=E,0===_a&&d(R)),i!==E?(j=w(),j!==E?(l=m(),l!==E?(i=[i,j,l],h=i):(Va=h,h=I)):(Va=h,h=I)):(Va=h,h=I),h===E&&(h=P),h!==E?(i=w(),i!==E?(125===a.charCodeAt(Va)?(j=S,Va++):(j=E,0===_a&&d(T)),j!==E?(Wa=b,c=U(f,h),b=c):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I),b}function m(){var a;return a=n(),a===E&&(a=o(),a===E&&(a=p(),a===E&&(a=q()))),a}function n(){var b,c,e,f,g,h,i;return b=Va,a.substr(Va,6)===V?(c=V,Va+=6):(c=E,0===_a&&d(W)),c===E&&(a.substr(Va,4)===X?(c=X,Va+=4):(c=E,0===_a&&d(Y)),c===E&&(a.substr(Va,4)===Z?(c=Z,Va+=4):(c=E,0===_a&&d($)))),c!==E?(e=w(),e!==E?(f=Va,44===a.charCodeAt(Va)?(g=Q,Va++):(g=E,0===_a&&d(R)),g!==E?(h=w(),h!==E?(i=B(),i!==E?(g=[g,h,i],f=g):(Va=f,f=I)):(Va=f,f=I)):(Va=f,f=I),f===E&&(f=P),f!==E?(Wa=b,c=_(c,f),b=c):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I),b}function o(){var b,c,e,f,g,h;return b=Va,a.substr(Va,6)===aa?(c=aa,Va+=6):(c=E,0===_a&&d(ba)),c!==E?(e=w(),e!==E?(44===a.charCodeAt(Va)?(f=Q,Va++):(f=E,0===_a&&d(R)),f!==E?(g=w(),g!==E?(h=u(),h!==E?(Wa=b,c=ca(h),b=c):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I),b}function p(){var b,c,e,f,g,h;return b=Va,a.substr(Va,13)===da?(c=da,Va+=13):(c=E,0===_a&&d(ea)),c!==E?(e=w(),e!==E?(44===a.charCodeAt(Va)?(f=Q,Va++):(f=E,0===_a&&d(R)),f!==E?(g=w(),g!==E?(h=u(),h!==E?(Wa=b,c=fa(h),b=c):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I),b}function q(){var b,c,e,f,g,h,i;if(b=Va,a.substr(Va,6)===ga?(c=ga,Va+=6):(c=E,0===_a&&d(ha)),c!==E)if(e=w(),e!==E)if(44===a.charCodeAt(Va)?(f=Q,Va++):(f=E,0===_a&&d(R)),f!==E)if(g=w(),g!==E){if(h=[],i=s(),i!==E)for(;i!==E;)h.push(i),i=s();else h=I;h!==E?(Wa=b,c=ia(h),b=c):(Va=b,b=I)}else Va=b,b=I;else Va=b,b=I;else Va=b,b=I;else Va=b,b=I;return b}function r(){var b,c,e,f;return b=Va,c=Va,61===a.charCodeAt(Va)?(e=ja,Va++):(e=E,0===_a&&d(ka)),e!==E?(f=z(),f!==E?(e=[e,f],c=e):(Va=c,c=I)):(Va=c,c=I),c!==E&&(c=a.substring(b,Va)),b=c,b===E&&(b=B()),b}function s(){var b,c,e,f,h,i,j,k,l;return b=Va,c=w(),c!==E?(e=r(),e!==E?(f=w(),f!==E?(123===a.charCodeAt(Va)?(h=N,Va++):(h=E,0===_a&&d(O)),h!==E?(i=w(),i!==E?(j=g(),j!==E?(k=w(),k!==E?(125===a.charCodeAt(Va)?(l=S,Va++):(l=E,0===_a&&d(T)),l!==E?(Wa=b,c=la(e,j),b=c):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I),b}function t(){var b,c,e,f;return b=Va,a.substr(Va,7)===ma?(c=ma,Va+=7):(c=E,0===_a&&d(na)),c!==E?(e=w(),e!==E?(f=z(),f!==E?(Wa=b,c=oa(f),b=c):(Va=b,b=I)):(Va=b,b=I)):(Va=b,b=I),b}function u(){var a,b,c,d,e;if(a=Va,b=t(),b===E&&(b=P),b!==E)if(c=w(),c!==E){if(d=[],e=s(),e!==E)for(;e!==E;)d.push(e),e=s();else d=I;d!==E?(Wa=a,b=pa(b,d),a=b):(Va=a,a=I)}else Va=a,a=I;else Va=a,a=I;return a}function v(){var b,c;if(_a++,b=[],ra.test(a.charAt(Va))?(c=a.charAt(Va),Va++):(c=E,0===_a&&d(sa)),c!==E)for(;c!==E;)b.push(c),ra.test(a.charAt(Va))?(c=a.charAt(Va),Va++):(c=E,0===_a&&d(sa));else b=I;return _a--,b===E&&(c=E,0===_a&&d(qa)),b}function w(){var b,c,e;for(_a++,b=Va,c=[],e=v();e!==E;)c.push(e),e=v();return c!==E&&(c=a.substring(b,Va)),b=c,_a--,b===E&&(c=E,0===_a&&d(ta)),b}function x(){var b;return ua.test(a.charAt(Va))?(b=a.charAt(Va),Va++):(b=E,0===_a&&d(va)),b}function y(){var b;return wa.test(a.charAt(Va))?(b=a.charAt(Va),Va++):(b=E,0===_a&&d(xa)),b}function z(){var b,c,e,f,g,h;if(b=Va,48===a.charCodeAt(Va)?(c=ya,Va++):(c=E,0===_a&&d(za)),c===E){if(c=Va,e=Va,Aa.test(a.charAt(Va))?(f=a.charAt(Va),Va++):(f=E,0===_a&&d(Ba)),f!==E){for(g=[],h=x();h!==E;)g.push(h),h=x();g!==E?(f=[f,g],e=f):(Va=e,e=I)}else Va=e,e=I;e!==E&&(e=a.substring(c,Va)),c=e}return c!==E&&(Wa=b,c=Ca(c)),b=c}function A(){var b,c,e,f,g,h,i,j;return Da.test(a.charAt(Va))?(b=a.charAt(Va),Va++):(b=E,0===_a&&d(Ea)),b===E&&(b=Va,a.substr(Va,2)===Fa?(c=Fa,Va+=2):(c=E,0===_a&&d(Ga)),c!==E&&(Wa=b,c=Ha()),b=c,b===E&&(b=Va,a.substr(Va,2)===Ia?(c=Ia,Va+=2):(c=E,0===_a&&d(Ja)),c!==E&&(Wa=b,c=Ka()),b=c,b===E&&(b=Va,a.substr(Va,2)===La?(c=La,Va+=2):(c=E,0===_a&&d(Ma)),c!==E&&(Wa=b,c=Na()),b=c,b===E&&(b=Va,a.substr(Va,2)===Oa?(c=Oa,Va+=2):(c=E,0===_a&&d(Pa)),c!==E&&(Wa=b,c=Qa()),b=c,b===E&&(b=Va,a.substr(Va,2)===Ra?(c=Ra,Va+=2):(c=E,0===_a&&d(Sa)),c!==E?(e=Va,f=Va,g=y(),g!==E?(h=y(),h!==E?(i=y(),i!==E?(j=y(),j!==E?(g=[g,h,i,j],f=g):(Va=f,f=I)):(Va=f,f=I)):(Va=f,f=I)):(Va=f,f=I),f!==E&&(f=a.substring(e,Va)),e=f,e!==E?(Wa=b,c=Ta(e),b=c):(Va=b,b=I)):(Va=b,b=I)))))),b}function B(){var a,b,c;if(a=Va,b=[],c=A(),c!==E)for(;c!==E;)b.push(c),c=A();else b=I;return b!==E&&(Wa=a,b=Ua(b)),a=b}var C,D=arguments.length>1?arguments[1]:{},E={},F={start:f},G=f,H=function(a){return{type:"messageFormatPattern",elements:a}},I=E,J=function(a){var b,c,d,e,f,g="";for(b=0,d=a.length;d>b;b+=1)for(e=a[b],c=0,f=e.length;f>c;c+=1)g+=e[c];return g},K=function(a){return{type:"messageTextElement",value:a}},L=/^[^ \t\n\r,.+={}#]/,M={type:"class",value:"[^ \\t\\n\\r,.+={}#]",description:"[^ \\t\\n\\r,.+={}#]"},N="{",O={type:"literal",value:"{",description:'"{"'},P=null,Q=",",R={type:"literal",value:",",description:'","'},S="}",T={type:"literal",value:"}",description:'"}"'},U=function(a,b){return{type:"argumentElement",id:a,format:b&&b[2]}},V="number",W={type:"literal",value:"number",description:'"number"'},X="date",Y={type:"literal",value:"date",description:'"date"'},Z="time",$={type:"literal",value:"time",description:'"time"'},_=function(a,b){return{type:a+"Format",style:b&&b[2]}},aa="plural",ba={type:"literal",value:"plural",description:'"plural"'},ca=function(a){return{type:a.type,ordinal:!1,offset:a.offset||0,options:a.options}},da="selectordinal",ea={type:"literal",value:"selectordinal",description:'"selectordinal"'},fa=function(a){return{type:a.type,ordinal:!0,offset:a.offset||0,options:a.options}},ga="select",ha={type:"literal",value:"select",description:'"select"'},ia=function(a){return{type:"selectFormat",options:a}},ja="=",ka={type:"literal",value:"=",description:'"="'},la=function(a,b){return{type:"optionalFormatPattern",selector:a,value:b}},ma="offset:",na={type:"literal",value:"offset:",description:'"offset:"'},oa=function(a){return a},pa=function(a,b){return{type:"pluralFormat",offset:a,options:b}},qa={type:"other",description:"whitespace"},ra=/^[ \t\n\r]/,sa={type:"class",value:"[ \\t\\n\\r]",description:"[ \\t\\n\\r]"},ta={type:"other",description:"optionalWhitespace"},ua=/^[0-9]/,va={type:"class",value:"[0-9]",description:"[0-9]"},wa=/^[0-9a-f]/i,xa={type:"class",value:"[0-9a-f]i",description:"[0-9a-f]i"},ya="0",za={type:"literal",value:"0",description:'"0"'},Aa=/^[1-9]/,Ba={type:"class",value:"[1-9]",description:"[1-9]"},Ca=function(a){return parseInt(a,10)},Da=/^[^{}\\\0-\x1F \t\n\r]/,Ea={type:"class",value:"[^{}\\\\\\0-\\x1F \\t\\n\\r]",description:"[^{}\\\\\\0-\\x1F \\t\\n\\r]"},Fa="\\\\",Ga={type:"literal",value:"\\\\",description:'"\\\\\\\\"'},Ha=function(){return"\\"},Ia="\\#",Ja={type:"literal",value:"\\#",description:'"\\\\#"'},Ka=function(){return"\\#"},La="\\{",Ma={type:"literal",value:"\\{",description:'"\\\\{"'},Na=function(){return"{"},Oa="\\}",Pa={type:"literal",value:"\\}",description:'"\\\\}"'},Qa=function(){return"}"},Ra="\\u",Sa={type:"literal",value:"\\u",description:'"\\\\u"'},Ta=function(a){return String.fromCharCode(parseInt(a,16))},Ua=function(a){return a.join("")},Va=0,Wa=0,Xa=0,Ya={line:1,column:1,seenCR:!1},Za=0,$a=[],_a=0;if("startRule"in D){if(!(D.startRule in F))throw new Error("Can't start parsing from rule \""+D.startRule+'".');G=F[D.startRule]}if(C=G(),C!==E&&Va===a.length)return C;throw C!==E&&Va<a.length&&d({type:"end",description:"end of input"}),e(null,$a,Za)}return a(b,Error),{SyntaxError:b,parse:c}}(),n=g;j(g,"formats",{enumerable:!0,value:{number:{currency:{style:"currency"},percent:{style:"percent"}},date:{"short":{month:"numeric",day:"numeric",year:"2-digit"},medium:{month:"short",day:"numeric",year:"numeric"},"long":{month:"long",day:"numeric",year:"numeric"},full:{weekday:"long",month:"long",day:"numeric",year:"numeric"}},time:{"short":{hour:"numeric",minute:"numeric"},medium:{hour:"numeric",minute:"numeric",second:"numeric"},"long":{hour:"numeric",minute:"numeric",second:"numeric",timeZoneName:"short"},full:{hour:"numeric",minute:"numeric",second:"numeric",timeZoneName:"short"}}}}),j(g,"__localeData__",{value:k(null)}),j(g,"__addLocaleData",{value:function(a){if(!a||!a.locale)throw new Error("Locale data provided to IntlMessageFormat is missing a `locale` property");g.__localeData__[a.locale.toLowerCase()]=a}}),j(g,"__parse",{value:m.parse}),j(g,"defaultLocale",{enumerable:!0,writable:!0,value:void 0}),g.prototype.resolvedOptions=function(){return{locale:this._locale}},g.prototype._compilePattern=function(a,b,c,d){var e=new l(b,c,d);return e.compile(a)},g.prototype._findPluralRuleFunction=function(a){for(var b=g.__localeData__,c=b[a.toLowerCase()];c;){if(c.pluralRuleFunction)return c.pluralRuleFunction;c=c.parentLocale&&b[c.parentLocale.toLowerCase()]}throw new Error("Locale data added to IntlMessageFormat is missing a `pluralRuleFunction` for :"+a)},g.prototype._format=function(a,b){var c,d,e,f,g,i="";for(c=0,d=a.length;d>c;c+=1)if(e=a[c],"string"!=typeof e){if(f=e.id,!b||!h.call(b,f))throw new Error("A value must be provided for: "+f);g=b[f],i+=e.options?this._format(e.getOption(g),b):e.format(g)}else i+=e;return i},g.prototype._mergeFormats=function(b,c){var d,e,f={};for(d in b)h.call(b,d)&&(f[d]=e=k(b[d]),c&&h.call(c,d)&&a(e,c[d]));return f},g.prototype._resolveLocale=function(a){"string"==typeof a&&(a=[a]),a=(a||[]).concat(g.defaultLocale);var b,c,d,e,f=g.__localeData__;for(b=0,c=a.length;c>b;b+=1)for(d=a[b].toLowerCase().split("-");d.length;){if(e=f[d.join("-")])return e.locale;d.pop()}var h=a.pop();throw new Error("No locale data has been added to IntlMessageFormat for: "+a.join(", ")+", or the default locale: "+h)};var o={locale:"en",pluralRuleFunction:function(a,b){var c=String(a).split("."),d=!c[1],e=Number(c[0])==a,f=e&&c[0].slice(-1),g=e&&c[0].slice(-2);return b?1==f&&11!=g?"one":2==f&&12!=g?"two":3==f&&13!=g?"few":"other":1==a&&d?"one":"other"}};n.__addLocaleData(o),n.defaultLocale="en";var p=n;this.IntlMessageFormat=p}).call(this);
+//# sourceMappingURL=intl-messageformat.min.js.map</script>
+
+<script>
+
+/**
+* `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/) library to
+* help you internationalize your application. Note that if you're on a browser that
+* does not natively support the [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+* object, you must load the polyfill yourself. An example polyfill can
+* be found [here](https://github.com/andyearnshaw/Intl.js/).
+*
+* `Polymer.AppLocalizeBehavior` supports the same [message-syntax](http://formatjs.io/guides/message-syntax/)
+* of format.js, in its entirety; use the library docs as reference for the
+* available message formats and options.
+*
+* Sample application loading resources from an external file:
+*
+*     <dom-module id="x-app">
+*        <template>
+*         <div>{{localize('hello', 'Batman')}}</div>
+*        </template>
+*        <script>
+*           Polymer({
+*             is: "x-app",
+*
+*             behaviors: [
+*               Polymer.AppLocalizeBehavior
+*             ],
+*
+*             properties: {
+*               language: {
+*                 value: 'en'
+*               },
+*             }
+*
+*             attached: function() {
+*               this.loadResources(this.resolveUrl('locales.json'));
+*             },
+*           });
+*        &lt;/script>
+*     </dom-module>
+*
+* Alternatively, you can also inline your resources inside the app itself:
+*
+*     <dom-module id="x-app">
+*        <template>
+*         <div>{{localize('hello', 'Batman')}}</div>
+*        </template>
+*        <script>
+*           Polymer({
+*             is: "x-app",
+*
+*             behaviors: [
+*               Polymer.AppLocalizeBehavior
+*             ],
+*
+*             properties: {
+*               language: {
+*                 value: 'en'
+*               },
+*               resources: {
+*                 value: function() {
+*                   return {
+*                     'en': { 'hello': 'My name is {name}.' },
+*                     'fr': { 'hello': 'Je m'apelle {name}.' }
+*                   }
+*               }
+*             }
+*           });
+*        &lt;/script>
+*     </dom-module>
+*
+* @demo demo/index.html
+* @polymerBehavior Polymer.AppLocalizeBehavior
+*/
+Polymer.AppLocalizeBehavior = {
+  /**
+   * Internal singleton cache. This is the private implementation of the
+   * behaviour; don't interact with it directly.
+   */
+  __localizationCache: {
+    requests: {},  /* One iron-request per unique resources path. */
+    messages: {},  /* Unique localized strings. Invalidated when the language, formats or resources change. */
+    ajax: null     /* Global iron-ajax object used to request resource files. */
+  },
+
+  /**
+   * If the element is using `pathToResources` to load an external resources
+   * file, fired when the file has been loaded.
+   *
+   * @event app-resources-loaded
+   */
+
+  /**
+   * If the element is using `pathToResources` to load an external resources
+   * file, fired when the file cannot be loaded due to an error.
+   *
+   * @event app-resources-error
+   */
+
+  properties: {
+    /**
+     * The language used for translation.
+     */
+    language: {
+      type: String
+    },
+
+    /**
+     * The dictionary of localized messages, for each of the languages that
+     * are going to be used. See http://formatjs.io/guides/message-syntax/ for
+     * more information on the message syntax.
+     *
+     * For example, a valid dictionary would be:
+     * this.resources = {
+     *  'en': { 'greeting': 'Hello!' }, 'fr' : { 'greeting': 'Bonjour!' }
+     * }
+     */
+    resources: {
+      type: Object
+    },
+
+    /**
+     * The path to the dictionary of localized messages. The format is the
+     * same as the `resources` array, only saved as an external json file.
+     * Note that using a path will populate the `resources` property, and override
+     * the previous data.
+     */
+    pathToResources: {
+      type: String
+    },
+
+    /**
+     * Optional dictionary of user defined formats, as explained here:
+     * http://formatjs.io/guides/message-syntax/#custom-formats
+     *
+     * For example, a valid dictionary of formats would be:
+     * this.formats = {
+     *    number: { USD: { style: 'currency', currency: 'USD' } }
+     * }
+     */
+    formats: {
+      type: Object,
+      value: function() { return {} }
+    },
+
+    /**
+     * Translates a string to the current `language`. Any parameters to the
+     * string should be passed in order, as follows:
+     * `localize(stringKey, param1Name, param1Value, param2Name, param2Value)`
+     */
+    localize: {
+      computed: '__computeLocalize(language, resources, formats)'
+    }
+  },
+
+  loadResources: function(path) {
+    var proto = this.constructor.prototype;
+
+    // If the global ajax object has not been initialized, initialize and cache it.
+    var ajax = proto.__localizationCache.ajax;
+    if (!ajax) {
+      ajax = proto.__localizationCache.ajax = document.createElement('iron-ajax');
+    }
+
+    var request = proto.__localizationCache.requests[path];
+    if (!request) {
+      ajax.url = path;
+      var request = ajax.generateRequest();
+
+      request.completes.then(
+          this.__onRequestResponse.bind(this),
+          this.__onRequestError.bind(this));
+
+      // Cache the instance so that it can be reused if the same path is loaded.
+      proto.__localizationCache.requests[path] = request;
+    } else {
+      request.completes.then(
+          this.__onRequestResponse.bind(this),
+          this.__onRequestError.bind(this));
+    }
+  },
+
+  /**
+   * Returns a computed `localize` method, based on the current `language`.
+   */
+  __computeLocalize: function(language, resources, formats) {
+    var proto = this.constructor.prototype;
+
+    // Everytime any of the parameters change, invalidate the strings cache.
+    proto.__localizationCache.messages = {};
+
+    return function() {
+      var key = arguments[0];
+      if (!key || !resources || !language)
+        return;
+
+      // Cache the key/value pairs for the same language, so that we don't
+      // do extra work if we're just reusing strings across an application.
+      var messageKey = key + resources[language][key];
+      var msg = proto.__localizationCache.messages[messageKey];
+
+      if (!msg) {
+        msg = new IntlMessageFormat(resources[language][key], language, formats);
+        proto.__localizationCache.messages[messageKey] = msg;
+      }
+
+      var args = {};
+      for (var i = 1; i < arguments.length; i+=2) {
+        args[arguments[i]] = arguments[i+1];
+      }
+
+      return msg.format(args);
+    };
+  },
+
+  __onRequestResponse: function(event) {
+    this.resources = event.response;
+    this.fire('app-resources-loaded');
+  },
+
+  __onRequestError: function(event) {
+    this.fire('app-resources-error');
+  }
+}
+
+</script>
+
+<dom-module id="iron-flex" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>
+      .layout.horizontal,
+      .layout.vertical {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+      }
+
+      .layout.inline {
+        display: -ms-inline-flexbox;
+        display: -webkit-inline-flex;
+        display: inline-flex;
+      }
+
+      .layout.horizontal {
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+      }
+
+      .layout.vertical {
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+      }
+
+      .layout.wrap {
+        -ms-flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+      }
+
+      .layout.center,
+      .layout.center-center {
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+
+      .layout.center-justified,
+      .layout.center-center {
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+      }
+
+      .flex {
+        -ms-flex: 1 1 0.000000001px;
+        -webkit-flex: 1;
+        flex: 1;
+        -webkit-flex-basis: 0.000000001px;
+        flex-basis: 0.000000001px;
+      }
+
+      .flex-auto {
+        -ms-flex: 1 1 auto;
+        -webkit-flex: 1 1 auto;
+        flex: 1 1 auto;
+      }
+
+      .flex-none {
+        -ms-flex: none;
+        -webkit-flex: none;
+        flex: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="iron-flex-reverse" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>
+      .layout.horizontal-reverse,
+      .layout.vertical-reverse {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+      }
+
+      .layout.horizontal-reverse {
+        -ms-flex-direction: row-reverse;
+        -webkit-flex-direction: row-reverse;
+        flex-direction: row-reverse;
+      }
+
+      .layout.vertical-reverse {
+        -ms-flex-direction: column-reverse;
+        -webkit-flex-direction: column-reverse;
+        flex-direction: column-reverse;
+      }
+
+      .layout.wrap-reverse {
+        -ms-flex-wrap: wrap-reverse;
+        -webkit-flex-wrap: wrap-reverse;
+        flex-wrap: wrap-reverse;
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="iron-flex-alignment" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>
+      /**
+       * Alignment in cross axis.
+       */
+      .layout.start {
+        -ms-flex-align: start;
+        -webkit-align-items: flex-start;
+        align-items: flex-start;
+      }
+
+      .layout.center,
+      .layout.center-center {
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+
+      .layout.end {
+        -ms-flex-align: end;
+        -webkit-align-items: flex-end;
+        align-items: flex-end;
+      }
+
+      .layout.baseline {
+        -ms-flex-align: baseline;
+        -webkit-align-items: baseline;
+        align-items: baseline;
+      }
+
+      /**
+       * Alignment in main axis.
+       */
+      .layout.start-justified {
+        -ms-flex-pack: start;
+        -webkit-justify-content: flex-start;
+        justify-content: flex-start;
+      }
+
+      .layout.center-justified,
+      .layout.center-center {
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+      }
+
+      .layout.end-justified {
+        -ms-flex-pack: end;
+        -webkit-justify-content: flex-end;
+        justify-content: flex-end;
+      }
+
+      .layout.around-justified {
+        -ms-flex-pack: distribute;
+        -webkit-justify-content: space-around;
+        justify-content: space-around;
+      }
+
+      .layout.justified {
+        -ms-flex-pack: justify;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+      }
+
+      /**
+       * Self alignment.
+       */
+      .self-start {
+        -ms-align-self: flex-start;
+        -webkit-align-self: flex-start;
+        align-self: flex-start;
+      }
+
+      .self-center {
+        -ms-align-self: center;
+        -webkit-align-self: center;
+        align-self: center;
+      }
+
+      .self-end {
+        -ms-align-self: flex-end;
+        -webkit-align-self: flex-end;
+        align-self: flex-end;
+      }
+
+      .self-stretch {
+        -ms-align-self: stretch;
+        -webkit-align-self: stretch;
+        align-self: stretch;
+      }
+
+      .self-baseline {
+        -ms-align-self: baseline;
+        -webkit-align-self: baseline;
+        align-self: baseline;
+      };
+
+      /**
+       * multi-line alignment in main axis.
+       */
+      .layout.start-aligned {
+        -ms-flex-line-pack: start;  /* IE10 */
+        -ms-align-content: flex-start;
+        -webkit-align-content: flex-start;
+        align-content: flex-start;
+      }
+
+      .layout.end-aligned {
+        -ms-flex-line-pack: end;  /* IE10 */
+        -ms-align-content: flex-end;
+        -webkit-align-content: flex-end;
+        align-content: flex-end;
+      }
+
+      .layout.center-aligned {
+        -ms-flex-line-pack: center;  /* IE10 */
+        -ms-align-content: center;
+        -webkit-align-content: center;
+        align-content: center;
+      }
+
+      .layout.between-aligned {
+        -ms-flex-line-pack: justify;  /* IE10 */
+        -ms-align-content: space-between;
+        -webkit-align-content: space-between;
+        align-content: space-between;
+      }
+
+      .layout.around-aligned {
+        -ms-flex-line-pack: distribute;  /* IE10 */
+        -ms-align-content: space-around;
+        -webkit-align-content: space-around;
+        align-content: space-around;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="iron-flex-factors" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>
+      .flex,
+      .flex-1 {
+        -ms-flex: 1 1 0.000000001px;
+        -webkit-flex: 1;
+        flex: 1;
+        -webkit-flex-basis: 0.000000001px;
+        flex-basis: 0.000000001px;
+      }
+
+      .flex-2 {
+        -ms-flex: 2;
+        -webkit-flex: 2;
+        flex: 2;
+      }
+
+      .flex-3 {
+        -ms-flex: 3;
+        -webkit-flex: 3;
+        flex: 3;
+      }
+
+      .flex-4 {
+        -ms-flex: 4;
+        -webkit-flex: 4;
+        flex: 4;
+      }
+
+      .flex-5 {
+        -ms-flex: 5;
+        -webkit-flex: 5;
+        flex: 5;
+      }
+
+      .flex-6 {
+        -ms-flex: 6;
+        -webkit-flex: 6;
+        flex: 6;
+      }
+
+      .flex-7 {
+        -ms-flex: 7;
+        -webkit-flex: 7;
+        flex: 7;
+      }
+
+      .flex-8 {
+        -ms-flex: 8;
+        -webkit-flex: 8;
+        flex: 8;
+      }
+
+      .flex-9 {
+        -ms-flex: 9;
+        -webkit-flex: 9;
+        flex: 9;
+      }
+
+      .flex-10 {
+        -ms-flex: 10;
+        -webkit-flex: 10;
+        flex: 10;
+      }
+
+      .flex-11 {
+        -ms-flex: 11;
+        -webkit-flex: 11;
+        flex: 11;
+      }
+
+      .flex-12 {
+        -ms-flex: 12;
+        -webkit-flex: 12;
+        flex: 12;
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="iron-positioning" assetpath="../bower_components/iron-flex-layout/">
+  <template>
+    <style>
+      .block {
+        display: block;
+      }
+
+      /* IE 10 support for HTML5 hidden attr */
+      [hidden] {
+        display: none !important;
+      }
+
+      .invisible {
+        visibility: hidden !important;
+      }
+
+      .relative {
+        position: relative;
+      }
+
+      .fit {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      body.fullbleed {
+        margin: 0;
+        height: 100vh;
+      }
+
+      .scroll {
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+      }
+
+      /* fixed position */
+      .fixed-bottom,
+      .fixed-left,
+      .fixed-right,
+      .fixed-top {
+        position: fixed;
+      }
+
+      .fixed-top {
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+
+      .fixed-right {
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      .fixed-bottom {
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      .fixed-left {
+        top: 0;
+        bottom: 0;
+        left: 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="tpa-money-transfer" assetpath="../bower_components/tpa-money-transfer/"><style>
+:host {
+  display: block;
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer */
+  -khtml-user-select: none;
+  /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none;
+  /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none;
+  /* Disable Android and iOS callouts*/
+}
+.bold {
+  font-weight: bold;
+}
+section {
+  margin-bottom: 1.8em;
+}
+.my-card {
+  @apply (--layout-horizontal);
+}
+.my-card > :nth-child(1) {
+  @apply (--layout-flex);
+}
+.my-card > :nth-child(2) {
+  @apply (--layout-flex-0);
+}
+.my-card > div:nth-child(1) > h1 {
+  font-size: 1em;
+  margin: 0;
+  font-weight: normal;
+}
+.my-card > div:nth-child(1) > div {
+  font-size: 1.2em;
+}
+.my-card.balance > div:nth-child(1) > div {
+  color: var(--primary-color);
+}
+.my-card.balance super {
+  font-size: 0.6em;
+}
+paper-input {
+  color: var(--light-primary-color);
+}
+paper-input div[prefix] {
+  padding-right: 5px;
+}
+.center {
+  @apply (--layout-horizontal);
+  @apply (--layout-center);
+}
+.transfer {
+  font-weight: bold;
+  font-size: 1.6em;
+  margin-bottom: 0.5em;
+}
+.color--brand-primary {
+  color: var(--primary-color);
+}
+.color--light-primary {
+  color: var(--light-primary-color);
+}
+paper-button[primary] {
+  color: var(--primary-background-color);
+  background: var(--primary-color);
+}
+paper-dialog {
+  width: 80%;
+  display: block;
+}
+.addressContent {
+  @apply (--layout);
+  width: 200px;
+  margin: 8px;
+}
+@media (max-width: 800px) {
+  .addressContainer {
+    width: calc(34%);
+  }
+}
+@media (max-width: 400px) {
+  .addressContainer {
+    width: 100%;
+  }
+}
+
+</style>
+  <template><iron-signals on-iron-signal-i18n="onI18Signal"></iron-signals>
+    <section class="my-card balance">
+      <div>
+        <h1>{{accountOwner}}</h1>
+        <div>{{accountNumber}}</div>
+      </div>
+      <div class="bold">
+        {{accountBalanceObj.wholeNumber}}{{decimalSeparator}}<sup>{{accountBalanceObj.decimals}}</sup>
+      </div>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{localize('amount')}}" type="number">
+        <div prefix="">€</div>
+      </paper-input>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{localize('recipient')}}"></paper-input>
+      <div class="center">
+        <paper-icon-button icon="book" class="color--brand-light" onclick="dialog.toggle()"></paper-icon-button>
+      </div>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{localize('accountNumber')}}"></paper-input>
+      <div class="center">
+        <paper-icon-button icon="add" class="color--brand-primary"></paper-icon-button>
+      </div>
+    </section>
+
+    <section class="my-card">
+      <paper-input label="{{localize('usage')}}"></paper-input>
+    </section>
+
+    <section class="my-card">
+      <div><paper-input label="{{localize('executionDate')}}"></paper-input></div>
+    </section>
+
+    <section>
+      <paper-button raised="" primary="">{{localize('submit')}}</paper-button>
+    </section>
+
+    <paper-dialog id="dialog" title="Adress Book">
+      <div>
+        <iron-ajax id="ajax" loading="{{loadingAddresses}}" url="data.json" handle-as="json" on-response="_onAddressBookData" auto=""></iron-ajax>
+        <iron-list items="[[addresses]]" as="address" scroll-target="document" grid="">
+          <template><iron-signals on-iron-signal-i18n="onI18Signal"></iron-signals>
+            <div class="addressContainer">
+              <div class="addressContent" tabindex$="[[tabIndex]]">
+                {{address.firstname}}&nbsp;{{address.lastname}}<br>
+                {{address.account}}<br>
+                {{address.institute}}
+              </div>
+            </div>
+          </template>
+        </iron-list>
+      </div>
+      <div class="buttons">
+        <paper-button dialog-dismiss="">Cancel</paper-button>
+        <paper-button dialog-confirm="" autofocus="">Discard</paper-button>
+      </div>
+    </paper-dialog>
+
+  </template>
+</dom-module>
+<script>(function () {
+   'use strict';
+   var format = function (a, n, x, s, c) {
+      // console.log("a", a)
+      var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')', num = a.toFixed(Math.max(0, ~~n));
+      return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+   };
+   Polymer({
+      is: 'tpa-money-transfer',
+      behaviors: [Polymer.AppLocalizeBehavior],
+      properties: {
+         /*
+         *
+         * account owner e.g. "John Doe"
+         *
+         * @type string
+         */
+         accountOwner: {
+            type: String
+         },
+         accountNumber: {
+            type: String
+         },
+         accountBalance: {
+            type: Number,
+            observer: '_accountBalanceChange'
+         },
+         accountBalanceObj: {
+            type: Object
+         },
+         decimalSeparator: {
+            type: String,
+            value: ',',
+            observer: '_accountBalanceChange'
+         },
+         thousendsSeparator: {
+            type: String,
+            value: '.',
+            observer: '_accountBalanceChange'
+         },
+         loadingAddresses: Boolean,
+         addresses: Array,
+         language: {
+            value: "de-de"
+         },
+         resources: {
+            value: function () {
+               return {
+                  "de-de": {
+                     "recipient": "Empfänger",
+                     "accountNumber": "Kontonummer",
+                     "usage": "Verwendungszweck",
+                     "executionDate": "Ausführungsdatum",
+                     "submit": "Ausführen",
+                     "amount": "Betrag"
+                  },
+                  "en-au": {
+                     "recipient": "Recipient",
+                     "accountNumber": "Account number",
+                     "usage": "Usage",
+                     "executionDate": "Execution date",
+                     "submit": "Submit",
+                     "amount": "Amount"
+                  }
+               };
+            }
+         }
+      },
+      _accountBalanceChange: function (n) {
+         var self = this, decimalSeparator = self.decimalSeparator, thousendsSeparator = self.thousendsSeparator, balance = typeof n !== 'number' ? self.accountBalance : n, split;
+         if (balance) {
+            split = format(balance, 2, 3, thousendsSeparator, decimalSeparator).split(decimalSeparator);
+            self.accountBalanceObj = {
+               wholeNumber: split[0],
+               decimals: split[1]
+            };
+         }
+      },
+      _onAddressBookData: function (e) {
+         var data;
+         this.addresses = e.detail.response;
+      },
+      onI18Signal: function (e, p, s) {
+         if (this.resources[p]) this.language = p;
+      }
+   });
+})();
+</script><dom-module id="tpa-transactions-list-styles" assetpath="../bower_components/tpa-transaction-list/">
+    <template>
+        <style include="shared-styles">
+            :host {
+                --iron-icon-fill-color:var(--primary-color);
+            }
+
+            h3 {
+              color: var(--primary-color);
+            }
+
+            .date-header {
+                color:#aaaaaa;
+                margin-top:10px;
+            }
+
+            .sub-text {
+                color: var(--primary-color);
+            }
+
+            .main-text {
+                padding-bottom: 10px;
+                padding-top: 10px;
+            }
+
+            .no-icon {
+                padding-left: 10px;
+            }
+        </style>
+    </template>
+</dom-module>
+<dom-module id="tpa-transaction-list-i18n" assetpath="../bower_components/tpa-transaction-list/">
+    <template>
+        <iron-signals on-iron-signal-i18n="i18nSignal"></iron-signals>
+    </template>
+    <script>
+        Polymer({
+            is: 'tpa-transaction-list-i18n',
+            behaviors: [I18nBehavior],
+            properties: {
+                /*
+                 * @private
+                 */
+                i18n: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            "en-au": {
+                                "latestTransactions":"Latest Transactions",
+                                "currencyName": "Dollar"
+                            },
+                            "de-de": {
+                                "latestTransactions":"Neueste Transaktionen",
+                                "currencyName": "Euro"
+                            },
+                            "nl-nl": {
+                                "latestTransactions":"Laatste transacties",
+                                "currencyName": "Euro"
+                            },
+                            "nl-be": {
+                                "latestTransactions":"Laatste transacties",
+                                "currencyName": "Euro"
+                            }
+                        }
+                    },
+                    notify: true
+                }
+            }
+        });
+    </script>
+</dom-module>
+
+<dom-module name="tpa-transaction-list">
+    <template>
+        <iron-signals on-iron-signal-dashboard-data="onDashboardData"></iron-signals>
+        <style include="tpa-transactions-list-styles">
+        </style>
+        <tpa-transaction-list-i18n id="i18ncontent" content="{{i18ncontent}}" currency-symbol-code="{{currencySymbolCode}}"></tpa-transaction-list-i18n>
+        <h3>{{title}}</h3>
+        <div>
+            <template as="transactionGroup" is="dom-repeat" items="{{transactionGroups}}">
+                <div class="date-header" style="padding-left:10px; padding-bottom:10px">{{getGroupTitle(transactionGroup)}} <span style="float:right"><span>{{i18ncontent.currencyName}}</span> ({{currencySymbolCode}})</span></div>
+                <template is="dom-repeat" as="item" items="{{transactionGroup.transactions}}">
+                    <div class$="{{computeRowClass(hideIcon)}}">
+                        <div class="main-text">
+                            <paper-icon-button hidden$="{{hideIcon}}" disabled="" icon="{{item.icon}}"></paper-icon-button>{{item.name}}
+                            <span style="float:right">{{currencySymbolCode}}<span>{{item.amount}}</span></span>
+                        </div>
+                        <div hidden$="{{hideSubText}}" class="sub-text">{{item.subText}}</div>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "tpa-transaction-list",
+            properties: {
+                i18ncontent:{
+                    type:Object,
+                    notify:true
+                },
+                currencySymbolCode:{
+                    type:String,
+                    notify:true
+                },
+                /**
+                 * Use to show and hide icons that will prefix each transaction.
+                 *
+                 * @attribute hideIcon
+                 */
+                hideIcon: {
+                    type: Boolean,
+                    value: false
+                },
+                /**
+                 * Use to indicate if the sub text for transactions should be shown.
+                 *
+                 * @attribute hideSubText
+                 */
+                hideSubText: {
+                    type: Boolean,
+                    value: false
+                },
+                /**
+                 * The field to in the transactionGroup that will be used as the header for each group
+                 *
+                 * @attribute groupTitleField
+                 */
+                groupTitleField:{
+                    type: String,
+                    value: "date"
+                },
+                /**
+                 * The transactionGroups to display on this transaction list.
+                 *
+                 * @attribute transactionGroups
+                 */
+                transactionGroups: {
+                    type: Array,
+                    value: [],
+                    notify:true
+                },
+                /**
+                 * The title that will be shown at the top of the list
+                 *
+                 * @attribute title
+                 */
+                title: {
+                    type: "String",
+                    value: "",
+                    notify:true
+                },
+                dataSource: {
+                    type: "String",
+                    value: "transactionGroups",
+                    notify:true
+                }
+            },
+            getGroupTitle: function(group){
+                return group[this.groupTitleField];
+            },
+            computeRowClass : function(hideIcon){
+                var className = "row";
+
+                if (hideIcon){
+                    className += " no-icon";
+                }
+
+                return className;
+            },
+            getCurrencySymbol: function(currencyCode){
+                return String.fromCharCode(currencyCode);
+            },
+            onDashboardData: function(e, data){
+                this.transactionGroups = data[this.dataSource];
+            }
+        });
+    </script>
+</dom-module>
 <script>
 
   /**
