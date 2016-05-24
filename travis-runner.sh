@@ -14,7 +14,7 @@ then
     # Deploying to GitHub Pages! (http://ING-Group.github.io/tpa-bootstrap)
     echo Deploying to GitHub Pages
     # sed -i.tmp1 "s/\/\/ app.baseUrl = '\/tpa-bootstrap/app.baseUrl = '\/tpa-bootstrap/" app/scripts/app.js    
-    sed -i.tmp1 "s#// app.apiBase = '/tpa-bootstrap/api#app.apiBase = '$TRAVIS_API_URL#" app/scripts/app.js                 
+    sed -i.tmp1 "s#// app.apiBase = '/tpa-bootstrap/api#app.apiBase = '$GH_PAGES_API#" app/scripts/app.js                 
     sed -i.tmp2 "s/<\/head>/\  \<script>'https:'!==window.location.protocol\&\&(window.location.protocol='https')<\/script>&/g" app/index.html
         
     gulp build-deploy-gh-pages    
