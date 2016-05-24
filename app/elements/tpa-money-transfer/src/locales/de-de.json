@@ -1,8 +1,0 @@
-{
-  "recipient": "Empfänger" ,
-  "accountNumber": "Kontonummer",
-  "usage": "Verwendungszweck",
-  "executionDate": "Ausführungsdatum",
-  "submit": "Ausführen",
-  "amount": "Betrag"
-}
