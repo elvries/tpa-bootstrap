@@ -1,0 +1,31 @@
+{
+  "name": "tpa-font",
+  "version": "0.0.1",
+  "description": "central component for the management of the INGMe fonts.",
+  "main": "tpa-font.html",
+  "directories": {
+    "test": "Demo"
+  },
+  "dependencies": {    
+  },
+  "devDependencies": {
+    "drakov": "^1.0.0",
+    "gulp": "^3.9.1"
+  },
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ING-Group/tpa-font.git"
+  },
+  "keywords": [
+    "fonts",
+    "INGMe"
+  ],
+  "author": "ING - The Guide",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ING-Group/tpa-font/issues"
+  },
+  "homepage": "https://github.com/ING-Group/tpa-font#readme"
+}

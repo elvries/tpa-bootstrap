@@ -1,0 +1,28 @@
+{
+  "name": "tpa-font",
+  "homepage": "https://github.com/ING-Group/tpa-font",
+  "authors": [
+    "Jan Meijering <jan@meijering.com>"
+  ],
+  "description": "central component for the management of fonts",
+  "main": "tpa-font",
+  "keywords": [
+    "fonts",
+    "INGMe"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.0.0",
+    "tpa-styles": "git://github.com/ING-Group/tpa-styles#version1"
+  }
+}
