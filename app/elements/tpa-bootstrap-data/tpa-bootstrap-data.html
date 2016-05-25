@@ -1,5 +1,5 @@
-<link rel="import" href="../tpa-ajax/tpa-ajax.html">
-<link rel="import" href="../iron-meta/iron-meta.html">
+<link rel="import" href="../../bower_components/tpa-ajax/tpa-ajax.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
 <!--
 `tpa-bootstrap-data` will fetch all the data required for the navigation and menu bar elements.
 
@@ -24,9 +24,11 @@
         }
       },
       ready: function(){
+        console.log('request', this.$.getBootstrapData);
         this.$.getBootstrapData.generateRequest();
       },
       handleBootstrapResponse: function(e, data){
+        console.log('calling bootstrap data request', data);
         this.fire("iron-signal", {
           name: "bootstrap-data",
           data: data.response
