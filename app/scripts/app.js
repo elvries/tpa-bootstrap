@@ -22,7 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.apiBaseUrl = [app.apiBase, app.apiPath].join('');
 
   app.services = {
-    "dashboard": app.apiBaseUrl + "dashboard"
+    "dashboard": app.apiBaseUrl + "dashboard",
+    "bootstrap": app.apiBaseUrl + "bootstrap"
   };
 
   app.baseUrl = '/';
