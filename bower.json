@@ -9,7 +9,7 @@
     "platinum-elements": "PolymerElements/platinum-elements#^2.0.0",
     "polymer": "Polymer/polymer#^1.4.0",
     "tpa-top-bar": "https://github.com/ING-Group/tpa-top-bar.git",
-    "tpa-nav-bar": "https://github.com/ING-Group/tpa-nav-bar.git#api-blueprint",
+    "tpa-nav-bar": "https://github.com/ING-Group/tpa-nav-bar.git",
     "tpa-icons": "https://github.com/ING-Group/tpa-icons.git",
     "tpa-transaction-list": "https://github.com/ING-Group/tpa-transaction-list.git",
     "tpa-i18n": "https://github.com/ING-Group/tpa-i18n.git",
