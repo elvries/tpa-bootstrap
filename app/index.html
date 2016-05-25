@@ -92,7 +92,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
 
       <div main>
-        <tpa-dashboard-data></tpa-dashboard-data>
         <app-header-layout has-scrolling-region>
           <app-header reveals>
             <tpa-top-bar class="paper-header"></tpa-top-bar>
@@ -105,7 +104,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="content">
           <iron-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home">
             <section data-route="home">
-              <tpa-app-layout></tpa-app-layout>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'home')}}">
+                <link rel="import" href="elements/tpa-app-layout/tpa-app-layout.html">
+                <tpa-app-layout></tpa-app-layout>
+              </template>
             </section>
 
             <section data-route="users">
