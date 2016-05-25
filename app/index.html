@@ -109,59 +109,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="users">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Users page</h1>
-                <p>Users Page</p>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'users')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-user-page.html">
+                <tpa-user-page></tpa-user-page>
+              </template>
             </section>
 
             <section data-route="savingsgoals">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Savings goals</h1>
-                <p>This is another page</p>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'savingsgoals')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-savingsgoals-page.html">
+                <tpa-savingsgoals-page></tpa-savingsgoals-page>
+              </template>
             </section>
 
             <section data-route="trading">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Trading</h1>
-                <div>Lorem ipsum...</div>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'trading')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-trading-page.html">
+                <tpa-trading-page></tpa-trading-page>
+              </template>
             </section>
 
             <section data-route="mortgage">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Mortgage</h1>
-                <p>This is another page</p>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'mortgage')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-mortgage-page.html">
+                <tpa-mortgage-page></tpa-mortgage-page>
+              </template>
             </section>
 
             <section data-route="loans">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Loans</h1>
-                <div>Lorem ipsum...</div>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'loans')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-loans-page.html">
+                <tpa-loans-page></tpa-loans-page>
+              </template>
             </section>
 
             <section data-route="insurance">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Insurance</h1>
-                <div>Lorem ipsum...</div>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'insurance')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-insurance-page.html">
+                <tpa-insurance-page></tpa-insurance-page>
+              </template>
             </section>
 
             <section data-route="contact">
-              <paper-material elevation="1">
-                <h1 class="page-title focus-target" tabindex="-1">Contact</h1>
-                <p>This is the contact section</p>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'contact')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-contact-page.html">
+                <tpa-contact-page></tpa-contact-page>
+              </template>
             </section>
 
             <section data-route="settings">
-              <paper-material elevation="1">
-                <h1>Settings</h1>
-                <tpa-region-selection></tpa-region-selection>
-              </paper-material>
+              <template is="dom-if" if="{{isSelected(data.pageName, 'settings')}}">
+                <link rel="import" href="elements/tpa-pages/tpa-settings-page.html">
+                <tpa-settings-page></tpa-settings-page>
+              </template>
             </section>
           </iron-pages>
         </div>
