@@ -93,13 +93,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div main>
         <tpa-dashboard-data></tpa-dashboard-data>
-        <tpa-bootstrap-data></tpa-bootstrap-data>
+        <tpa-ajax auto id="getBootstrapData" url="{{services.bootstrap}}" handle-as="json" last-response="{{bootstrapResponse}}"></tpa-ajax>
         <app-header-layout has-scrolling-region>
           <app-header reveals>
             <tpa-top-bar class="paper-header"></tpa-top-bar>
             <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
               <!-- Application sub title -->
-              <tpa-nav-bar base-url="{{baseUrl}}#/"></tpa-nav-bar>
+              <tpa-nav-bar base-urlgit ="{{baseUrl}}#/" tabs="[[bootstrapResponse.tabs]]"></tpa-nav-bar>
             </paper-toolbar>
           </app-header>
           <!-- Main Content -->
