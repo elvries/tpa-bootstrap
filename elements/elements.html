@@ -17915,23 +17915,28 @@ of where they are in DOM.
                 fill: white;
                 margin-right:10px;
             }
+            paper-toolbar.main-toolbar {
+                --paper-toolbar-height:auto;
+            }
+            paper-toolbar.main-toolbar paper-tabs {
+                width:100%;
 
+            }
         </style>
 
+        <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
+            <paper-tabs selected="0" scrollable="{{shouldScroll}}">
+                <template is="dom-repeat" as="item" items="[[tabs]]">
+                    <paper-tab link="">
+                        <a href="{{baseUrl}}{{item.link}}" class="link" tabindex="-1">
+                            <iron-icon icon="[[item.icon]]" class="white"></iron-icon>[[item.label]]
+                        </a>
+                    </paper-tab>
+                </template>
+            </paper-tabs>
 
-
-        <paper-tabs selected="0" scrollable="{{shouldScroll}}">
-            <template is="dom-repeat" as="item" items="[[tabs]]">
-                <paper-tab link="">
-                    <a href="{{baseUrl}}{{item.link}}" class="link" tabindex="-1">
-                        <iron-icon icon="[[item.icon]]" class="white"></iron-icon>[[item.label]]
-                    </a>
-                </paper-tab>
-            </template>
-        </paper-tabs>
-
-      <iron-media-query query="(max-width: 880px)" query-matches="{{shouldScroll}}"></iron-media-query>
-
+          <iron-media-query query="(max-width: 880px)" query-matches="{{shouldScroll}}"></iron-media-query>
+        </paper-toolbar>
     </template>
     <script>
         Polymer({
@@ -17956,9 +17961,6 @@ of where they are in DOM.
                     type: Array,
                     value: function() { return []; }
                 }
-            },
-            onBootstrapData: function(e, data){
-                this.tabs = data.tabs;
             }
         });
 
@@ -26316,57 +26318,6 @@ paper-dialog {
         })
     </script>
 </dom-module>
-<dom-module id="tpa-app-layout" assetpath="tpa-app-layout/">
-    <template>
-        <style include="shared-styles iron-flex iron-flex-alignment">
-            .layout {
-                margin-bottom: 20px;
-            }
-
-            paper-card {
-                width: calc(33.3% - 20px);
-                margin: 24px 0;
-            }
-
-            @media (max-width: 1200px) {
-                paper-card {
-                    width: calc(50% - 20px);
-                }
-            }
-
-            @media (max-width: 800px) {
-                paper-card {
-                    width: calc(100% - 0px);
-                }
-            }
-
-        </style>
-        <div class="horizontal around-justified layout wrap">
-                <paper-card heading="Money Transfer">
-                <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450" account-balance="5000"></tpa-money-transfer>
-                </paper-card>
-
-                <paper-card heading="Latest Transactions">
-                  <tpa-transaction-list></tpa-transaction-list>
-                </paper-card>
-
-                <paper-card heading="Accounts">
-                  <tpa-transaction-list hide-icon="" group-title-field="accountType"></tpa-transaction-list>
-                </paper-card>
-
-                    <paper-card heading="Mortgage calculation">
-                        <tpa-mortgage-calculation></tpa-mortgage-calculation>
-                    </paper-card>
-
-            
-        </div>
-    </template>
-    <script>
-        Polymer({
-            is: "tpa-app-layout"
-        });
-    </script>
-</dom-module>
 <script>/*
     Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
     This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -27201,6 +27152,57 @@ class TPARequest{
 </script>
 
 
+<dom-module id="tpa-app-layout" assetpath="tpa-app-layout/">
+    <template>
+        <style include="shared-styles iron-flex iron-flex-alignment">
+            .layout {
+                margin-bottom: 20px;
+            }
+
+            paper-card {
+                width: calc(33.3% - 20px);
+                margin: 24px 0;
+            }
+
+            @media (max-width: 1200px) {
+                paper-card {
+                    width: calc(50% - 20px);
+                }
+            }
+
+            @media (max-width: 800px) {
+                paper-card {
+                    width: calc(100% - 0px);
+                }
+            }
+
+        </style>
+        <div class="horizontal around-justified layout wrap">
+                <paper-card heading="Money Transfer">
+                <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450" account-balance="5000"></tpa-money-transfer>
+                </paper-card>
+
+                <paper-card heading="Latest Transactions">
+                  <tpa-transaction-list></tpa-transaction-list>
+                </paper-card>
+
+                <paper-card heading="Accounts">
+                  <tpa-transaction-list hide-icon="" group-title-field="accountType"></tpa-transaction-list>
+                </paper-card>
+
+                    <paper-card heading="Mortgage calculation">
+                        <tpa-mortgage-calculation></tpa-mortgage-calculation>
+                    </paper-card>
+
+            
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "tpa-app-layout"
+        });
+    </script>
+</dom-module>
 
 <dom-module id="tpa-dashboard-data" assetpath="../bower_components/tpa-dashboard/">
   <template>
