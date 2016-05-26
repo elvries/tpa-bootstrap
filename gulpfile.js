@@ -126,8 +126,8 @@ gulp.task('copy', function() {
   
   // Copy over the bundled components
   var bundle = gulp.src([
-    'app/build/bundled/elements/**/*.*'
-    //'!app/build/bundled/elements/**/{demo,test}/*'    
+    'app/build/bundled/elements/**/*.*',
+    '!app/build/bundled/elements/**/{demo,test}/*'    
   ],{ 
     dot: true
   }).pipe(gulp.dest(dist('elements')));
