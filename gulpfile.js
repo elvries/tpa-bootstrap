@@ -184,6 +184,9 @@ gulp.task('vulcanize', function() {
 gulp.task('polymer-build', function(callback) {              
   var fragments =  polymerConfig.fragments.join(' ');  
   
+  console.log('!!!! NOTE : This will not work on Windows until following Issue/PR merged !!!!');
+  console.log('!!!! - Issue : https://github.com/Polymer/polymer-cli/issues/191');
+  console.log('!!!! -  PR   : https://github.com/Polymer/polymer-cli/pull/199');  
   var polymerBuildCommand = 'polymer build --entrypoint index.html --shell elements/elements.html --fragment ' + fragments;
   
   exec(polymerBuildCommand, { cwd : 'app' }, function(err, stdout, stderr) {
