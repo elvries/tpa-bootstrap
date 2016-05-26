@@ -182,8 +182,7 @@ gulp.task('vulcanize', function() {
 });
 
 gulp.task('polymer-build', function(callback) {              
-  var fragments =  polymerConfig.fragments.join(' ');
-  console.log('fragments', fragments);
+  var fragments =  polymerConfig.fragments.join(' ');  
   
   var polymerBuildCommand = 'polymer build --entrypoint index.html --shell elements/elements.html --fragment ' + fragments;
   
