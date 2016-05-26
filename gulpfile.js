@@ -58,7 +58,8 @@ var dist = function(subpath) {
 function drakovProxy(){
   var argv = {
       sourceFiles: './**/*-mock.md',
-      serverPort: 5001
+      serverPort: 5001,
+      public : true
   };
   drakov.run(argv);
 
