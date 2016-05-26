@@ -15,6 +15,12 @@
 * End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
 * [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, Mobile Chrome Apps and lint tools.
 
+TPA Additions
+
+* Lazy Loading using Service Workers via [Polymer CLI](https://github.com/Polymer/polymer-cli) build task
+* API Blueprint hosting via [Drakov](https://github.com/Aconex/drakov/) and [Proxy Middleware](https://github.com/chimurai/http-proxy-middleware/) to work with [Browsersync](https://www.npmjs.com/package/browser-sync)
+* Unit testing coverage with [Istanbul](https://github.com/thedeeno/web-component-tester-istanbul)
+
 ### Demo
 
 [TPA Demo](https://ing-group.github.io/tpa-bootstrap/)
@@ -174,6 +180,8 @@ Components installed by Bower live in the `app/bower_components` directory. This
 
 ### Github Pages
 
+TPA has enabled Github Pages as described below. In addition, there is an API endpoint setting, GH_PAGES_API, added to Travis CI that gets pushed in upon build
+
 1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
 2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `app.baseUrl = '/bobs-awesome-site/';`)
 3. Run `gulp build-deploy-gh-pages` from command line
@@ -192,6 +200,8 @@ Polymer Starter Kit offers an optional offline experience thanks to Service Work
 Our optional offline setup should work well for relatively simple applications. For more complex apps, we recommend learning how Service Worker works so that you can make the most of the Platinum Service Worker element abstractions.
 
 ### Enable Service Worker support?
+
+TPA has enabled Service Worker support from the Polymer Starter Kit, as described below.
 
 To enable Service Worker support for Polymer Starter Kit project use these 3 steps:
 
@@ -296,6 +306,8 @@ If you are implementing an offline experince using Service Worker, make sure to 
 ## Yeoman support
 
 [generator-polymer](https://github.com/yeoman/generator-polymer/releases) now includes support for Polymer Starter Kit out of the box.
+
+[generator-tpa](https://github.com/ING-Group/generator-tpa/) is the bespoke implementation of generating new components for TPA. 
 
 ## Frequently Asked Questions
 
