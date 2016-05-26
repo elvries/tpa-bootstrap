@@ -97,10 +97,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         app.$.toast.show();
       }
       app.$.paperDrawerPanel.closeDrawer();
-  }
+  };
 
   app.closeDrawer = function() {
     app.$.paperDrawerPanel.closeDrawer();
+  };
+
+  app.isSelected = function(selected, actual) {
+    return selected === actual;
   };
 
 })(document);
