@@ -5,6 +5,8 @@
 
 > A starting point for building ING web applications with Polymer 1.0
 
+TPA Bootstrap is a clone from [Polymer Starter Kit](https://github.com/PolymerElements/polymer-starter-kit/tree/v1.3.0)
+
 ### Included out of the box:
 
 * [Polymer](https://www.polymer-project.org/), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) and [Neon](https://elements.polymer-project.org/browse?package=neon-elements) elements
@@ -20,6 +22,7 @@ TPA Additions
 * Lazy Loading using Service Workers via [Polymer CLI](https://github.com/Polymer/polymer-cli) build task
 * API Blueprint hosting via [Drakov](https://github.com/Aconex/drakov/) and [Proxy Middleware](https://github.com/chimurai/http-proxy-middleware/) to work with [Browsersync](https://www.npmjs.com/package/browser-sync)
 * Unit testing coverage with [Istanbul](https://github.com/thedeeno/web-component-tester-istanbul)
+* CSP Compliance with [Crisper](https://github.com/PolymerLabs/crisper)
 
 ### Demo
 
@@ -46,7 +49,7 @@ To take advantage of Polymer Starter Kit you need to:
 
 ### Get the code
 
-[Download](https://github.com/polymerelements/polymer-starter-kit/releases/latest) and extract Polymer Starter Kit to where you want to work. The project comes in two flavours - Light and Full.
+[Download](https://github.com/ING-Group/tpa-bootstrap/releases/latest) and extract Polymer Starter Kit to where you want to work. The project comes in two flavours - Light and Full.
 
 **Beginners**: Try Polymer Starter Kit Light. This doesn't require any extra dependencies nor knowledge of modern front-end tooling. This option is good for prototyping if you haven't build a Polymer app before.
 
@@ -99,7 +102,7 @@ This lets you run `gulp` and `bower` from the command line.
 4)  Install the starter kit's local `npm` and `bower` dependencies.
 
 ```sh
-cd polymer-starter-kit && npm install && bower install
+cd tpa-bootstrap && npm install && bower install
 ```
 
 This installs the element sets (Paper, Iron, Platinum) and tools the starter kit requires to build and serve apps.
@@ -170,6 +173,8 @@ Web apps built with Polymer Starter Kit come configured with support for [Web Co
 
 [Read more](https://github.com/Polymer/web-component-tester#html-suites) about using Web Component tester.
 
+Code Coverage is provided by [Istanbul](https://github.com/thedeeno/web-component-tester-istanbul)
+
 ## Dependency Management
 
 Polymer uses [Bower](http://bower.io) for package management. This makes it easy to keep your elements up to date and versioned. For tooling, we use npm to manage Node.js-based dependencies.
@@ -182,16 +187,12 @@ Components installed by Bower live in the `app/bower_components` directory. This
 
 TPA has enabled Github Pages as described below. In addition, there is an API endpoint setting, GH_PAGES_API, added to Travis CI that gets pushed in upon build
 
-1. Uncomment this line  `// app.baseUrl = '/polymer-starter-kit/';` in app.js near the top
-2. Change `app.baseUrl = '/polymer-starter-kit/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `app.baseUrl = '/bobs-awesome-site/';`)
+1. Uncomment this line  `// app.baseUrl = '/tpa-bootstrap/';` in app.js near the top
+2. Change `app.baseUrl = '/tpa-bootstrap/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `app.baseUrl = '/bobs-awesome-site/';`)
 3. Run `gulp build-deploy-gh-pages` from command line
-4. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/polymer-starter-kit/)
+4. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/tpa-bootstrap/)
 
 [See more details](/docs/deploy-to-github-pages.md/)
-
-### Firebase
-
-[See detail recipe](/docs/deploy-to-firebase-pretty-urls.md/)
 
 ## Service Worker
 
@@ -234,7 +235,7 @@ To enable Service Worker support for Polymer Starter Kit project use these 3 ste
   -->
   ```
 3. Uncomment 'cache-config' in the `runSequence()` section of the 'default' gulp task, like below:
-[(gulpfile.js)](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js)
+[(gulpfile.js)](https://github.com/ING-Group/tpa-bootstrap/blob/master/gulpfile.js)
 
   ```JavaScript
   // Build Production Files, the Default Task
@@ -255,7 +256,7 @@ If you experience an issue with Service Worker support in your application, chec
 * [sw-toolbox](https://github.com/GoogleChrome/sw-toolbox/issues)
 * [platinum-sw](https://github.com/PolymerElements/platinum-sw/issues)
 * [platinum-push-notifications-manager](https://github.com/PolymerElements/platinum-push-messaging)
-* For all other issues, feel free to file them [here](https://github.com/polymerelements/polymer-starter-kit/issues).
+* For all other issues, feel free to file them [here](https://github.com/ING-Group/tpa-bootstrap/issues).
 
 #### I get an error message about "Only secure origins are allowed"
 
@@ -290,9 +291,9 @@ If you find anything to still be stale, you can also try navigating to `chrome:s
 
 If for any reason you need to disable Service Worker support after previously enabling it, you can remove it from your Polymer Starter Kit project using these 4 steps:
 
-1. Remove references to the platinum-sw elements from your application [index](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/index.html).
-2. Remove the two Platinum Service Worker elements (platinum-sw/..) in [app/elements/elements.html](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/elements/elements.html)
-3. Remove 'precache' from the list in the 'default' gulp task ([gulpfile.js](https://github.com/PolymerElements/polymer-starter-kit/blob/master/gulpfile.js))
+1. Remove references to the platinum-sw elements from your application [index](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/index.html).
+2. Remove the two Platinum Service Worker elements (platinum-sw/..) in [app/elements/elements.html](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/elements/elements.html)
+3. Remove 'precache' from the list in the 'default' gulp task ([gulpfile.js](https://github.com/ING-Group/tpa-bootstrap/blob/master/gulpfile.js))
 4. Navigate to `chrome://serviceworker-internals` and unregister any Service Workers registered by Polymer Starter Kit for your app just in case there's a copy of it cached.
 
 ## Add to home screen banner
@@ -313,15 +314,15 @@ If you are implementing an offline experince using Service Worker, make sure to 
 
 ### Where do I customise my application theme?
 
-Theming can be achieved using [CSS Custom properties](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details) via [app/styles/app-theme.html](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/styles/app-theme.html).
+Theming can be achieved using [CSS Custom properties](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details) via [app/styles/app-theme.html](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/styles/app-theme.html).
 You can also use `app/styles/main.css` for pure CSS stylesheets (e.g for global styles), however note that Custom properties will not work there under the shim.
 
 A [Polycast](https://www.youtube.com/watch?v=omASiF85JzI) is also available that walks through theming using Polymer 1.0.
 
 ### Where do I configure routes in my application?
 
-This can be done via [`app/elements/routing.html`](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/elements/routing.html). We use Page.js for routing and new routes
-can be defined in this import. We then toggle which `<iron-pages>` page to display based on the [selected](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/index.html#L105) route.
+This can be done via [`app/elements/routing.html`](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/elements/routing.html). We use Page.js for routing and new routes
+can be defined in this import. We then toggle which `<iron-pages>` page to display based on the [selected](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/index.html#L105) route.
 
 ### Why are we using Page.js rather than a declarative router like `<more-routing>`?
 
@@ -337,7 +338,7 @@ App layouts live in a separate repository called [app-layout-templates](https://
 You can select a template and copy over the relevant parts you would like to reuse to Polymer Starter Kit.
 
 You will probably need to change paths to where your Iron and Paper dependencies can be found to get everything working.
-This can be done by adding them to the [`elements.html`](https://github.com/PolymerElements/polymer-starter-kit/blob/master/app/elements/elements.html) import.
+This can be done by adding them to the [`elements.html`](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/elements/elements.html) import.
 
 ### Something has failed during installation. How do I fix this?
 
@@ -357,7 +358,7 @@ If you get a browser console error indicating that an element you know you have 
 
 If the issue is to do with a failure somewhere else, you might find that due to a network issue
 a dependency failed to correctly install. We recommend running `npm cache clean` and deleting the `node_modules` directory followed by
-`npm install` to see if this corrects the problem. If not, please check the [issue tracker](https://github.com/PolymerElements/polymer-starter-kit/issues) in case
+`npm install` to see if this corrects the problem. If not, please check the [issue tracker](https://github.com/ING-Group/tpa-bootstrap/issues) in case
 there is a workaround or fix already posted.
 
 ### I'm having trouble getting Vulcanize to fully build my project on Windows. Help?
@@ -366,7 +367,7 @@ Some Windows users have run into trouble with the `elements.html` file in their 
 not being correctly vulcanized. This can happen if your project is in a folder with a name containing a
 space. You can work around this issue by ensuring your path doesn't contain one.
 
-There is also an [in-flight](https://github.com/PolymerElements/polymer-starter-kit/issues/62#issuecomment-108974016) issue
+There is also an [in-flight](https://github.com/ING-Group/tpa-bootstrap/issues/62#issuecomment-108974016) issue
 where some are finding they need to disable the `inlineCss` option in our configuration for Vulcanize
 to correctly build. We are still investigating this, however for the time-being use the workaround if
 you find your builds getting stuck here.
@@ -396,7 +397,7 @@ If you are not using the build-blocks, but still wish for additional files (e.g 
 
 Don't worry! We've got you covered. Polymer Starter Kit tries to offer everything you need to build and optimize your apps for production, which is why we include the tooling we do. We realise however that our tooling setup may not be for everyone.
 
-If you find that you just want the simplest setup possible, we recommend using Polymer Starter Kit light, which is available from the [Releases](https://github.com/PolymerElements/polymer-starter-kit/releases) page. This takes next to no time to setup.
+If you find that you just want the simplest setup possible, we recommend using Polymer Starter Kit light, which is available from the [Releases](https://github.com/ING-Group/tpa-bootstrap/releases) page. This takes next to no time to setup.
 
 ## Licensing
 

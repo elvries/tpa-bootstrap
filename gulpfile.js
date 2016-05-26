@@ -125,21 +125,13 @@ gulp.task('copy', function() {
     dot: true
   }).pipe(gulp.dest(dist()));
   
-  // Copy over the bundled components
-  var bundle = gulp.src([
-    'app/build/bundled/elements/**/*.*',
-    '!app/build/bundled/elements/**/{demo,test}/*'    
-  ],{ 
-    dot: true
-  }).pipe(gulp.dest(dist('elements')));
-
   // Copy over only the bower_components we need
   // These are things which cannot be vulcanized
   var bower = gulp.src([
     'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
-  return merge(app, bower, bundle)
+  return merge(app, bower)
     .pipe($.size({
       title: 'copy'
     }));
@@ -195,6 +187,18 @@ gulp.task('polymer-build', function(callback) {
     console.log(stderr);
     callback(err);
   });    
+});
+
+gulp.task('crisper', function() {   
+  
+    return gulp.src(
+      ['app/build/bundled/elements/**/*.*',
+      '!app/build/bundled/elements/**/{demo,test}/*'])
+    // Split inline scripts from an HTML file for Content Security Policy compliance
+    // HTML and JS minification is performed in the 'build' task
+    .pipe($.crisper())    
+    .pipe(gulp.dest('dist/elements'))
+    .pipe($.size({title: 'crisper'}));
 });
 
 // Generate config data for the <sw-precache-cache> element.
@@ -297,6 +301,7 @@ gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
     'polymer-build',
+    'crisper',
     ['ensureFiles', 'copy', 'styles'],
     'build',
     //'vulcanize', // Removed in replacement of polymer-build 
