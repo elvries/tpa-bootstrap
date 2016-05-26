@@ -24,10 +24,12 @@ var merge = require('merge-stream');
 var path = require('path');
 var fs = require('fs');
 var glob = require('glob-all');
+var exec = require('child_process').exec;
 var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
 var ensureFiles = require('./tasks/ensure-files.js');
+var polymerConfig = require('./app/polymer.json');
 var drakov = require('drakov');
 var proxy = require('http-proxy-middleware');
 var lec = require('gulp-line-ending-corrector');
@@ -112,6 +114,7 @@ gulp.task('images', function() {
 gulp.task('copy', function() {
   var app = gulp.src([
     'app/*',
+    '!app/build',
     '!app/test',
     '!app/elements',
     '!app/bower_components',
@@ -120,6 +123,14 @@ gulp.task('copy', function() {
   ], {
     dot: true
   }).pipe(gulp.dest(dist()));
+  
+  // Copy over the bundled components
+  var bundle = gulp.src([
+    'app/build/bundled/elements/**/*.*'
+    //'!app/build/bundled/elements/**/{demo,test}/*'    
+  ],{ 
+    dot: true
+  }).pipe(gulp.dest(dist('elements')));
 
   // Copy over only the bower_components we need
   // These are things which cannot be vulcanized
@@ -127,7 +138,7 @@ gulp.task('copy', function() {
     'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
-  return merge(app, bower)
+  return merge(app, bower, bundle)
     .pipe($.size({
       title: 'copy'
     }));
@@ -170,6 +181,19 @@ gulp.task('vulcanize', function() {
     .pipe($.size({title: 'vulcanize'}));
 });
 
+gulp.task('polymer-build', function(callback) {              
+  var fragments =  polymerConfig.fragments.join(' ');
+  console.log('fragments', fragments);
+  
+  var polymerBuildCommand = 'polymer build --entrypoint index.html --shell elements/elements.html --fragment ' + fragments;
+  
+  exec(polymerBuildCommand, { cwd : 'app' }, function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    callback(err);
+  });    
+});
+
 // Generate config data for the <sw-precache-cache> element.
 // This include a list of files that should be precached, as well as a (hopefully unique) cache
 // id that ensure that multiple PSK projects don't share the same Cache Storage.
@@ -188,7 +212,8 @@ gulp.task('cache-config', function(callback) {
     'index.html',
     './',
     'bower_components/webcomponentsjs/webcomponents-lite.min.js',
-    '{elements,scripts,styles}/**/*.*'],
+    '{elements,scripts,styles}/**/*.*',
+    '!{elements,scripts,styles}/**/*.md'],
     {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
@@ -268,9 +293,11 @@ gulp.task('serve:dist', ['default'], function() {
 gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
+    'polymer-build',
     ['ensureFiles', 'copy', 'styles'],
     'build',
-    'vulcanize', 'cache-config',
+    //'vulcanize', // Removed in replacement of polymer-build 
+    'cache-config',
     cb);
 });
 
