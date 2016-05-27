@@ -21,6 +21,7 @@
     "tpa-font": "https://github.com/ING-Group/tpa-font.git",
     "tpa-mortgage-calculation": "https://github.com/ING-Group/tpa-mortgage-calculation.git",
     "tpa-money-transfer": "https://github.com/ING-Group/tpa-money-transfer.git",
+    "tpa-spending-categories": "https://github.com/ING-Group/tpa-spending-categories.git",
     "app-route": "PolymerElements/app-route#^0.9.1",
     "app-layout": "PolymerElements/app-layout#^0.9.0"
   },

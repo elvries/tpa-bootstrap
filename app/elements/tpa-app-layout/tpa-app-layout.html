@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/tpa-money-transfer/tpa-money-transfer.html">
 <link rel="import" href="../../bower_components/tpa-transaction-list/tpa-transaction-list.html">
 <link rel="import" href="../../bower_components/tpa-mortgage-calculation/tpa-mortgage-calculation.html">
+<link rel="import" href="../../bower_components/tpa-spending-categories/tpa-spending-categories.html">
 <link rel="import" href="../../bower_components/tpa-dashboard/tpa-dashboard-data.html">
 
 <dom-module id="tpa-app-layout">
@@ -30,22 +31,28 @@
 
         </style>
         <div class="horizontal around-justified layout wrap">
-                <paper-card heading="Money Transfer">
+            <paper-card heading="Money Transfer">
                 <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450"
                                     account-balance="5000"></tpa-money-transfer>
-                </paper-card>
+            </paper-card>
 
-                <paper-card heading="Latest Transactions">
-                  <tpa-transaction-list></tpa-transaction-list>
-                </paper-card>
+            <paper-card heading="Latest Transactions">
+                <tpa-transaction-list></tpa-transaction-list>
+            </paper-card>
 
-                <paper-card heading="Accounts">
-                  <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
-                </paper-card>
+            <paper-card heading="Accounts">
+                <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
+            </paper-card>
 
-                    <paper-card heading="Mortgage calculation">
-                        <tpa-mortgage-calculation></tpa-mortgage-calculation>
-                    </paper-card>
+            <paper-card heading="Mortgage calculation">
+                <tpa-mortgage-calculation></tpa-mortgage-calculation>
+            </paper-card>
+
+            <paper-card heading="Spending categories">
+                <tpa-spending-categories
+                    parts='{"labels": ["Hypotheek","Energie","Verzekeringen","Vervoer","Ovirge"], "data": [40, 15, 15, 15, 15]}'>
+                </tpa-spending-categories>
+            </paper-card>
 
             <!--<paper-card>
                     <div class="card-content">
