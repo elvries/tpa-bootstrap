@@ -33,6 +33,7 @@ var polymerConfig = require('./app/polymer.json');
 var drakov = require('drakov');
 var proxy = require('http-proxy-middleware');
 var lec = require('gulp-line-ending-corrector');
+var dateFormat = require('dateformat');
 
 // var ghPages = require('gulp-gh-pages');
 
@@ -237,6 +238,15 @@ gulp.task('cache-config', function(callback) {
   });
 });
 
+gulp.task('cache-config-unique', function() {
+  var now = new Date();
+  var dateText = dateFormat(now, 'ddmmyyhhMMss');
+  //console.log('datetext', dateText);
+  return gulp.src(dist('cache-config.json'))
+    .pipe($.replace('"cacheId":"tpa-bootstrap"', '"cacheId":"tpa-bootstrap-'+dateText+'"'))
+    .pipe(gulp.dest(dist()));
+});
+
 // Clean output directory
 gulp.task('clean', function() {
   return del(['.tmp', dist()]);
@@ -306,6 +316,7 @@ gulp.task('default', ['clean'], function(cb) {
     'build',
     //'vulcanize', // Removed in replacement of polymer-build 
     'cache-config',
+    'cache-config-unique',
     cb);
 });
 
