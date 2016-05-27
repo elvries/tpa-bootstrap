@@ -5,7 +5,7 @@
     "Jan Meijering <jan@meijering.com>"
   ],
   "description": "central component for the management of fonts",
-  "main": "tpa-font",
+  "main": "tpa-font.html",
   "keywords": [
     "fonts",
     "INGMe"
@@ -23,6 +23,6 @@
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0",
-    "tpa-styles": "git://github.com/ING-Group/tpa-styles#version1"
+    "tpa-styles": "git://github.com/ING-Group/tpa-styles"
   }
 }

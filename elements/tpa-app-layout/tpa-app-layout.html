@@ -172,7 +172,7 @@
     <template>
         <iron-signals on-iron-signal-dashboard-data="onDashboardData"></iron-signals>
         <style include="tpa-transactions-list-styles"></style>
-        <tpa-transaction-list-i18n id="i18ncontent" content="{{i18ncontent}}" currency-symbol-code="{{currencySymbolCode}}"></tpa-transaction-list-i18n>
+        <tpa-transaction-list-i18n id="i18ncontent" content="{{i18ncontent}}" currency-symbol="{{currencySymbolCode}}"></tpa-transaction-list-i18n>
         <h3>{{title}}</h3>
         <div>
             <template as="transactionGroup" is="dom-repeat" items="{{transactionGroups}}">
