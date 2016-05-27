@@ -1,29 +1,4 @@
-<html><head><script src="tpa-settings-page.js" defer=""></script><meta charset="UTF-8"><link rel="import" href="../elements.html"></head><body><div hidden="" by-vulcanize=""><dom-module id="iron-dropdown" assetpath="../../bower_components/iron-dropdown/">
-  <style>:host{position:fixed;}#contentWrapper ::content > *{overflow:auto;}#contentWrapper.animating ::content > *{overflow:hidden;}</style>
-  <template>
-    <div id="contentWrapper">
-      <content id="content" select=".dropdown-content"></content>
-    </div>
-  </template>
-
-  </dom-module>
-<dom-module id="paper-menu-button" assetpath="../../bower_components/paper-menu-button/">
-  <template>
-    <style>:host{display:inline-block;position:relative;padding:8px;outline:none;@apply (--paper-menu-button);}:host([disabled]){cursor:auto;color:var(--disabled-text-color);@apply (--paper-menu-button-disabled);}iron-dropdown{@apply (--paper-menu-button-dropdown);}.dropdown-content{@apply (--shadow-elevation-2dp);position:relative;border-radius:2px;background-color:var(--paper-menu-button-dropdown-background, --primary-background-color);@apply (--paper-menu-button-content);}:host([vertical-align="top"]) .dropdown-content{margin-bottom:20px;margin-top:-10px;top:10px;}:host([vertical-align="bottom"]) .dropdown-content{bottom:10px;margin-bottom:-10px;margin-top:20px;}</style>
-
-    <div id="trigger" on-tap="toggle">
-      <content select=".dropdown-trigger"></content>
-    </div>
-
-    <iron-dropdown id="dropdown" opened="{{opened}}" horizontal-align="[[horizontalAlign]]" vertical-align="[[verticalAlign]]" horizontal-offset="[[horizontalOffset]]" vertical-offset="[[verticalOffset]]" open-animation-config="[[openAnimationConfig]]" close-animation-config="[[closeAnimationConfig]]" no-animations="[[noAnimations]]" focus-target="[[_dropdownContent]]" on-iron-overlay-canceled="__onIronOverlayCanceled">
-      <div class="dropdown-content">
-        <content id="content" select=".dropdown-content"></content>
-      </div>
-    </iron-dropdown>
-  </template>
-
-  </dom-module>
-<iron-iconset-svg name="paper-dropdown-menu" size="24">
+<html><head><script src="tpa-settings-page.js" defer=""></script><meta charset="UTF-8"><link rel="import" href="../elements.html"></head><body><div hidden="" by-vulcanize=""><iron-iconset-svg name="paper-dropdown-menu" size="24">
 <svg><defs>
 <g id="arrow-drop-down"><path d="M7 10l5 5 5-5z"></path></g>
 </defs></svg>

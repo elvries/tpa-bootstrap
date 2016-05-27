@@ -565,6 +565,31 @@
   </template>
 
   </dom-module>
+<dom-module id="iron-dropdown" assetpath="../bower_components/iron-dropdown/">
+  <style>:host{position:fixed;}#contentWrapper ::content > *{overflow:auto;}#contentWrapper.animating ::content > *{overflow:hidden;}</style>
+  <template>
+    <div id="contentWrapper">
+      <content id="content" select=".dropdown-content"></content>
+    </div>
+  </template>
+
+  </dom-module>
+<dom-module id="paper-menu-button" assetpath="../bower_components/paper-menu-button/">
+  <template>
+    <style>:host{display:inline-block;position:relative;padding:8px;outline:none;@apply (--paper-menu-button);}:host([disabled]){cursor:auto;color:var(--disabled-text-color);@apply (--paper-menu-button-disabled);}iron-dropdown{@apply (--paper-menu-button-dropdown);}.dropdown-content{@apply (--shadow-elevation-2dp);position:relative;border-radius:2px;background-color:var(--paper-menu-button-dropdown-background, --primary-background-color);@apply (--paper-menu-button-content);}:host([vertical-align="top"]) .dropdown-content{margin-bottom:20px;margin-top:-10px;top:10px;}:host([vertical-align="bottom"]) .dropdown-content{bottom:10px;margin-bottom:-10px;margin-top:20px;}</style>
+
+    <div id="trigger" on-tap="toggle">
+      <content select=".dropdown-trigger"></content>
+    </div>
+
+    <iron-dropdown id="dropdown" opened="{{opened}}" horizontal-align="[[horizontalAlign]]" vertical-align="[[verticalAlign]]" horizontal-offset="[[horizontalOffset]]" vertical-offset="[[verticalOffset]]" open-animation-config="[[openAnimationConfig]]" close-animation-config="[[closeAnimationConfig]]" no-animations="[[noAnimations]]" focus-target="[[_dropdownContent]]" on-iron-overlay-canceled="__onIronOverlayCanceled">
+      <div class="dropdown-content">
+        <content id="content" select=".dropdown-content"></content>
+      </div>
+    </iron-dropdown>
+  </template>
+
+  </dom-module>
 <dom-module id="paper-button" assetpath="../bower_components/paper-button/">
   <template strip-whitespace="">
     <style include="paper-material">:host{@apply (--layout-inline);@apply (--layout-center-center);position:relative;box-sizing:border-box;min-width:5.14em;margin:0 0.29em;background:transparent;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);-webkit-tap-highlight-color:transparent;font:inherit;text-transform:uppercase;outline-width:0;border-radius:3px;-moz-user-select:none;-ms-user-select:none;-webkit-user-select:none;user-select:none;cursor:pointer;z-index:0;padding:0.7em 0.57em;@apply (--paper-font-common-base);@apply (--paper-button);}:host([raised].keyboard-focus){font-weight:bold;@apply (--paper-button-raised-keyboard-focus);}:host(:not([raised]).keyboard-focus){font-weight:bold;@apply (--paper-button-flat-keyboard-focus);}:host([disabled]){background:#eaeaea;color:#a8a8a8;cursor:auto;pointer-events:none;@apply (--paper-button-disabled);}paper-ripple{color:var(--paper-button-ink-color);}</style>
@@ -573,154 +598,27 @@
   </template>
 
   </dom-module>
-<dom-module name="tpa-top-bar">
-    <template>
-
-        <style include="shared-styles">.flex-equal-justified{justify-content:space-around;display:flex;flex-direction:row;width:100%;}.flex-self-center{display:flex;flex-direction:row;}.flex-self-center.actions{justify-content:flex-end;}.flex-equal-justified > div,
-            .flex-equal-justified > span{width:33%;}.icon-ing-logo{display:block;text-align:center;}iron-icon.ing-icon{--iron-icon-height:28px;--iron-icon-width:135px;fill:#000066;margin-left:-15px;vertical-align:bottom;}iron-icon.lion-icon{--iron-icon-height:40px;--iron-icon-width:82px;margin-left:-15px;}paper-toolbar.top-bar{--paper-toolbar-background:var(--primary-background-color);--paper-toolbar-color:var(--primary-color);--paper-toolbar-height:64px;}</style>
-
-        <paper-toolbar class="top-bar">
-            <div class="container flex-equal-justified menu" id="topbar">
-                <div class="flex-self-center">
-                    <paper-icon-button icon="menu" on-tap="menuAction">
-                    </paper-icon-button>
-                </div>
-
-            <span class="icon-ing-logo font-size-xh flex-child flex-self-center">
-                <iron-icon class="ing-icon" icon="tpa:ing-logo-ing"></iron-icon>
-                <iron-icon class="lion-icon" icon="tpa:ing-logo-lion"></iron-icon>
-            </span>
-                <div class="flex-self-center actions">
-                    <paper-icon-button icon="search"></paper-icon-button>
-                    <paper-icon-button icon="perm-identity"></paper-icon-button>
-                    <paper-button class="primary" raised="">Log out</paper-button>
-                </div>
-            </div>
-        </paper-toolbar>
-    </template>
-    </dom-module>
-<iron-iconset-svg name="paper-tabs" size="24">
-<svg><defs>
-<g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></g>
-<g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
-</defs></svg>
-</iron-iconset-svg>
-<dom-module id="paper-tab" assetpath="../bower_components/paper-tabs/">
-  <template>
-    <style>:host{@apply (--layout-inline);@apply (--layout-center);@apply (--layout-center-justified);@apply (--layout-flex-auto);position:relative;padding:0 12px;overflow:hidden;cursor:pointer;vertical-align:middle;@apply (--paper-font-common-base);@apply (--paper-tab);}:host(:focus){outline:none;}:host([link]){padding:0;}.tab-content{height:100%;transform:translateZ(0);-webkit-transform:translateZ(0);transition:opacity 0.1s cubic-bezier(0.4, 0.0, 1, 1);@apply (--layout-horizontal);@apply (--layout-center-center);@apply (--layout-flex-auto);@apply (--paper-tab-content);}:host(:not(.iron-selected)) > .tab-content{opacity:0.8;@apply (--paper-tab-content-unselected);}:host(:focus) .tab-content{opacity:1;font-weight:700;}paper-ripple{color:var(--paper-tab-ink, --paper-yellow-a100);}.tab-content > ::content > a{@apply (--layout-flex-auto);height:100%;}</style>
-
-    <div class="tab-content">
-      <content></content>
-    </div>
-  </template>
-
-  </dom-module>
-<dom-module id="paper-tabs" assetpath="../bower_components/paper-tabs/">
-  <template>
-    <style>:host{@apply (--layout);@apply (--layout-center);height:48px;font-size:14px;font-weight:500;overflow:hidden;-moz-user-select:none;-ms-user-select:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);-webkit-tap-highlight-color:transparent;@apply (--paper-tabs);}:host-context([dir=rtl]){@apply (--layout-horizontal-reverse);}#tabsContainer{position:relative;height:100%;white-space:nowrap;overflow:hidden;@apply (--layout-flex-auto);}#tabsContent{height:100%;-moz-flex-basis:auto;-ms-flex-basis:auto;flex-basis:auto;}#tabsContent.scrollable{position:absolute;white-space:nowrap;}#tabsContent.horizontal{@apply (--layout-horizontal);}.hidden{display:none;}.not-visible{opacity:0;cursor:default;}paper-icon-button{width:48px;height:48px;padding:12px;margin:0 4px;}#selectionBar{position:absolute;height:2px;bottom:0;left:0;right:0;background-color:var(--paper-tabs-selection-bar-color, --paper-yellow-a100);-webkit-transform:scale(0);transform:scale(0);-webkit-transform-origin:left center;transform-origin:left center;transition:-webkit-transform;transition:transform;@apply (--paper-tabs-selection-bar);}#selectionBar.align-bottom{top:0;bottom:auto;}#selectionBar.expand{transition-duration:0.15s;transition-timing-function:cubic-bezier(0.4, 0.0, 1, 1);}#selectionBar.contract{transition-duration:0.18s;transition-timing-function:cubic-bezier(0.0, 0.0, 0.2, 1);}#tabsContent > ::content > *:not(#selectionBar){height:100%;}</style>
-
-    <paper-icon-button icon="paper-tabs:chevron-left" class$="[[_computeScrollButtonClass(_leftHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onLeftScrollButtonDown" tabindex="-1"></paper-icon-button>
-
-    <div id="tabsContainer" on-track="_scroll" on-down="_down">
-      <div id="tabsContent" class$="[[_computeTabsContentClass(scrollable)]]">
-        <div id="selectionBar" class$="[[_computeSelectionBarClass(noBar, alignBottom)]]" on-transitionend="_onBarTransitionEnd"></div>
-        <content select="*"></content>
-      </div>
-    </div>
-
-    <paper-icon-button icon="paper-tabs:chevron-right" class$="[[_computeScrollButtonClass(_rightHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onRightScrollButtonDown" tabindex="-1"></paper-icon-button>
-
-  </template>
-
-  </dom-module>
-<dom-module name="tpa-nav-bar">
-    <template>
-        <iron-signals on-iron-signal-bootstrap-data="onBootstrapData"></iron-signals>
-        <style>:host{width:100%;}paper-tab[link] a{@apply (--layout-horizontal);@apply (--layout-center-center);color:#ffffff;text-decoration:none;padding-left:12px;padding-right:12px;font-weight:bold;}iron-icon.white{fill:white;margin-right:10px;}paper-toolbar.main-toolbar{--paper-toolbar-height:auto;}paper-toolbar.main-toolbar paper-tabs{width:100%;}</style>
-
-        <paper-toolbar id="mainToolbar" class="main-toolbar" justify="center">
-            <paper-tabs selected="0" scrollable="{{shouldScroll}}">
-                <template is="dom-repeat" as="item" items="[[tabs]]">
-                    <paper-tab link="">
-                        <a href="{{baseUrl}}{{item.link}}" class="link" tabindex="-1">
-                            <iron-icon icon="[[item.icon]]" class="white"></iron-icon>[[item.label]]
-                        </a>
-                    </paper-tab>
-                </template>
-            </paper-tabs>
-
-          <iron-media-query query="(max-width: 880px)" query-matches="{{shouldScroll}}"></iron-media-query>
-        </paper-toolbar>
-    </template>
-    </dom-module>
-<dom-module id="tpa-globals" assetpath="../bower_components/tpa-globals/">
-	<template>
-		<content>
-			
-			
-		</content>
-	</template>
-</dom-module>
-<dom-module id="app-location" assetpath="../bower_components/app-route/">
-  <template>
-    <iron-location path="{{__path}}" query="{{__query}}" hash="{{__hash}}" url-space-regex="{{urlSpaceRegex}}">
-    </iron-location>
-    <iron-query-params params-string="{{__query}}" params-object="{{queryParams}}">
-    </iron-query-params>
-  </template>
-  </dom-module>
-<dom-module id="app-header" assetpath="../bower_components/app-layout/app-header/">
-  <template>
-    <style>:host{position:relative;display:block;transition-timing-function:linear;transition-property:-webkit-transform;transition-property:transform;}:host::after{position:absolute;right:0px;bottom:-5px;left:0px;width:100%;height:5px;content:"";transition:opacity 0.4s;pointer-events:none;opacity:0;box-shadow:inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);will-change:opacity;@apply (--app-header-shadow);}:host([shadow])::after{opacity:1;}#contentContainer > ::content [condensed-title]{-webkit-transform-origin:left top;transform-origin:left top;white-space:nowrap;opacity:0;}#contentContainer > ::content [title]{-webkit-transform-origin:left top;transform-origin:left top;white-space:nowrap;}#background{@apply (--layout-fit);overflow:hidden;}#backgroundFrontLayer,
-      #backgroundRearLayer{@apply (--layout-fit);height:100%;pointer-events:none;background-size:cover;}#backgroundFrontLayer{@apply (--app-header-background-front-layer);}#backgroundRearLayer{opacity:0;@apply (--app-header-background-rear-layer);}#contentContainer{position:relative;width:100%;height:100%;}:host([disabled]),
-      :host([disabled])::after,
-      :host([disabled]) #backgroundFrontLayer,
-      :host([disabled]) #backgroundRearLayer,
-      :host([disabled]) ::content > app-toolbar:first-of-type,
-      :host([disabled]) ::content > [primary],
-      /* Silent scrolling should not run CSS transitions */
-      :host-context(.app-layout-silent-scroll),
-      :host-context(.app-layout-silent-scroll)::after,
-      :host-context(.app-layout-silent-scroll) #backgroundFrontLayer,
-      :host-context(.app-layout-silent-scroll) #backgroundRearLayer,
-      :host-context(.app-layout-silent-scroll) ::content > app-toolbar:first-of-type,
-      :host-context(.app-layout-silent-scroll) ::content > [primary]{transition:none !important;}</style>
-
-    <div id="background">
-      <div id="backgroundRearLayer"></div>
-      <div id="backgroundFrontLayer"></div>
-    </div>
-    <div id="contentContainer">
-      <content id="content"></content>
-    </div>
-  </template>
-
-  </dom-module>
-<dom-module id="app-header-layout" assetpath="../bower_components/app-layout/app-header-layout/">
-  <template>
-    <style>:host{display:block;position:relative;z-index:0;}:host([has-scrolling-region]){height:100%;}:host > ::content > app-header{@apply (--layout-fixed-top);z-index:1;}:host([has-scrolling-region]) > ::content > app-header{position:absolute;}#contentContainer{position:relative;z-index:0;}:host([has-scrolling-region]) > #contentContainer{@apply (--layout-fit);overflow-y:auto;-webkit-overflow-scrolling:touch;}</style>
-
-    <content id="header" select="app-header"></content>
-
-    <div id="contentContainer">
-      <content></content>
-    </div>
-
-  </template>
-
-  </dom-module>
+<style>html /deep/ .layout.horizontal,
+  html /deep/ .layout.horizontal-reverse,
+  html /deep/ .layout.vertical,
+  html /deep/ .layout.vertical-reverse{display:-ms-flexbox;display:-webkit-flex;display:flex;}html /deep/ .layout.inline{display:-ms-inline-flexbox;display:-webkit-inline-flex;display:inline-flex;}html /deep/ .layout.horizontal{-ms-flex-direction:row;-webkit-flex-direction:row;flex-direction:row;}html /deep/ .layout.horizontal-reverse{-ms-flex-direction:row-reverse;-webkit-flex-direction:row-reverse;flex-direction:row-reverse;}html /deep/ .layout.vertical{-ms-flex-direction:column;-webkit-flex-direction:column;flex-direction:column;}html /deep/ .layout.vertical-reverse{-ms-flex-direction:column-reverse;-webkit-flex-direction:column-reverse;flex-direction:column-reverse;}html /deep/ .layout.wrap{-ms-flex-wrap:wrap;-webkit-flex-wrap:wrap;flex-wrap:wrap;}html /deep/ .layout.wrap-reverse{-ms-flex-wrap:wrap-reverse;-webkit-flex-wrap:wrap-reverse;flex-wrap:wrap-reverse;}html /deep/ .flex-auto{-ms-flex:1 1 auto;-webkit-flex:1 1 auto;flex:1 1 auto;}html /deep/ .flex-none{-ms-flex:none;-webkit-flex:none;flex:none;}html /deep/ .flex,
+  html /deep/ .flex-1{-ms-flex:1;-webkit-flex:1;flex:1;}html /deep/ .flex-2{-ms-flex:2;-webkit-flex:2;flex:2;}html /deep/ .flex-3{-ms-flex:3;-webkit-flex:3;flex:3;}html /deep/ .flex-4{-ms-flex:4;-webkit-flex:4;flex:4;}html /deep/ .flex-5{-ms-flex:5;-webkit-flex:5;flex:5;}html /deep/ .flex-6{-ms-flex:6;-webkit-flex:6;flex:6;}html /deep/ .flex-7{-ms-flex:7;-webkit-flex:7;flex:7;}html /deep/ .flex-8{-ms-flex:8;-webkit-flex:8;flex:8;}html /deep/ .flex-9{-ms-flex:9;-webkit-flex:9;flex:9;}html /deep/ .flex-10{-ms-flex:10;-webkit-flex:10;flex:10;}html /deep/ .flex-11{-ms-flex:11;-webkit-flex:11;flex:11;}html /deep/ .flex-12{-ms-flex:12;-webkit-flex:12;flex:12;}html /deep/ .layout.start{-ms-flex-align:start;-webkit-align-items:flex-start;align-items:flex-start;}html /deep/ .layout.center,
+  html /deep/ .layout.center-center{-ms-flex-align:center;-webkit-align-items:center;align-items:center;}html /deep/ .layout.end{-ms-flex-align:end;-webkit-align-items:flex-end;align-items:flex-end;}html /deep/ .layout.start-justified{-ms-flex-pack:start;-webkit-justify-content:flex-start;justify-content:flex-start;}html /deep/ .layout.center-justified,
+  html /deep/ .layout.center-center{-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;}html /deep/ .layout.end-justified{-ms-flex-pack:end;-webkit-justify-content:flex-end;justify-content:flex-end;}html /deep/ .layout.around-justified{-ms-flex-pack:around;-webkit-justify-content:space-around;justify-content:space-around;}html /deep/ .layout.justified{-ms-flex-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;}html /deep/ .self-start{-ms-align-self:flex-start;-webkit-align-self:flex-start;align-self:flex-start;}html /deep/ .self-center{-ms-align-self:center;-webkit-align-self:center;align-self:center;}html /deep/ .self-end{-ms-align-self:flex-end;-webkit-align-self:flex-end;align-self:flex-end;}html /deep/ .self-stretch{-ms-align-self:stretch;-webkit-align-self:stretch;align-self:stretch;}html /deep/ .block{display:block;}html /deep/ [hidden]{display:none !important;}html /deep/ .invisible{visibility:hidden !important;}html /deep/ .relative{position:relative;}html /deep/ .fit{position:absolute;top:0;right:0;bottom:0;left:0;}body.fullbleed{margin:0;height:100vh;}html /deep/ .scroll{-webkit-overflow-scrolling:touch;overflow:auto;}.fixed-bottom,
+  .fixed-left,
+  .fixed-right,
+  .fixed-top{position:fixed;}html /deep/ .fixed-top{top:0;left:0;right:0;}html /deep/ .fixed-right{top:0;right:0;bottom:0;}html /deep/ .fixed-bottom{right:0;bottom:0;left:0;}html /deep/ .fixed-left{top:0;bottom:0;left:0;}</style>
+<style>.layout.horizontal,
+  .layout.horizontal-reverse,
+  .layout.vertical,
+  .layout.vertical-reverse{display:-ms-flexbox;display:-webkit-flex;display:flex;}.layout.inline{display:-ms-inline-flexbox;display:-webkit-inline-flex;display:inline-flex;}.layout.horizontal{-ms-flex-direction:row;-webkit-flex-direction:row;flex-direction:row;}.layout.horizontal-reverse{-ms-flex-direction:row-reverse;-webkit-flex-direction:row-reverse;flex-direction:row-reverse;}.layout.vertical{-ms-flex-direction:column;-webkit-flex-direction:column;flex-direction:column;}.layout.vertical-reverse{-ms-flex-direction:column-reverse;-webkit-flex-direction:column-reverse;flex-direction:column-reverse;}.layout.wrap{-ms-flex-wrap:wrap;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.layout.wrap-reverse{-ms-flex-wrap:wrap-reverse;-webkit-flex-wrap:wrap-reverse;flex-wrap:wrap-reverse;}.flex-auto{-ms-flex:1 1 auto;-webkit-flex:1 1 auto;flex:1 1 auto;}.flex-none{-ms-flex:none;-webkit-flex:none;flex:none;}.flex,
+  .flex-1{-ms-flex:1;-webkit-flex:1;flex:1;}.flex-2{-ms-flex:2;-webkit-flex:2;flex:2;}.flex-3{-ms-flex:3;-webkit-flex:3;flex:3;}.flex-4{-ms-flex:4;-webkit-flex:4;flex:4;}.flex-5{-ms-flex:5;-webkit-flex:5;flex:5;}.flex-6{-ms-flex:6;-webkit-flex:6;flex:6;}.flex-7{-ms-flex:7;-webkit-flex:7;flex:7;}.flex-8{-ms-flex:8;-webkit-flex:8;flex:8;}.flex-9{-ms-flex:9;-webkit-flex:9;flex:9;}.flex-10{-ms-flex:10;-webkit-flex:10;flex:10;}.flex-11{-ms-flex:11;-webkit-flex:11;flex:11;}.flex-12{-ms-flex:12;-webkit-flex:12;flex:12;}.layout.start{-ms-flex-align:start;-webkit-align-items:flex-start;align-items:flex-start;}.layout.center,
+  .layout.center-center{-ms-flex-align:center;-webkit-align-items:center;align-items:center;}.layout.end{-ms-flex-align:end;-webkit-align-items:flex-end;align-items:flex-end;}.layout.start-justified{-ms-flex-pack:start;-webkit-justify-content:flex-start;justify-content:flex-start;}.layout.center-justified,
+  .layout.center-center{-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;}.layout.end-justified{-ms-flex-pack:end;-webkit-justify-content:flex-end;justify-content:flex-end;}.layout.around-justified{-ms-flex-pack:around;-webkit-justify-content:space-around;justify-content:space-around;}.layout.justified{-ms-flex-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;}.self-start{-ms-align-self:flex-start;-webkit-align-self:flex-start;align-self:flex-start;}.self-center{-ms-align-self:center;-webkit-align-self:center;align-self:center;}.self-end{-ms-align-self:flex-end;-webkit-align-self:flex-end;align-self:flex-end;}.self-stretch{-ms-align-self:stretch;-webkit-align-self:stretch;align-self:stretch;}.block{display:block;}[hidden]{display:none !important;}.invisible{visibility:hidden !important;}.relative{position:relative;}.fit{position:absolute;top:0;right:0;bottom:0;left:0;}body.fullbleed{margin:0;height:100vh;}.scroll{-webkit-overflow-scrolling:touch;overflow:auto;}.fixed-bottom,
+  .fixed-left,
+  .fixed-right,
+  .fixed-top{position:fixed;}.fixed-top{top:0;left:0;right:0;}.fixed-right{top:0;right:0;bottom:0;}.fixed-bottom{right:0;bottom:0;left:0;}.fixed-left{top:0;bottom:0;left:0;}</style>
 <style is="custom-style">@font-face{font-family:"INGMe";src:url("../bower_components/tpa-font/INGMe/Regular/INGMeWeb-Regular.eot?#iefix");src:url("../bower_components/tpa-font/INGMe/Regular/INGMeWeb-Regular.eot?#iefix") format("eot"), url("../bower_components/tpa-font/INGMe/Regular/INGMeWeb-Regular.woff") format("woff"), url("../bower_components/tpa-font/INGMe/Regular/INGMeWeb-Regular.ttf") format("truetype"), url("../bower_components/tpa-font/INGMe/Regular/INGMeWeb-Regular.svg#INGMeWeb-Regular") format("svg");font-weight:normal;font-style:normal;}@font-face{font-family:"INGMe";src:url("../bower_components/tpa-font/INGMe/Bold/INGMeWeb-Bold.eot?#iefix");src:url("../bower_components/tpa-font/INGMe/Bold/INGMeWeb-Bold.eot?#iefix") format("eot"), url("../bower_components/tpa-font/INGMe/Bold/INGMeWeb-Bold.woff") format("woff"), url("../bower_components/tpa-font/INGMe/Bold/INGMeWeb-Bold.ttf") format("truetype"), url("../bower_components/tpa-font/INGMe/Bold/INGMeWeb-Bold.svg#INGMeWeb-Bold") format("svg");font-weight:bold;font-style:normal;}</style>
-<style is="custom-style">:root{--paper-font-common-base:{font-family:'INGMe', sans-serif;-webkit-font-smoothing:antialiased;};--paper-font-common-code:{font-family:'INGMe', monospace;-webkit-font-smoothing:antialiased;};--paper-font-common-expensive-kerning:{text-rendering:optimizeLegibility;};--paper-font-common-nowrap:{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;};--paper-font-display4:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:112px;font-weight:300;letter-spacing:-.044em;line-height:120px;};--paper-font-display3:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:56px;font-weight:400;letter-spacing:-.026em;line-height:60px;};--paper-font-display2:{@apply (--paper-font-common-base);font-size:45px;font-weight:400;letter-spacing:-.018em;line-height:48px;};--paper-font-display1:{@apply (--paper-font-common-base);font-size:34px;font-weight:400;letter-spacing:-.01em;line-height:40px;};--paper-font-headline:{@apply (--paper-font-common-base);font-size:24px;font-weight:400;letter-spacing:-.012em;line-height:32px;};--paper-font-title:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:20px;font-weight:500;line-height:28px;};--paper-font-subhead:{@apply (--paper-font-common-base);font-size:16px;font-weight:400;line-height:24px;};--paper-font-body2:{@apply (--paper-font-common-base);font-size:14px;font-weight:500;line-height:24px;};--paper-font-body1:{@apply (--paper-font-common-base);font-size:14px;font-weight:400;line-height:20px;};--paper-font-caption:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:12px;font-weight:400;letter-spacing:0.011em;line-height:20px;};--paper-font-menu:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:13px;font-weight:500;line-height:24px;};--paper-font-button:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:14px;font-weight:500;letter-spacing:0.018em;line-height:24px;text-transform:uppercase;};--paper-font-code2:{@apply (--paper-font-common-code);font-size:14px;font-weight:700;line-height:20px;};--paper-font-code1:{@apply (--paper-font-common-code);font-size:14px;font-weight:500;line-height:20px;};}</style>
-<style is="custom-style">:root{--ing-lime-50:#f8fae2;--ing-lime-100:#f8fae2;--ing-lime-200:#f1f4c5;--ing-lime-300:#f1f4c5;--ing-lime-400:#d0d93c;--ing-lime-500:#d0d93c;--ing-lime-600:#d0d93c;--ing-lime-700:#d0d93c;--ing-lime-800:#a3e98a;--ing-lime-900:#a3e98a;--ing-lime-a100:#f4ff81;--ing-lime-a200:#d0d93c;--ing-lime-a400:#d0d93c;--ing-lime-a700:#a3e98a;--ing-orange-50:#ff6200;--ing-orange-100:#ff6200;--ing-orange-200:#ff6200;--ing-orange-300:#ff6200;--ing-orange-400:#ff6200;--ing-orange-500:#ff6200;--ing-orange-600:#ff6200;--ing-orange-700:#ff6200;--ing-orange-800:#ff6200;--ing-orange-900:#ff6200;--ing-orange-a100:#ff6200;--ing-orange-a200:#ff6200;--ing-orange-a400:#ff6200;--ing-orange-a700:#ff6200;--ing-grey-50:#f5f5f5;--ing-grey-100:#f5f5f5;--ing-grey-200:#ebebeb;--ing-grey-300:#d5d5d5;--ing-grey-400:#adadad;--ing-grey-500:#adadad;--ing-grey-600:#333333;--ing-grey-700:#333333;--ing-grey-800:#767676;--ing-grey-900:#767676;--primary-text-color:var(--ing-grey-900);--primary-background-color:#ffffff;--secondary-text-color:#737373;--disabled-text-color:#9b9b9b;--divider-color:#dbdbdb;--primary-color:var(--ing-orange-500);--light-primary-color:var(--ing-orange-100);--dark-primary-color:var(--ing-orange-700);--accent-color:var(--ing-orange-500);--light-accent-color:var(--ing-orange-100);--dark-accent-color:var(--ing-orange-500);--paper-tabs-selection-bar-color:#FFC1A0;--paper-tabs-selection-bar:{height:4px;};--paper-input-container-focus-color:var(--ing-orange-500);--paper-button:{color:var(--ing-grey-900);background-color:var(--ing-grey-100);height:35px;text-transform:none;font-weight:700;};--paper-card:{padding:10px;};--paper-card-header-text:{color:var(--ing-orange-500);};--paper-input-prefix:{margin-right:10px;};--paper-menu-background-color:#fff;--menu-link-color:#111111;}:root paper-button:hover{background-color:#ffffff;}:root paper-tabs{background-color:var(--ing-orange-700);color:#fff;}:root paper-button.secondary:hover,
-    :root paper-button.primary{background-color:var(--ing-orange-100);color:#ffffff;}:root paper-button.secondary,
-    :root paper-button.primary:hover{color:var(--ing-orange-100);background-color:#ffffff;}:root paper-icon-button.primary iron-icon,
-    :root iron-icon.primary{fill:var(--ing-orange-300);}:root paper-icon-button.secondary iron-icon,
-    :root iron-icon.secondary{fill:var(--ing-grey-400);}body{@apply (--layout-fullbleed);@apply (--layout-vertical);background:#fafafa;color:#333;font:13px/1.231 'INGMe', arial, helvetica, clean, sans-serif;}:root *{font-size:13px;line-height:1.231;font-family:INGMe, arial, helvetica, clean, sans-serif;}.space{@apply (--layout-flex);}paper-scroll-header-panel{height:100%;}paper-menu a > *, paper-menu paper-item > *, paper-menu paper-icon-item > *{pointer-events:none;color:#333;}:root paper-input.large *{font-size:2rem;line-height:2.5rem;}:root paper-input.large{margin:0;}:root paper-input.large{--paper-input-container-input:{font-size:2rem;};}:root paper-input.large{--paper-input-container-label-focus:{display:none;};}paper-menu{--paper-menu-selected-item:{color:var(--primary-color);};--paper-menu-focused-item-after:{background:var(--primary-color);};}.content{height:900px;}#toast .toast-hide-button{color:#eeff41;margin:10px;}section[tabindex="-1"]:focus{outline:none;}@media (max-width: 600px){#drawer .paper-toolbar{margin-left:16px;}}@media (min-width: 601px){#drawer.paper-drawer-panel > [drawer]{border-right:1px solid rgba(0, 0, 0, 0.14);}iron-pages{padding:48px 62px;}:root paper-toolbar{padding:0 48px;}}@media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait){}@media all and (min-width: 361px) and (orientation: portrait){}@media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape){}@media all and (min-width: 481px) and (orientation: landscape){}@media all and (min-width: 600px) and (max-width: 960px) and (orientation: landscape){}@media all and (min-width: 961px) and (orientation: landscape){}@media all and (min-width: 600px) and (orientation: portrait){}@media all and (min-width: 601px) and (max-width: 840px) and (orientation: portrait){}@media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape){}@media all and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4/3){}@media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape){}@media all and (min-width: 481px) and (max-width: 840px) and (max-aspect-ratio: 4/3){}@media all and (min-width: 841px) and (max-width: 1280px) and (orientation: landscape){}@media all and (min-width: 841px) and (max-width: 1280px) and (max-aspect-ratio: 4/3){}@media all and (min-width: 1281px) and (max-width: 1600px){}@media all and (min-width: 1601px) and (max-width: 1920px){}</style>
-<dom-module id="shared-styles" assetpath="../bower_components/tpa-styles/">
-    <template>
-        <style></style>
-    </template>
-</dom-module>
 <iron-iconset-svg name="tpa" size="1024">
   <svg><defs>
     <g id="close">
@@ -1227,6 +1125,157 @@
   </defs>
   </svg>
 </iron-iconset-svg>
+<style is="custom-style">:root{--paper-font-common-base:{font-family:'INGMe', sans-serif;-webkit-font-smoothing:antialiased;};--paper-font-common-code:{font-family:'INGMe', monospace;-webkit-font-smoothing:antialiased;};--paper-font-common-expensive-kerning:{text-rendering:optimizeLegibility;};--paper-font-common-nowrap:{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;};--paper-font-display4:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:112px;font-weight:300;letter-spacing:-.044em;line-height:120px;};--paper-font-display3:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:56px;font-weight:400;letter-spacing:-.026em;line-height:60px;};--paper-font-display2:{@apply (--paper-font-common-base);font-size:45px;font-weight:400;letter-spacing:-.018em;line-height:48px;};--paper-font-display1:{@apply (--paper-font-common-base);font-size:34px;font-weight:400;letter-spacing:-.01em;line-height:40px;};--paper-font-headline:{@apply (--paper-font-common-base);font-size:24px;font-weight:400;letter-spacing:-.012em;line-height:32px;};--paper-font-title:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:20px;font-weight:500;line-height:28px;};--paper-font-subhead:{@apply (--paper-font-common-base);font-size:16px;font-weight:400;line-height:24px;};--paper-font-body2:{@apply (--paper-font-common-base);font-size:14px;font-weight:500;line-height:24px;};--paper-font-body1:{@apply (--paper-font-common-base);font-size:14px;font-weight:400;line-height:20px;};--paper-font-caption:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:12px;font-weight:400;letter-spacing:0.011em;line-height:20px;};--paper-font-menu:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:13px;font-weight:500;line-height:24px;};--paper-font-button:{@apply (--paper-font-common-base);@apply (--paper-font-common-nowrap);font-size:14px;font-weight:500;letter-spacing:0.018em;line-height:24px;text-transform:uppercase;};--paper-font-code2:{@apply (--paper-font-common-code);font-size:14px;font-weight:700;line-height:20px;};--paper-font-code1:{@apply (--paper-font-common-code);font-size:14px;font-weight:500;line-height:20px;};}</style>
+<style is="custom-style">:root{--ing-lime-50:#f8fae2;--ing-lime-100:#f8fae2;--ing-lime-200:#f1f4c5;--ing-lime-300:#f1f4c5;--ing-lime-400:#d0d93c;--ing-lime-500:#d0d93c;--ing-lime-600:#d0d93c;--ing-lime-700:#d0d93c;--ing-lime-800:#a3e98a;--ing-lime-900:#a3e98a;--ing-lime-a100:#f4ff81;--ing-lime-a200:#d0d93c;--ing-lime-a400:#d0d93c;--ing-lime-a700:#a3e98a;--ing-orange-50:#ff6200;--ing-orange-100:#ff6200;--ing-orange-200:#ff6200;--ing-orange-300:#ff6200;--ing-orange-400:#ff6200;--ing-orange-500:#ff6200;--ing-orange-600:#ff6200;--ing-orange-700:#ff6200;--ing-orange-800:#ff6200;--ing-orange-900:#ff6200;--ing-orange-a100:#ff6200;--ing-orange-a200:#ff6200;--ing-orange-a400:#ff6200;--ing-orange-a700:#ff6200;--ing-grey-50:#f5f5f5;--ing-grey-100:#f5f5f5;--ing-grey-200:#ebebeb;--ing-grey-300:#d5d5d5;--ing-grey-400:#adadad;--ing-grey-500:#adadad;--ing-grey-600:#333333;--ing-grey-700:#333333;--ing-grey-800:#767676;--ing-grey-900:#767676;--primary-text-color:var(--ing-grey-900);--primary-background-color:#ffffff;--secondary-text-color:#737373;--disabled-text-color:#9b9b9b;--divider-color:#dbdbdb;--primary-color:var(--ing-orange-500);--light-primary-color:var(--ing-orange-100);--dark-primary-color:var(--ing-orange-700);--accent-color:var(--ing-orange-500);--light-accent-color:var(--ing-orange-100);--dark-accent-color:var(--ing-orange-500);--paper-tabs-selection-bar-color:#FFC1A0;--paper-tabs-selection-bar:{height:4px;};--paper-input-container-focus-color:var(--ing-orange-500);--paper-button:{color:var(--ing-grey-900);background-color:var(--ing-grey-100);height:35px;text-transform:none;font-weight:700;};--paper-card:{padding:10px;};--paper-card-header-text:{color:var(--ing-orange-500);};--paper-input-prefix:{margin-right:10px;};--paper-menu-background-color:#fff;--menu-link-color:#111111;}:root paper-button:hover{background-color:#ffffff;}:root paper-tabs{background-color:var(--ing-orange-700);color:#fff;}:root paper-button.secondary:hover,
+    :root paper-button.primary{background-color:var(--ing-orange-100);color:#ffffff;}:root paper-button.secondary,
+    :root paper-button.primary:hover{color:var(--ing-orange-100);background-color:#ffffff;}:root paper-icon-button.primary iron-icon,
+    :root iron-icon.primary{fill:var(--ing-orange-300);}:root paper-icon-button.secondary iron-icon,
+    :root iron-icon.secondary{fill:var(--ing-grey-400);}body{@apply (--layout-fullbleed);@apply (--layout-vertical);background:#fafafa;color:#333;font:13px/1.231 'INGMe', arial, helvetica, clean, sans-serif;}:root *{font-size:13px;line-height:1.231;font-family:INGMe, arial, helvetica, clean, sans-serif;}.space{@apply (--layout-flex);}paper-scroll-header-panel{height:100%;}paper-menu a > *, paper-menu paper-item > *, paper-menu paper-icon-item > *{pointer-events:none;color:#333;}:root paper-input.large *{font-size:2rem;line-height:2.5rem;}:root paper-input.large{margin:0;}:root paper-input.large{--paper-input-container-input:{font-size:2rem;};}:root paper-input.large{--paper-input-container-label-focus:{display:none;};}paper-menu{--paper-menu-selected-item:{color:var(--primary-color);};--paper-menu-focused-item-after:{background:var(--primary-color);};}.content{height:900px;}#toast .toast-hide-button{color:#eeff41;margin:10px;}section[tabindex="-1"]:focus{outline:none;}@media (max-width: 600px){#drawer .paper-toolbar{margin-left:16px;}}@media (min-width: 601px){#drawer.paper-drawer-panel > [drawer]{border-right:1px solid rgba(0, 0, 0, 0.14);}iron-pages{padding:48px 62px;}:root paper-toolbar{padding:0 48px;}}@media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait){}@media all and (min-width: 361px) and (orientation: portrait){}@media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape){}@media all and (min-width: 481px) and (orientation: landscape){}@media all and (min-width: 600px) and (max-width: 960px) and (orientation: landscape){}@media all and (min-width: 961px) and (orientation: landscape){}@media all and (min-width: 600px) and (orientation: portrait){}@media all and (min-width: 601px) and (max-width: 840px) and (orientation: portrait){}@media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape){}@media all and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4/3){}@media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape){}@media all and (min-width: 481px) and (max-width: 840px) and (max-aspect-ratio: 4/3){}@media all and (min-width: 841px) and (max-width: 1280px) and (orientation: landscape){}@media all and (min-width: 841px) and (max-width: 1280px) and (max-aspect-ratio: 4/3){}@media all and (min-width: 1281px) and (max-width: 1600px){}@media all and (min-width: 1601px) and (max-width: 1920px){}</style>
+<dom-module id="shared-styles" assetpath="../bower_components/tpa-styles/">
+    <template>
+        <style></style>
+    </template>
+</dom-module>
+<dom-module name="tpa-top-bar">
+    <template>
+
+        <style include="shared-styles">.flex-equal-justified{justify-content:space-around;display:flex;flex-direction:row;width:100%;}.flex-self-center{display:flex;flex-direction:row;}.flex-self-center.actions{justify-content:flex-end;}.flex-equal-justified > div,
+            .flex-equal-justified > span{width:33%;}.icon-ing-logo{display:block;text-align:center;}.icon-ing-logo iron-icon.ing-icon{--iron-icon-height:28px;--iron-icon-width:135px;fill:#000066;margin-left:-15px;vertical-align:bottom;}@media all and (min-width: 0) and (max-width: 840px){.icon-ing-logo iron-icon.ing-icon{display:none;}}.icon-ing-logo iron-icon.lion-icon{--iron-icon-height:40px;--iron-icon-width:82px;margin-left:-15px;}div.top-bar{padding:10px 68px;background-color:#ffffff;}@media (max-width: 600px){paper-toolbar.top-bar{--paper-toolbar-height:64px;}}.actions paper-menu-button{padding:0;}</style>
+
+        <div class="top-bar">
+            <div class="container flex-equal-justified menu" id="topbar">
+                <div class="flex-self-center">
+                    <paper-icon-button class="primary" icon="menu" on-tap="menuAction">
+                    </paper-icon-button>
+                </div>
+
+            <span class="icon-ing-logo font-size-xh flex-child flex-self-center">
+                <iron-icon class="ing-icon" icon="tpa:ing-logo-ing"></iron-icon>
+                <iron-icon class="lion-icon primary" icon="tpa:ing-logo-lion"></iron-icon>
+            </span>
+                <div class="flex-self-center actions">
+                    <paper-menu-button vertical-offset="40">
+                        <paper-icon-button icon="perm-identity" class="dropdown-trigger primary"></paper-icon-button>
+                        <paper-menu class="dropdown-content app-menu">
+                            <tpa-profile></tpa-profile>
+                        </paper-menu>
+
+                    </paper-menu-button>
+                    <paper-button class="secondary" raised="">Log out</paper-button>
+                </div>
+
+            </div>
+        </div>
+    </template>
+    </dom-module>
+<iron-iconset-svg name="paper-tabs" size="24">
+<svg><defs>
+<g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></g>
+<g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
+</defs></svg>
+</iron-iconset-svg>
+<dom-module id="paper-tab" assetpath="../bower_components/paper-tabs/">
+  <template>
+    <style>:host{@apply (--layout-inline);@apply (--layout-center);@apply (--layout-center-justified);@apply (--layout-flex-auto);position:relative;padding:0 12px;overflow:hidden;cursor:pointer;vertical-align:middle;@apply (--paper-font-common-base);@apply (--paper-tab);}:host(:focus){outline:none;}:host([link]){padding:0;}.tab-content{height:100%;transform:translateZ(0);-webkit-transform:translateZ(0);transition:opacity 0.1s cubic-bezier(0.4, 0.0, 1, 1);@apply (--layout-horizontal);@apply (--layout-center-center);@apply (--layout-flex-auto);@apply (--paper-tab-content);}:host(:not(.iron-selected)) > .tab-content{opacity:0.8;@apply (--paper-tab-content-unselected);}:host(:focus) .tab-content{opacity:1;font-weight:700;}paper-ripple{color:var(--paper-tab-ink, --paper-yellow-a100);}.tab-content > ::content > a{@apply (--layout-flex-auto);height:100%;}</style>
+
+    <div class="tab-content">
+      <content></content>
+    </div>
+  </template>
+
+  </dom-module>
+<dom-module id="paper-tabs" assetpath="../bower_components/paper-tabs/">
+  <template>
+    <style>:host{@apply (--layout);@apply (--layout-center);height:48px;font-size:14px;font-weight:500;overflow:hidden;-moz-user-select:none;-ms-user-select:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);-webkit-tap-highlight-color:transparent;@apply (--paper-tabs);}:host-context([dir=rtl]){@apply (--layout-horizontal-reverse);}#tabsContainer{position:relative;height:100%;white-space:nowrap;overflow:hidden;@apply (--layout-flex-auto);}#tabsContent{height:100%;-moz-flex-basis:auto;-ms-flex-basis:auto;flex-basis:auto;}#tabsContent.scrollable{position:absolute;white-space:nowrap;}#tabsContent.horizontal{@apply (--layout-horizontal);}.hidden{display:none;}.not-visible{opacity:0;cursor:default;}paper-icon-button{width:48px;height:48px;padding:12px;margin:0 4px;}#selectionBar{position:absolute;height:2px;bottom:0;left:0;right:0;background-color:var(--paper-tabs-selection-bar-color, --paper-yellow-a100);-webkit-transform:scale(0);transform:scale(0);-webkit-transform-origin:left center;transform-origin:left center;transition:-webkit-transform;transition:transform;@apply (--paper-tabs-selection-bar);}#selectionBar.align-bottom{top:0;bottom:auto;}#selectionBar.expand{transition-duration:0.15s;transition-timing-function:cubic-bezier(0.4, 0.0, 1, 1);}#selectionBar.contract{transition-duration:0.18s;transition-timing-function:cubic-bezier(0.0, 0.0, 0.2, 1);}#tabsContent > ::content > *:not(#selectionBar){height:100%;}</style>
+
+    <paper-icon-button icon="paper-tabs:chevron-left" class$="[[_computeScrollButtonClass(_leftHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onLeftScrollButtonDown" tabindex="-1"></paper-icon-button>
+
+    <div id="tabsContainer" on-track="_scroll" on-down="_down">
+      <div id="tabsContent" class$="[[_computeTabsContentClass(scrollable)]]">
+        <div id="selectionBar" class$="[[_computeSelectionBarClass(noBar, alignBottom)]]" on-transitionend="_onBarTransitionEnd"></div>
+        <content select="*"></content>
+      </div>
+    </div>
+
+    <paper-icon-button icon="paper-tabs:chevron-right" class$="[[_computeScrollButtonClass(_rightHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onRightScrollButtonDown" tabindex="-1"></paper-icon-button>
+
+  </template>
+
+  </dom-module>
+<dom-module name="tpa-nav-bar">
+    <template>
+        <iron-signals on-iron-signal-bootstrap-data="onBootstrapData"></iron-signals>
+        <style>:host{width:100%;}paper-tab[link] a{@apply (--layout-horizontal);@apply (--layout-center-center);color:#ffffff;text-decoration:none;padding-left:12px;padding-right:12px;font-weight:bold;}iron-icon.inverse{fill:white;margin-right:10px;}paper-tabs{padding:0 64px;}</style>
+
+            <paper-tabs id="mainBar" selected="0" scrollable="{{shouldScroll}}">
+            <template is="dom-repeat" as="item" items="[[tabs]]">
+                <paper-tab link="">
+                    <a href="{{baseUrl}}{{item.link}}" class="link" tabindex="-1">
+                            <iron-icon icon="[[item.icon]]" class="inverse"></iron-icon>[[item.label]]
+                    </a>
+                </paper-tab>
+            </template>
+        </paper-tabs>
+
+      <iron-media-query query="(max-width: 880px)" query-matches="{{shouldScroll}}"></iron-media-query>
+    </template>
+    </dom-module>
+<dom-module id="tpa-globals" assetpath="../bower_components/tpa-globals/">
+	<template>
+		<content>
+			
+			
+		</content>
+	</template>
+</dom-module>
+<dom-module id="app-location" assetpath="../bower_components/app-route/">
+  <template>
+    <iron-location path="{{__path}}" query="{{__query}}" hash="{{__hash}}" url-space-regex="{{urlSpaceRegex}}">
+    </iron-location>
+    <iron-query-params params-string="{{__query}}" params-object="{{queryParams}}">
+    </iron-query-params>
+  </template>
+  </dom-module>
+<dom-module id="app-header" assetpath="../bower_components/app-layout/app-header/">
+  <template>
+    <style>:host{position:relative;display:block;transition-timing-function:linear;transition-property:-webkit-transform;transition-property:transform;}:host::after{position:absolute;right:0px;bottom:-5px;left:0px;width:100%;height:5px;content:"";transition:opacity 0.4s;pointer-events:none;opacity:0;box-shadow:inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);will-change:opacity;@apply (--app-header-shadow);}:host([shadow])::after{opacity:1;}#contentContainer > ::content [condensed-title]{-webkit-transform-origin:left top;transform-origin:left top;white-space:nowrap;opacity:0;}#contentContainer > ::content [title]{-webkit-transform-origin:left top;transform-origin:left top;white-space:nowrap;}#background{@apply (--layout-fit);overflow:hidden;}#backgroundFrontLayer,
+      #backgroundRearLayer{@apply (--layout-fit);height:100%;pointer-events:none;background-size:cover;}#backgroundFrontLayer{@apply (--app-header-background-front-layer);}#backgroundRearLayer{opacity:0;@apply (--app-header-background-rear-layer);}#contentContainer{position:relative;width:100%;height:100%;}:host([disabled]),
+      :host([disabled])::after,
+      :host([disabled]) #backgroundFrontLayer,
+      :host([disabled]) #backgroundRearLayer,
+      :host([disabled]) ::content > app-toolbar:first-of-type,
+      :host([disabled]) ::content > [primary],
+      /* Silent scrolling should not run CSS transitions */
+      :host-context(.app-layout-silent-scroll),
+      :host-context(.app-layout-silent-scroll)::after,
+      :host-context(.app-layout-silent-scroll) #backgroundFrontLayer,
+      :host-context(.app-layout-silent-scroll) #backgroundRearLayer,
+      :host-context(.app-layout-silent-scroll) ::content > app-toolbar:first-of-type,
+      :host-context(.app-layout-silent-scroll) ::content > [primary]{transition:none !important;}</style>
+
+    <div id="background">
+      <div id="backgroundRearLayer"></div>
+      <div id="backgroundFrontLayer"></div>
+    </div>
+    <div id="contentContainer">
+      <content id="content"></content>
+    </div>
+  </template>
+
+  </dom-module>
+<dom-module id="app-header-layout" assetpath="../bower_components/app-layout/app-header-layout/">
+  <template>
+    <style>:host{display:block;position:relative;z-index:0;}:host([has-scrolling-region]){height:100%;}:host > ::content > app-header{@apply (--layout-fixed-top);z-index:1;}:host([has-scrolling-region]) > ::content > app-header{position:absolute;}#contentContainer{position:relative;z-index:0;}:host([has-scrolling-region]) > #contentContainer{@apply (--layout-fit);overflow-y:auto;-webkit-overflow-scrolling:touch;}</style>
+
+    <content id="header" select="app-header"></content>
+
+    <div id="contentContainer">
+      <content></content>
+    </div>
+
+  </template>
+
+  </dom-module>
 <dom-module id="paper-input-char-counter" assetpath="../bower_components/paper-input/">
   <template>
     <style>:host{display:inline-block;float:right;@apply (--paper-font-caption);@apply (--paper-input-char-counter);}:host-context([dir="rtl"]){float:left;}</style>
