@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0",
-    "tpa-styles": "git://github.com/ING-Group/tpa-styles"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "tpa-styles": "ING-Group/tpa-styles"
   }
 }

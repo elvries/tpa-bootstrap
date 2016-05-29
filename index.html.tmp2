@@ -101,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </app-header>
                 <!-- Main Content -->
                 <div class="content">
-                    <iron-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home">
+                    <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="slide-from-right-animation" exit-animation="slide-left-animation">
                         <section data-route="home">
                             <template is="dom-if" if="{{isSelected(data.pageName, 'home')}}">
                                 <link rel="import" href="elements/tpa-app-layout/tpa-app-layout.html">
@@ -164,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <tpa-settings-page></tpa-settings-page>
                             </template>
                         </section>
-                    </iron-pages>
+                    </neon-animated-pages>
                 </div>
             </app-header-layout>
         </div>
