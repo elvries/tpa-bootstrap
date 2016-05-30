@@ -37,7 +37,8 @@
   },
   "scripts": {
     "test": "gulp test:local",
-    "start": "gulp serve"
+    "start": "gulp serve",
+    "global": "npm list -g --depth=0"
   },
   "engines": {
     "node": ">=4.0.0"
