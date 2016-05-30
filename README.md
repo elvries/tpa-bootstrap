@@ -320,6 +320,8 @@ There are known issues with Windows and the Polymer CLI when running `gulp serve
 
 Worst case scenario, setup an Ubuntu VM for web development until the issues are resolved.
 
+Also check for further [issues](https://github.com/Polymer/polymer-cli/issues?q=is%3Aopen+is%3Aissue)
+
 ### How do I add new JavaScript files so they're picked up by the build process?
 
 At the bottom of `app/index.html`, you will find a build block that can be used to include additional
