@@ -54,7 +54,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="elements/elements.html">
 
     <!-- For shared styles, shared-styles.html import in elements.html -->
-    <style is="custom-style" include="shared-styles"></style>
+    <style is="custom-style" include="shared-styles">
+    </style>
 </head>
 
 <body unresolved>
@@ -94,7 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div main>
             <tpa-ajax auto id="getBootstrapData" url="{{services.bootstrap}}" handle-as="json" last-response="{{bootstrapResponse}}"></tpa-ajax>
             <app-header-layout has-scrolling-region>
-                <app-header reveals>
+                <app-header style="box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);" effects="material" reveals>
                     <tpa-top-bar class="paper-header"></tpa-top-bar>
                     <tpa-nav-bar base-url="{{baseUrl}}#/" tabs="[[bootstrapResponse.tabs]]"></tpa-nav-bar>
                 </app-header>
@@ -163,6 +164,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <tpa-settings-page></tpa-settings-page>
                             </template>
                         </section>
+                        
+                        <section data-route="feedback">
+                            <template is="dom-if" if="{{isSelected(data.pageName, 'feedback')}}">
+                                <link rel="import" href="elements/tpa-pages/tpa-feedback-page.html">
+                                <tpa-feedback-page></tpa-feedback-page>
+                            </template>
+                        </section>
                     </neon-animated-pages>
                 </div>
             </app-header-layout>
@@ -179,12 +187,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  duration="6000"
                  text="Caching complete! This app will work offline.">
     </paper-toast>
+    <paper-toast id="cache-updated"
+                 duration="10000"
+                 text="A new version of this app is available.">
+                 <a href="javascript:history.go(0);" style="color: #ff9933; text-decoration: none;">REFRESH</a>
+    </paper-toast>
 
     <platinum-sw-register auto-register
                           clients-claim
                           skip-waiting
                           base-uri="bower_components/platinum-sw/bootstrap"
-                          on-service-worker-installed="displayInstalledToast">
+                          on-service-worker-installed="displayInstalledToast"
+                          on-service-worker-updated="displayUpdatedToast">
         <platinum-sw-cache default-cache-strategy="fastest"
                            cache-config-file="cache-config.json">
         </platinum-sw-cache>

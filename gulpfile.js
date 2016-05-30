@@ -33,6 +33,7 @@ var polymerConfig = require('./app/polymer.json');
 var drakov = require('drakov');
 var proxy = require('http-proxy-middleware');
 var lec = require('gulp-line-ending-corrector');
+var dateFormat = require('dateformat');
 
 // var ghPages = require('gulp-gh-pages');
 
@@ -177,9 +178,9 @@ gulp.task('vulcanize', function() {
 gulp.task('polymer-build', function(callback) {              
   var fragments =  polymerConfig.fragments.join(' ');  
   
-  console.log('!!!! NOTE : This will not work on Windows until following Issue/PR merged !!!!');
-  console.log('!!!! - Issue : https://github.com/Polymer/polymer-cli/issues/191');
-  console.log('!!!! -  PR   : https://github.com/Polymer/polymer-cli/pull/199');  
+  console.log('!!!! NOTE  : This will not work on Windows until following merged !!!!');
+  console.log('!!!! Issue : https://github.com/Polymer/polymer-cli/issues/191    !!!!');
+  console.log('!!!! PR    : https://github.com/Polymer/polymer-cli/pull/199      !!!!');  
   var polymerBuildCommand = 'polymer build --entrypoint index.html --shell elements/elements.html --fragment ' + fragments;
   
   exec(polymerBuildCommand, { cwd : 'app' }, function(err, stdout, stderr) {
@@ -235,6 +236,15 @@ gulp.task('cache-config', function(callback) {
       fs.writeFile(configPath, JSON.stringify(config), callback);
     }
   });
+});
+
+gulp.task('cache-config-unique', function() {
+  var now = new Date();
+  var dateText = dateFormat(now, 'ddmmyyhhMMss');
+  //console.log('datetext', dateText);
+  return gulp.src(dist('cache-config.json'))
+    .pipe($.replace('"cacheId":"tpa-bootstrap"', '"cacheId":"tpa-bootstrap-'+dateText+'"'))
+    .pipe(gulp.dest(dist()));
 });
 
 // Clean output directory
@@ -306,6 +316,7 @@ gulp.task('default', ['clean'], function(cb) {
     'build',
     //'vulcanize', // Removed in replacement of polymer-build 
     'cache-config',
+    'cache-config-unique',
     cb);
 });
 
