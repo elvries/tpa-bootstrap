@@ -1,6 +1,6 @@
 <html><head><script src="tpa-app-layout.js" defer=""></script><meta charset="UTF-8"><link rel="import" href="../elements.html"></head><body><div hidden="" by-vulcanize=""><dom-module id="iron-list" assetpath="../../bower_components/iron-list/">
   <template>
-    <style>:host{display:block;position:relative;}@media only screen and (-webkit-max-device-pixel-ratio: 1){:host{will-change:transform;}}#items{@apply (--iron-list-items-container);position:relative;}:host(:not([grid])) #items > ::content > *{width:100%;}#items > ::content > *{box-sizing:border-box;margin:0;position:absolute;top:0;will-change:transform;}</style>
+    <style>:host{display:block;}:host(.has-scroller){overflow:auto;}:host(:not(.has-scroller)){position:relative;}#items{@apply (--iron-list-items-container);position:relative;}#items > ::content > *{width:100%;box-sizing:border-box;position:absolute;top:0;will-change:transform;}</style>
 
     <array-selector id="selector" items="{{items}}" selected="{{selectedItems}}" selected-item="{{selectedItem}}">
     </array-selector>
@@ -24,6 +24,124 @@
   </template>
 </dom-module>
 
+<dom-module id="paper-calendar" assetpath="../../bower_components/paper-date-picker/">
+  <template>
+    <style>:host{display:block;box-sizing:border-box;padding:12px 0;position:relative;width:100%;height:100%;min-width:160px;min-height:160px;color:var(--primary-text-color);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:rgba(0,0,0,0);--ease-in-sine:cubic-bezier(0.47, 0, 0.745, 0.715);--ease-out-sine:cubic-bezier(0.39, 0.575, 0.565, 1);@apply (--paper-font-body1);@apply (--paper-calendar);overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;@apply (--paper-calendar);}#calendar{position:relative;width:100%;height:100%;@apply (--layout-horizontal);}#months{height:100%;@apply (--layout-horizontal);}#months.animating .month-nav{opacity:1;}#months.animating{transition-property:transform, opacity;transition-duration:300ms;}#months.animating.swipe{transition-timing-function:var(--ease-in-sine);--webkit-transition-timing-function:var(--ease-in-sine);}#months.animating.reset{transition-timing-function:var(--ease-out-sine);--webkit-transition-timing-function:var(--ease-out-sine);}.month{height:100%;@apply (--layout-vertical);@apply (--layout-justified);@apply (--layout-flex);}.month-row, .month-nav{height:calc(100%/8);box-sizing:border-box;padding:0 calc(100%/36);}.month-col{position:relative;@apply (--layout-vertical);@apply (--layout-flex);}.month-nav{position:absolute;top:0;left:0;width:100%;opacity:1;}.month-nav .col{position:relative;@apply (--layout-vertical);@apply (--layout-center-center);}.month-nav .btn .icon{cursor:pointer;}.month-nav .btn .ripple{position:absolute;width:48px;height:48px;top:50%;left:50%;transform:translate(-50%, -50%);}.month-nav .btn.right{text-align:right;}.month-name{line-height:24px;vertical-align:middle;text-align:center;font-weight:bold;@apply (--paper-font-body2);}.month-weekdays{color:var(--secondary-text-color);}.month-col .day{cursor:default;pointer-events:none;@apply (--layout-fit);@apply (--layout-vertical);@apply (--layout-center-center);}.month-col{position:relative;width:100%;height:100%;@apply (--layout-center-center);}.day-item{border-radius:100%;width:100%;height:100%;}.day-item::selection{background:none;}.day-item.selected{background:var(--default-primary-color);}.day-item.selected .day{color:var(--text-primary-color);}.day-item:not([disabled]){cursor:pointer;}.day-item[disabled] .day{color:var(--text-disabled-color, #9d9d9d);}.day-item.today .day{color:var(--default-primary-color);}.day-item.selected.today .day{color:var(--text-primary-color);}</style>
+    <div id="calendar">
+      <div id="months" on-track="_onTrack" class$="{{_contentClass}}">
+        <template is="dom-repeat" items="{{_months}}" as="month">
+          <div class$="{{_getMonthClass('month', month)}}">
+            <div class="month-row month-name layout horizontal center-center flex">
+              <span>{{dateFormat(month.date, 'MMMM YYYY', locale)}}</span>
+            </div>
+            <div class="month-row month-weekdays week layout horizontal justified flex">
+              <template is="dom-repeat" items="{{_weekdays}}">
+                <div class="month-col layout vertical flex">
+                  <div class="day">{{item.0}}</div>
+                </div>
+              </template>
+            </div>
+            <template is="dom-repeat" items="{{month.weeks}}" as="row">
+              <div class="month-row layout horizontal justified flex">
+                <template is="dom-repeat" items="{{row}}">
+                  <div class="month-col">
+                    <div class$="{{_getDayClass('day-item selection', item.date, today, date)}}" disabled$="{{_isDisabled(item.day, item.date, minDate, maxDate)}}" on-tap="_tapDay" date$="{{item.name}}">
+                      <div class="day">{{item.day}}</div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
+      <div id="monthNav" class="month-nav layout horizontal center">
+        <div class="flex col self-stretch">
+          <div class="btn" on-tap="_swipePrevMonth">
+            <paper-ripple center="" class="ripple circle"></paper-ripple>
+            <iron-icon class="icon flex" icon="chevron-left"></iron-icon>
+          </div>
+        </div>
+        <div class="flex-5"></div>
+        <div class="flex col self-stretch">
+          <div class="btn" on-tap="_swipeNextMonth">
+            <paper-ripple center="" class="ripple circle"></paper-ripple>
+            <iron-icon class="icon flex" icon="chevron-right"></iron-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  </dom-module>
+<style is="custom-style">:root{--paper-date-picker-dialog:{margin:0;max-height:520px !important;overflow:hidden;};--paper-date-picker-dialog-picker:{margin-top:0 !important;padding:0;};--paper-date-picker-dialog-calendar:{padding-bottom:0;};--paper-date-picker-dialog-heading:{margin-bottom:-62px;};}</style>
+
+<dom-module id="paper-date-picker-dialog-style" assetpath="../../bower_components/paper-date-picker/">
+  <template>
+    <style>.paper-date-picker-dialog{@apply (--paper-date-picker-dialog);}.paper-date-picker-dialog > paper-date-picker{--paper-calendar:{@apply (--paper-date-picker-dialog-calendar);};@apply (--paper-date-picker-dialog-picker);}.paper-date-picker-dialog > paper-date-picker:not([narrow]){--paper-date-picker-heading:{@apply (--paper-date-picker-dialog-heading);};}</style>
+  </template>
+</dom-module>
+<dom-module id="paper-year-list" assetpath="../../bower_components/paper-date-picker/">
+  <template>
+    <style>:host{display:block;box-sizing:border-box;height:100%;@apply (--paper-font-common-base);position:relative;}.year{cursor:pointer;height:var(--paper-year-list-item-height, 44px);line-height:var(--paper-year-list-item-height, 44px);text-align:center;vertical-align:middle;}.selected{color:var(--default-primary-color);font-size:24px;}iron-list{@apply (--layout-fit);}</style>
+    <iron-list id="yearList" items="[[_years]]">
+      <template>
+        <div class$="year{{_addSelectedClass(selected)}}" on-tap="_tappedYearHandler">
+          [[item.year]]
+        </div>
+      </template>
+    </iron-list>
+  </template>
+  </dom-module>
+<style is="custom-style" include="paper-date-picker-dialog-style"></style>
+
+<dom-module id="paper-date-picker" assetpath="../../bower_components/paper-date-picker/">
+  <template>
+    <style>:host{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:inline-block;color:var(--primary-text-color);@apply (--paper-font-body1);@apply (--paper-date-picker);}#datePicker{width:512px;height:248px;@apply (--layout-horizontal);}#heading{width:168px;@apply (--paper-date-picker-heading);}:host([narrow]) #datePicker{width:328px;height:428px;@apply (--layout-vertical);}:host([narrow]) #heading{width:auto;height:96px;padding:16px 24px;}#heading{padding:16px;box-sizing:border-box;color:var(--text-primary-color);background:var(--default-primary-color);@apply (--layout-vertical);@apply (--layout-around-justfied);}#heading .date,
+      #heading .year{cursor:pointer;}#heading .date{@apply (--paper-font-display1);font-weight:bold;margin-top:2px;@apply (--paper-date-picker-heading-date);}#heading div.date{letter-spacing:0.025em;}#heading .date span{white-space:nowrap;}#heading .year{@apply (--paper-font-body2);font-size:16px;@apply (--paper-date-picker-heading-date);}#heading:not(.pg-chooseYear) .year,
+      #heading.pg-chooseYear .date{color:var(--light-primary-color);}:host([isTouch]) paper-year-list::-webkit-scrollbar{width:0 !important;}#pages{@apply (--layout-flex);width:auto;background:var(--default-background-color);}#calendar{--paper-calendar:{@apply (--paper-date-picker-calendar);};}</style>
+    <iron-media-query query="{{_getMediaQuery(forceNarrow, responsiveWidth)}}" query-matches="{{_queryMatches}}"></iron-media-query>
+    <div id="datePicker">
+      <div id="heading" class$="{{_getHeadingClass('heading-content', _selectedPage)}}">
+        <div class="year" on-tap="_tapHeadingYear">{{dateFormat(date, 'YYYY', locale)}}</div>
+        <div class="date" on-tap="_tapHeadingDate">
+          <template is="dom-repeat" items="{{_splitHeadingDate(date, headingFormat, locale)}}">
+            <span>{{item}}</span>
+          </template>
+        </div>
+      </div>
+      <neon-animated-pages id="pages" selected="{{_selectedPage}}" attr-for-selected="id" entry-animation="fade-in-animation" exit-animation="fade-out-animation" on-iron-select="_pageSelected">
+        <neon-animatable id="chooseDate">
+          <paper-calendar id="calendar" locale="{{locale}}" date="{{date}}" min-date="{{minDate}}" max-date="{{maxDate}}">
+          </paper-calendar>
+        </neon-animatable>
+        <neon-animatable id="chooseYear">
+          <paper-year-list id="yearList" date="{{date}}" on-tap="_tapHeadingDate" min="[[_minYear]]" max="[[_maxYear]]"></paper-year-list>
+        </neon-animatable>
+      </neon-animated-pages>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="tpa-date-picker" assetpath="../../bower_components/tpa-date-picker/">
+  <template>
+
+    <template is="dom-if" if="{{isMobile}}">
+      <paper-input label="{{label}}" type="date" required$="{{required}}"></paper-input>
+    </template>
+
+    <template is="dom-if" if="{{!isMobile}}">
+      <paper-input label="{{label}}" on-tap="showDialog" value="{{formattedDate}}" required$="{{required}}" name$="{{name}}"></paper-input>
+    </template>
+
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="" on-iron-overlay-closed="dismissDialog">
+      <paper-date-picker id="picker" date="[[date]]" locale="{{locale}}" min-date$="{{_minDate}}" max-date$="{{max}}"></paper-date-picker>
+      <div class="buttons">
+        <paper-button dialog-dismiss="">Cancel</paper-button>
+        <paper-button dialog-confirm="">OK</paper-button>
+      </div>
+    </paper-dialog>
+
+  </template>
+</dom-module>
 <dom-module id="paper-dialog-scrollable" assetpath="../../bower_components/paper-dialog-scrollable/">
 
   <style>:host{display:block;@apply (--layout-relative);}:host(.is-scrolled:not(:first-child))::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--divider-color);}:host(.can-scroll:not(.scrolled-to-bottom):not(:last-child))::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--divider-color);}.scrollable{padding:0 24px;@apply (--layout-scroll);@apply (--paper-dialog-scrollable);}.fit{@apply (--layout-fit);}</style>
@@ -79,63 +197,66 @@
   </template>
 </dom-module>
 <dom-module id="tpa-money-transfer" assetpath="../../bower_components/tpa-money-transfer/">
-  <style>div.head{width:60%;float:left;}div [secondary]{color:var(--ing-orange-300);}div.amount{text-align:right;font-weight:bold;font-size:1.1rem;}paper-dialog.addressList{width:80%;display:block;}.addressContent{width:200px;margin:8px;}@media (max-width: 800px){.addressContainer{width:34%;}}@media (max-width: 400px){.addressContainer{width:100%;}}</style>
+  <style>div.head{width:60%;float:left;}div [secondary]{color:var(--ing-orange-300);}div.amount{text-align:right;font-weight:bold;font-size:1.1rem;}paper-dialog.addressList{width:80%;display:block;}paper-dialog.addressList paper-dialog-scrollable{min-height:100px;}.addressContainer:after{content:".";clear:both;display:block;visibility:hidden;height:0px;}.addressContent{display:inline-block;float:left;margin-right:10px;padding:5px;cursor:pointer;}.addressContent:hover{background-color:var(--ing-orange-300);}.addressContainer{margin-right:-15px;margin-bottom:20px;}</style>
   <template>
 <iron-signals on-iron-signal-i18n="onI18Signal"></iron-signals>
 
-        <div class="card-content">
-            <div class="head">
-                <div>{{accountOwner}}</div>
-                <div secondary="">{{accountNumber}}</div>
-            </div>
-            <div class="amount">
-                {{accountBalanceObj.wholeNumber}}{{decimalSeparator}}<sup>{{accountBalanceObj.decimals}}</sup>
-            </div>
-
-            <paper-input class="large" label="{{localize('amount')}}" type="number">
-                <div prefix="">€</div>
-            </paper-input>
-
-            <paper-input label="{{localize('recipient')}}">
-                <div suffix="">
-                    <paper-icon-button icon="tpa:addressbook-empty" class="secondary" onclick="dialog.toggle()"></paper-icon-button>
+        <form is="iron-form" id="form" method="post" action="/api/transferMoney">
+            <div class="card-content">
+                <div class="head">
+                    <div>{{accountOwner}}</div>
+                    <div secondary="">{{accountNumber}}</div>
                 </div>
-            </paper-input>
-
-            <paper-input label="{{localize('accountNumber')}}">
-                <div suffix="">
-                    <paper-icon-button icon="tpa:plus" class="primary"></paper-icon-button>
+                <div class="amount">
+                    {{accountBalanceObj.wholeNumber}}{{decimalSeparator}}<sup>{{accountBalanceObj.decimals}}</sup>
                 </div>
-            </paper-input>
 
-            <paper-input label="{{localize('usage')}}"></paper-input>
+                <paper-input class="large" label="{{localize('amount')}}" type="number" name="amount" required="">
+                    <div prefix="">€</div>
+                </paper-input>
 
-            <paper-input label="{{localize('executionDate')}}"></paper-input>
-        </div>
-        <div class="card-actions">
-            <paper-button raised="" class="primary">{{localize('submit')}}</paper-button>
-        </div>
-        <iron-ajax id="ajax" loading="{{loadingAddresses}}" url="data.json" handle-as="json" on-response="_onAddressBookData" auto=""></iron-ajax>
+                <paper-input label="{{localize('recipient')}}" name="recipient" required="">
+                    <div suffix="">
+                        <paper-icon-button icon="tpa:addressbook-empty" class="secondary" on-tap="toggleAddressBook"></paper-icon-button>
+                    </div>
+                </paper-input>
+
+                <paper-input label="{{localize('accountNumber')}}" name="accountNumber" required="">
+                    <div suffix="">
+                        <paper-icon-button icon="tpa:plus" class="primary"></paper-icon-button>
+                    </div>
+                </paper-input>
+
+                <paper-input label="{{localize('usage')}}" name="usage" required=""></paper-input>
+
+                
+                <tpa-date-picker label="{{localize('executionDate')}}" locale="{{language}}" min="{{now}}" max$="{{maxDate}}" format="{{localize('dateFormat')}}" name="executionDate" required=""></tpa-date-picker>
+            </div>
+            <div class="card-actions">
+                <paper-button raised="" class="primary" on-tap="submitForm">{{localize('submit')}}</paper-button>
+            </div>
+        </form>
+        <iron-ajax id="ajax" loading="{{loadingAddresses}}" url="/api/getAddressBook" handle-as="json" on-response="_onAddressBookData" auto=""></iron-ajax>
         <paper-dialog id="dialog" class="addressList" title="Adress Book" entry-animation="fade-in-animation" exit-animation="fade-out-animation" on-iron-overlay-opened="refit">
             <paper-dialog-scrollable>
-
-                <iron-list items="{{addresses}}" as="address" _scroll-target="document" grid="">
-                    <template>
-                        <div class="addressContainer">
-                            <div class="addressContent" tabindex$="[[tabIndex]]">
-                                {{address.firstname}}&nbsp;{{address.lastname}}<br>
-                                {{address.account}}<br>
-                                {{address.institute}}
-                            </div>
+                <div class="addressContainer">
+                    <template is="dom-repeat" items="{{addresses}}" as="address">
+                        <div class="addressContent" on-tap="chooseAddress">
+                            {{address.firstname}}&nbsp;{{address.lastname}}<br>
+                            {{address.account}}<br>
+                            {{address.institute}}
                         </div>
                     </template>
-                </iron-list>
+                </div>
             </paper-dialog-scrollable>
+
             <div class="buttons">
                 <paper-button class="secondary" dialog-dismiss="">Cancel</paper-button>
                 <paper-button class="primary" dialog-confirm="" autofocus="">Discard</paper-button>
             </div>
         </paper-dialog>
+        <paper-toast id="toast-error" text="{{localize('error')}}" duration="10000"><content select=".error"></content></paper-toast>
+        <paper-toast id="toast-success" text="{{localize('success')}}" duration="5000"><content select=".success"></content></paper-toast>
   </template>
 </dom-module>
 <dom-module id="tpa-transactions-list-styles" assetpath="../../bower_components/tpa-transaction-list/">
