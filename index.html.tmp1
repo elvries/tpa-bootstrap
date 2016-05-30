@@ -164,6 +164,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <tpa-settings-page></tpa-settings-page>
                             </template>
                         </section>
+                        
+                        <section data-route="feedback">
+                            <template is="dom-if" if="{{isSelected(data.pageName, 'feedback')}}">
+                                <link rel="import" href="elements/tpa-pages/tpa-feedback-page.html">
+                                <tpa-feedback-page></tpa-feedback-page>
+                            </template>
+                        </section>
                     </neon-animated-pages>
                 </div>
             </app-header-layout>
