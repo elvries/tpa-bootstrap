@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/ING-Group/tpa-bootstrap.svg?branch=master)](https://travis-ci.org/ING-Group/tpa-bootstrap)
 
-![](https://cloud.githubusercontent.com/assets/110953/7877439/6a69d03e-0590-11e5-9fac-c614246606de.png)
+![](http://www.ing.com/static/ingdotcompresentation/static/img/logos/logo.hd.png)
 ## ING TPA Bootstrap with Polymer Starter Kit
 
 > A starting point for building ING web applications with Polymer 1.0
@@ -9,34 +9,36 @@ TPA Bootstrap is a clone from [Polymer Starter Kit](https://github.com/PolymerEl
 
 ### Included out of the box:
 
-* [Polymer](https://www.polymer-project.org/), [Paper](https://elements.polymer-project.org/browse?package=paper-elements), [Iron](https://elements.polymer-project.org/browse?package=iron-elements) and [Neon](https://elements.polymer-project.org/browse?package=neon-elements) elements
-* [Material Design](http://www.google.com/design/spec/material-design/introduction.html) layout using ING Style & Theme
-* Routing with [Page.js](https://visionmedia.github.io/page.js/)
-* Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester)
-* Optional offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
-* End-to-end Build Tooling (including [Vulcanize](https://github.com/Polymer/vulcanize))
-* [Recipes](/docs/README.md/) for ES2015 support, Polymer performance, using Chrome Dev Editor, Deploying to GitHub Pages, Deploying to Firebase, Mobile Chrome Apps and lint tools.
-
-TPA Additions
-
-* Lazy Loading using Service Workers via [Polymer CLI](https://github.com/Polymer/polymer-cli) build task
+* [Material Design](http://www.google.com/design/spec/material-design/introduction.html) using ING Style & Theme
+* Routing with [app-route](https://github.com/PolymerElements/app-route)
+* Unit testing with [Web Component Tester](https://github.com/Polymer/web-component-tester) with code coverage with [Istanbul](https://github.com/thedeeno/web-component-tester-istanbul)
+* Offline setup through [Platinum](https://elements.polymer-project.org/browse?package=platinum-elements) Service Worker elements
+* Lazy Loading via [Polymer CLI](https://github.com/Polymer/polymer-cli) build task
+* End-to-end Build Tooling (including CSP Compliance with [Crisper](https://github.com/PolymerLabs/crisper))
 * API Blueprint hosting via [Drakov](https://github.com/Aconex/drakov/) and [Proxy Middleware](https://github.com/chimurai/http-proxy-middleware/) to work with [Browsersync](https://www.npmjs.com/package/browser-sync)
-* Unit testing coverage with [Istanbul](https://github.com/thedeeno/web-component-tester-istanbul)
-* CSP Compliance with [Crisper](https://github.com/PolymerLabs/crisper)
+
 
 ### Demo
 
-[TPA Demo](https://ing-group.github.io/tpa-bootstrap/)
-
-[TPA Demo with Mock](http://tpabootstrap.westeurope.cloudapp.azure.com/)
+[TPA Demo](http://www.tpabootstrap.net/#/home)  with Mock endpoints
 
 ### Tutorials
 
+#### Polymer
+If you have not used Polymer before, you can find a variety of tutorials online (ensure they are 1.0+)
+
+* [Polymer Project](https://www.polymer-project.org/1.0/start/index) - Build an Element
+* [Pluralsight](https://www.pluralsight.com/courses/building-web-application-polymer-material-design) - Web Applications using Polymer and Material Design
+* [LevelUpTuts](https://www.youtube.com/playlist?list=PLLnpHn493BHGhoGAb2PRKzv4Zw3QoatK-) - Polymer 1.0 Tutorials
+* [Google Developers](https://www.youtube.com/playlist?list=PLOU2XLYxmsII5c3Mgw6fNYCzaWrsM3sMN) - Polycasts with Rob Dodson
+
+
+#### Polymer Starter Kit
 Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://www.polymer-project.org):
 
 * [Set up the PSK](https://www.polymer-project.org/1.0/docs/start/psk/set-up.html)
 * [Create a page](https://www.polymer-project.org/1.0/docs/start/psk/create-a-page.html)
-* [Deploy the PSK to the web](https://www.polymer-project.org/1.0/docs/start/psk/deploy.html)
+
 
 ## Getting Started
 
@@ -49,21 +51,16 @@ To take advantage of Polymer Starter Kit you need to:
 
 ### Get the code
 
-[Download](https://github.com/ING-Group/tpa-bootstrap/releases/latest) and extract Polymer Starter Kit to where you want to work. The project comes in two flavours - Light and Full.
+[Download](https://github.com/ING-Group/tpa-bootstrap/) and extract the code where you want to work.
 
-**Beginners**: Try Polymer Starter Kit Light. This doesn't require any extra dependencies nor knowledge of modern front-end tooling. This option is good for prototyping if you haven't build a Polymer app before.
+:warning: **Important**: Contains dotfiles (files starting with a `.`). If you're copying the contents of the Bootstrap to a new location make sure you bring along these dotfiles as well! On Mac, [enable showing hidden files](http://ianlunn.co.uk/articles/quickly-showhide-hidden-files-mac-os-x-mavericks/), then try extracting/copying Bootstrap again. This time the dotfiles needed should be visible so you can copy them over without issues.
 
-**Intermediate - Advanced**: Use the full version of Polymer Starter Kit. This comes with all the build tools you'll need for testing and productionising your app so it's nice and lean. You'll need to run a few extra commands to install the tools we recommend but it's worth it to make sure your final app is super optimised.
-
-:warning: **Important**: Polymer Starter Kit, and Polymer Starter Kit Light, both contain dotfiles (files starting with a `.`). If you're copying the contents of the Starter Kit to a new location make sure you bring along these dotfiles as well! On Mac, [enable showing hidden files](http://ianlunn.co.uk/articles/quickly-showhide-hidden-files-mac-os-x-mavericks/), then try extracting/copying Polymer Starter Kit again. This time the dotfiles needed should be visible so you can copy them over without issues.
-
-Rob Dodson has a fantastic [PolyCast video](https://www.youtube.com/watch?v=xz-yixRxZN8) available that walks through using Polymer Starter Kit. An [end-to-end with Polymer](https://www.youtube.com/watch?v=1f_Tj_JnStA) and Polymer Starter Kit talk is also available.
 
 ### Install dependencies
 
 #### Quick-start (for experienced users)
 
-With Node.js installed, run the following one liner from the root of your Polymer Starter Kit download:
+With Node.js installed, run the following one liner from the root of your download:
 
 ```sh
 npm install -g gulp bower && npm install && bower install
@@ -99,13 +96,27 @@ npm install -g gulp bower
 
 This lets you run `gulp` and `bower` from the command line.
 
-4)  Install the starter kit's local `npm` and `bower` dependencies.
+4)  Install the bootstrap's local `npm` and `bower` dependencies.
 
 ```sh
 cd tpa-bootstrap && npm install && bower install
 ```
 
-This installs the element sets (Paper, Iron, Platinum) and tools the starter kit requires to build and serve apps.
+5)  To build the application, there is a dependency on the [polymer-cli](https://github.com/Polymer/polymer-cli) tool.
+
+```sh
+npm install -g polymer-cli
+```
+
+This is the finall step required to build and serve apps.
+
+#### Troubleshooting
+
+To see a list of globally installed dependencies
+
+```sh
+npm list -g --depth=0
+```
 
 ### Development workflow
 
@@ -133,19 +144,19 @@ To run tests Java 7 or higher is required. To update Java go to http://www.oracl
 gulp
 ```
 
-Build and optimize the current project, ready for deployment. This includes vulcanization, image, script, stylesheet and HTML optimization and minification.
+Build and optimize the current project, ready for deployment. This includes vulcanization, crisper, image, script, stylesheet and HTML optimization and minification.
 
 ## Application Theming & Styling
 
-Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of this in `app/styles/app-theme.html` to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
+Polymer 1.0 introduces a shim for CSS custom properties. We take advantage of this in [app-theme.html](https://github.com/ING-Group/tpa-styles). 
+You can also find our presets for Material Design breakpoints in this file.
 
 [Read more](https://www.polymer-project.org/1.0/docs/devguide/styling.html) about CSS custom properties.
 
 ### Styling
-1. ***main.css*** - to define styles that can be applied outside of Polymer's custom CSS properties implementation. Some of the use-cases include defining styles that you want to be applied for a splash screen, styles for your application 'shell' before it gets upgraded using Polymer or critical style blocks that you want parsed before your elements are.
-2. ***app-theme.html*** - to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
-3. ***shared-styles.html*** - to share styles between elements and index.html.
-4. ***element styles only*** - styles specific to element. These styles should be inside the `<style></style>` inside `template`.
+1. ***app-theme.html*** - to provide theming for your application. You can also find our presets for Material Design breakpoints in this file.
+2. ***shared-styles.html*** - to share styles between elements and index.html.
+3. ***element styles only*** - styles specific to element. These styles should be inside the `<style></style>` inside `template`.
 
   ```HTML
   <dom-module id="my-list">
@@ -185,69 +196,21 @@ Components installed by Bower live in the `app/bower_components` directory. This
 
 ### Github Pages
 
-TPA has enabled Github Pages as described below. In addition, there is an API endpoint setting, GH_PAGES_API, added to Travis CI that gets pushed in upon build
+TPA has enabled Github Pages. 
 
-1. Uncomment this line  `// app.baseUrl = '/tpa-bootstrap/';` in app.js near the top
-2. Change `app.baseUrl = '/tpa-bootstrap/';`  to `app.baseUrl = '/your-pathname/';` (ex: if you repo is `github.com/username/bobs-awesome-site` you would change this to `app.baseUrl = '/bobs-awesome-site/';`)
-3. Run `gulp build-deploy-gh-pages` from command line
-4. To see changes wait 1-2 minutes then load Github pages for your app (ex: https://polymerelements.github.io/tpa-bootstrap/)
+Visit the site here : https://ING-Group.github.io/tpa-bootstrap/
+
+You can perform a manual deployment from the command line by running `gulp build-deploy-gh-pages`, although this is not recommended unless for debugging purposes.
 
 [See more details](/docs/deploy-to-github-pages.md/)
 
+### API Endpoint
+
+There is an API endpoint setting inside Travis CI, GH_PAGES_API, that gets pushed in upon build. This allows us to easily change the endpoints for testing purposes.
+
 ## Service Worker
 
-Polymer Starter Kit offers an optional offline experience thanks to Service Worker and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
-
-Our optional offline setup should work well for relatively simple applications. For more complex apps, we recommend learning how Service Worker works so that you can make the most of the Platinum Service Worker element abstractions.
-
-### Enable Service Worker support?
-
-TPA has enabled Service Worker support from the Polymer Starter Kit, as described below.
-
-To enable Service Worker support for Polymer Starter Kit project use these 3 steps:
-
-1. Uncomment Service Worker code in index.html
-  ```HTML
-  <!-- Uncomment next block to enable Service Worker support (1/2) -->
-  <!--
-  <paper-toast id="caching-complete"
-               duration="6000"
-               text="Caching complete! This app will work offline.">
-  </paper-toast>
-
-  <platinum-sw-register auto-register
-                        clients-claim
-                        skip-waiting
-                        on-service-worker-installed="displayInstalledToast">
-    <platinum-sw-cache default-cache-strategy="networkFirst"
-                       cache-config-file="cache-config.json">
-    </platinum-sw-cache>
-  </platinum-sw-register>
-  -->
-  ```
-2. Uncomment Service Worker code in elements.html
-
-  ```HTML
-  <!-- Uncomment next block to enable Service Worker Support (2/2) -->
-  <!--
-  <link rel="import" href="../bower_components/platinum-sw/platinum-sw-cache.html">
-  <link rel="import" href="../bower_components/platinum-sw/platinum-sw-register.html">
-  -->
-  ```
-3. Uncomment 'cache-config' in the `runSequence()` section of the 'default' gulp task, like below:
-[(gulpfile.js)](https://github.com/ING-Group/tpa-bootstrap/blob/master/gulpfile.js)
-
-  ```JavaScript
-  // Build Production Files, the Default Task
-  gulp.task('default', ['clean'], function (cb) {
-    runSequence(
-      ['copy', 'styles'],
-      'elements',
-      ['images', 'fonts', 'html'],
-      'vulcanize', 'cache-config',
-      cb);
-  });
-  ```
+TPA Bootstrap has enabled the  offline experience thanks to Service Worker and the [Platinum Service Worker elements](https://github.com/PolymerElements/platinum-sw). New to Service Worker? Read the following [introduction](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) to understand how it works.
 
 #### Filing bugs in the right place
 
@@ -302,43 +265,30 @@ If you've enabled Service Worker support, your app becomes eligible to trigger a
 
     "start_url": "/?homescreen=1"
 
-If you are implementing an offline experince using Service Worker, make sure to cache `/?homescreen=1`. For a short explanation, you can refer to [this segment](https://youtu.be/g7f1Az5fxgU?t=1435) from Rob Dodson's talk Building Progressive Web Apps with Polymer. A more in-depth exploration can be found at [Service Workers in Production](https://developers.google.com/web/showcase/case-study/service-workers-iowa#watch-out-for-extra-query-parameters).
+If you are implementing an offline experience using Service Worker, make sure to cache `/?homescreen=1`. For a short explanation, you can refer to [this segment](https://youtu.be/g7f1Az5fxgU?t=1435) from Rob Dodson's talk Building Progressive Web Apps with Polymer. A more in-depth exploration can be found at [Service Workers in Production](https://developers.google.com/web/showcase/case-study/service-workers-iowa#watch-out-for-extra-query-parameters).
 
 ## Yeoman support
 
-[generator-polymer](https://github.com/yeoman/generator-polymer/releases) now includes support for Polymer Starter Kit out of the box.
-
-[generator-tpa](https://github.com/ING-Group/generator-tpa/) is the bespoke implementation of generating new components for TPA. 
+[generator-tpa](https://github.com/ING-Group/generator-tpa/) is the bespoke implementation of [generator-polymer](https://github.com/yeoman/generator-polymer/releases) for generating new components for TPA. 
 
 ## Frequently Asked Questions
 
 ### Where do I customise my application theme?
 
 Theming can be achieved using [CSS Custom properties](https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details) via [app/styles/app-theme.html](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/styles/app-theme.html).
-You can also use `app/styles/main.css` for pure CSS stylesheets (e.g for global styles), however note that Custom properties will not work there under the shim.
 
 A [Polycast](https://www.youtube.com/watch?v=omASiF85JzI) is also available that walks through theming using Polymer 1.0.
 
 ### Where do I configure routes in my application?
 
-This can be done via [`app/elements/routing.html`](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/elements/routing.html). We use Page.js for routing and new routes
-can be defined in this import. We then toggle which `<iron-pages>` page to display based on the [selected](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/index.html#L105) route.
+This can be done via [`app/index.html`](https://github.com/ING-Group/tpa-styles/blob/master/index.html). We use app-route element for routing and new routes
+can be defined in this import. See [app-route](https://github.com/PolymerElements/app-route) for further information
 
-### Why are we using Page.js rather than a declarative router like `<more-routing>`?
+[app-location](https://github.com/PolymerElements/app-route/blob/master/app-location.html) is also used to synchronise between the state of the application and the browser bar.  
 
-`<more-routing>` (in our opinion) is good, but lacks imperative hooks for getting full control
-over the routing in your application. This is one place where a pure JS router shines. We may
-at some point switch back to a declarative router when our hook requirements are tackled. That
-said, it should be trivial to switch to `<more-routing>` or another declarative router in your
-own local setup.
+### Why are we using app-route rather than Page.js
 
-### Where can I find the application layouts from your Google I/O 2015 talk?
-
-App layouts live in a separate repository called [app-layout-templates](https://github.com/PolymerElements/app-layout-templates).
-You can select a template and copy over the relevant parts you would like to reuse to Polymer Starter Kit.
-
-You will probably need to change paths to where your Iron and Paper dependencies can be found to get everything working.
-This can be done by adding them to the [`elements.html`](https://github.com/ING-Group/tpa-bootstrap/blob/master/app/elements/elements.html) import.
+The [app-route](https://github.com/PolymerElements/app-route) is more in line with the web component strategy than Page.js
 
 ### Something has failed during installation. How do I fix this?
 
@@ -354,26 +304,25 @@ Node.js (and npm) may have been installed into `C:\Program Files\`. Updating npm
 into `%AppData%\npm`, but your system will still use the npm version. You can avoid this by deleting your older npm from `C:\Program Files\nodejs`
 as described [here](https://github.com/npm/npm/issues/6309#issuecomment-67549380).
 
-If you get a browser console error indicating that an element you know you have installed is missing, try deleting the bower_components folder, then run `bower cache clean` followed by `bower install` to reinstall. This can be especially helpful when upgrading from a prior version of the Polymer Starter Kit.
+If you get a browser console error indicating that an element you know you have installed is missing, try deleting the bower_components folder, then run `bower cache clean` followed by `bower install` to reinstall. This can be especially helpful when upgrading from a prior version.
 
 If the issue is to do with a failure somewhere else, you might find that due to a network issue
 a dependency failed to correctly install. We recommend running `npm cache clean` and deleting the `node_modules` directory followed by
 `npm install` to see if this corrects the problem. If not, please check the [issue tracker](https://github.com/ING-Group/tpa-bootstrap/issues) in case
 there is a workaround or fix already posted.
 
-### I'm having trouble getting Vulcanize to fully build my project on Windows. Help?
+### I'm having trouble getting Polymer Build to fully build my project on Windows. Help?
 
-Some Windows users have run into trouble with the `elements.html` file in their `dist` folder
-not being correctly vulcanized. This can happen if your project is in a folder with a name containing a
-space. You can work around this issue by ensuring your path doesn't contain one.
+There are known issues with Windows and the Polymer CLI when running `gulp serve:dist`
 
-There is also an [in-flight](https://github.com/ING-Group/tpa-bootstrap/issues/62#issuecomment-108974016) issue
-where some are finding they need to disable the `inlineCss` option in our configuration for Vulcanize
-to correctly build. We are still investigating this, however for the time-being use the workaround if
-you find your builds getting stuck here.
+* https://github.com/Polymer/polymer-cli/issues/191
+* https://github.com/Polymer/polymer-cli/pull/199
 
+Worst case scenario, setup an Ubuntu VM for web development until the issues are resolved.
 
-### How do I add new JavaScript files to Starter Kit so they're picked up by the build process?
+Also check for further [issues](https://github.com/Polymer/polymer-cli/issues?q=is%3Aopen+is%3Aissue)
+
+### How do I add new JavaScript files so they're picked up by the build process?
 
 At the bottom of `app/index.html`, you will find a build block that can be used to include additional
 scripts for your app. Build blocks are just normal script tags that are wrapped in a HTML
@@ -393,16 +342,12 @@ during a build.
 
 If you are not using the build-blocks, but still wish for additional files (e.g scripts or stylesheets) to be included in the final `dist` directory, you will need to either copy these files as part of the gulpfile.js build process (see the `copy` task for how to automate this) or manually copy the files.
 
-### I'm finding the installation/tooling here overwhelming. What should I do?
-
-Don't worry! We've got you covered. Polymer Starter Kit tries to offer everything you need to build and optimize your apps for production, which is why we include the tooling we do. We realise however that our tooling setup may not be for everyone.
-
-If you find that you just want the simplest setup possible, we recommend using Polymer Starter Kit light, which is available from the [Releases](https://github.com/ING-Group/tpa-bootstrap/releases) page. This takes next to no time to setup.
-
 ## Licensing
 
 Like other Google projects, Polymer Starter Kit includes Google license headers at the top of several of our source files. Google's open-source licensing requires that this header be kept in place (sorry!), however we acknowledge that you may need to add your own licensing to files you modify. This can be done by appending your own extensions to these headers.
 
+TPA is using BSD-Clause-3 for their licensing (TODO: Confirm)
+
 ## Contributing
 
-Polymer Starter Kit is a new project and is an ongoing effort by the Web Component community. We welcome your bug reports, PRs for improvements, docs and anything you think would improve the experience for other Polymer developers.
+TPA Bootstrap and the Polymer Starter Kit is a new project and is an ongoing effort by the Web Component community. We welcome your bug reports, PRs for improvements, docs and anything you think would improve the experience for other Polymer developers.
