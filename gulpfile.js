@@ -125,11 +125,11 @@ gulp.task('copy', function() {
   ], {
     dot: true
   }).pipe(gulp.dest(dist()));
-  
+
   // Copy over only the bower_components we need
   // These are things which cannot be vulcanized
   var bower = gulp.src([
-    'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font}/**/*'
+    'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font,tpa-feedback}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
   return merge(app, bower)
@@ -175,29 +175,29 @@ gulp.task('vulcanize', function() {
     .pipe($.size({title: 'vulcanize'}));
 });
 
-gulp.task('polymer-build', function(callback) {              
-  var fragments =  polymerConfig.fragments.join(' ');  
-  
+gulp.task('polymer-build', function(callback) {
+  var fragments =  polymerConfig.fragments.join(' ');
+
   console.log('!!!! NOTE  : This will not work on Windows until following merged !!!!');
   console.log('!!!! Issue : https://github.com/Polymer/polymer-cli/issues/191    !!!!');
-  console.log('!!!! PR    : https://github.com/Polymer/polymer-cli/pull/199      !!!!');  
+  console.log('!!!! PR    : https://github.com/Polymer/polymer-cli/pull/199      !!!!');
   var polymerBuildCommand = 'polymer build --entrypoint index.html --shell elements/elements.html --fragment ' + fragments;
-  
+
   exec(polymerBuildCommand, { cwd : 'app' }, function(err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     callback(err);
-  });    
+  });
 });
 
-gulp.task('crisper', function() {   
-  
+gulp.task('crisper', function() {
+
     return gulp.src(
       ['app/build/bundled/elements/**/*.*',
       '!app/build/bundled/elements/**/{demo,test}/*'])
     // Split inline scripts from an HTML file for Content Security Policy compliance
     // HTML and JS minification is performed in the 'build' task
-    .pipe($.crisper())    
+    .pipe($.crisper())
     .pipe(gulp.dest('dist/elements'))
     .pipe($.size({title: 'crisper'}));
 });
@@ -314,7 +314,7 @@ gulp.task('default', ['clean'], function(cb) {
     'crisper',
     ['ensureFiles', 'copy', 'styles'],
     'build',
-    //'vulcanize', // Removed in replacement of polymer-build 
+    //'vulcanize', // Removed in replacement of polymer-build
     'cache-config',
     'cache-config-unique',
     cb);
@@ -344,7 +344,7 @@ gulp.task('deploy-gh-pages', function() {
 
 gulp.task('fix-api-eol', function() {
   return gulp.src('./app/bower_components/**/*-mock.md')
-    .pipe(lec({verbose:true, eolc: 'LF', encoding:'utf8'}))    
+    .pipe(lec({verbose:true, eolc: 'LF', encoding:'utf8'}))
     .pipe(gulp.dest('./app/bower_components'));
 });
 
