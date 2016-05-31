@@ -55,6 +55,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- For shared styles, shared-styles.html import in elements.html -->
     <style is="custom-style" include="shared-styles">
+        iron-icon.side-bar-icon {
+            --iron-icon-fill-color:var(--primary-color);
+        }
+        paper-item:hover {
+            background-color:var(--ing-grey-200);
+            font-weight:strong;
+        }
+
+        .padding-left-sm {
+            margin-left:20px;
+        }
     </style>
 </head>
 
@@ -84,8 +95,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <!-- Drawer Content -->
             <paper-menu class="app-menu" attr-for-selected="data-route" selected="{{data.pageName}}">
                 <template as="item" is="dom-repeat" items="{{menuItems}}">
-                    <paper-item data-route="{{item.route}}" on-click="closeDrawer">
-                        <iron-icon icon="{{item.icon}}"></iron-icon>
+                    <paper-item title="{{item.title}}" data-route="{{item.route}}" on-click="closeDrawer">
+                        <iron-icon class="side-bar-icon" icon="{{item.icon}}"></iron-icon>
                         <span class="padding-left-sm">{{item.title}}</span>
                     </paper-item>
                 </template>
@@ -164,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <tpa-settings-page></tpa-settings-page>
                             </template>
                         </section>
-                        
+
                         <section data-route="feedback">
                             <template is="dom-if" if="{{isSelected(data.pageName, 'feedback')}}">
                                 <link rel="import" href="elements/tpa-pages/tpa-feedback-page.html">
