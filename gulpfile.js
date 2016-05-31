@@ -55,10 +55,10 @@ var dist = function(subpath) {
   return !subpath ? DIST : path.join(DIST, subpath);
 };
 
-
-function drakovProxy(){
+var drakovProxy = function(parentpath){  
+  var sourceFiles = path.join(parentpath, '**/*-mock.md');
   var argv = {
-      sourceFiles: './**/*-mock.md',
+      sourceFiles: sourceFiles,
       serverPort: 5001,
       public : true
   };
@@ -131,8 +131,12 @@ gulp.task('copy', function() {
   var bower = gulp.src([
     'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font,tpa-feedback}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
+  
+  var mock = gulp.src([
+    'app/elements/**/*-mock.md'
+  ]).pipe(gulp.dest(dist('mock')));
 
-  return merge(app, bower)
+  return merge(app, bower, mock)
     .pipe($.size({
       title: 'copy'
     }));
@@ -273,7 +277,7 @@ gulp.task('serve', ['styles'], function() {
     // https: true,
     server: {
       baseDir: ['.tmp', 'app'],
-      middleware: [historyApiFallback(), drakovProxy()]
+      middleware: [historyApiFallback(), drakovProxy('app')]
     }
   });
 
@@ -302,7 +306,7 @@ gulp.task('serve:dist', ['default'], function() {
     //       will present a certificate warning in the browser.
     // https: true,
     server: dist(),
-    middleware: [historyApiFallback(), drakovProxy()]
+    middleware: [historyApiFallback(), drakovProxy(dist())]
   });
 });
 
