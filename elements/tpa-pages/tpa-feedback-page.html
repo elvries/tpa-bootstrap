@@ -1,8 +1,71 @@
-<html><head><script src="tpa-feedback-page.js" defer=""></script><link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../bower_components/tpa-feedback/tpa-feedback.html">
+<html><head><script src="tpa-feedback-page.js" defer=""></script><meta charset="UTF-8"><link rel="import" href="../elements.html"></head><body><div hidden="" by-vulcanize=""><dom-module id="kitt-mocks" assetpath="../../bower_components/tpa-kitt/kitt-mocks/">
 
-</head><body><dom-module id="tpa-feedback-page">
+    </dom-module>
+<dom-module id="kitt-platform" assetpath="../../bower_components/tpa-kitt/kitt-platform/">
+
+    </dom-module>
+<dom-module id="tpa-feedback" assetpath="../../bower_components/tpa-feedback/">
+
+    <style>header{height:134px;background-color:#efdbb9;margin:auto;position:relative;}header img{height:144px;position:absolute;margin:0 auto;top:10px;left:0;right:0;}tpa-mobile-tablet-container{display:block;max-width:650px;margin:0 auto;}tpa-mobile-tablet-container paper-button{width:100%;}textarea{width:100%;}section#success img{margin-top:20px;width:144px;margin:0 auto;}section .content{padding:10px;}</style>
+    <template>
+
+        <iron-ajax id="ajax-send-feedback" method="POST" url="/api/feedback-next" handle-as="json" on-response="handleResponse" debounce-duration="300"></iron-ajax>
+
+        <kitt-mocks app-version="y.y.c"></kitt-mocks>
+
+        <kitt-platform></kitt-platform>
+
+        <neon-animated-pages selected="0" entry-animation="slide-from-right-animation" exit-animation="slide-left-animation">
+
+            <section id="intro">
+
+                <header>
+                    <img src="../../bower_components/tpa-feedback/img/intro.png" alt="intro">
+                </header>
+
+                <tpa-mobile-tablet-container class="content">
+
+                    <p>Heeft u een briljant idee of suggestie voor verbetering van de Mobiel Bankieren App? Dan horen we
+                        dat graag! Met uw feedback maken we onze app nog beter.</p>
+
+                    <paper-button class="primary" on-tap="next">Geef uw feedback</paper-button>
+
+                    <h2>Technisch probleem?</h2>
+
+                    <p>Voor een technisch probleem kunt u het beste direct contact opnemen met ING Klantenservice. We
+                        helpen u graag.</p>
+
+                    <paper-button class="primary" on-tap="call">Bel ING Klantenservice</paper-button>
+
+                </tpa-mobile-tablet-container>
+
+            </section>
+
+            <section id="feedback">
+                <textarea rows="5"></textarea>
+                <tpa-mobile-tablet-container class="content">
+
+                    <paper-button class="primary" on-tap="send">Verstuur</paper-button>
+
+                    <p>We vragen uw persoonlijke feedback. Wij gebruiken uw feedback om onze diensten te verbeteren.</p>
+
+                </tpa-mobile-tablet-container>
+            </section>
+
+            <section id="success">
+                <tpa-mobile-tablet-container class="content">
+                    <img src="../../bower_components/tpa-feedback/img/success.png" alt="intro">
+                    <paper-button class="primary" on-tap="close">Accounts</paper-button>
+                </tpa-mobile-tablet-container>
+            </section>
+
+        </neon-animated-pages>
+
+    </template>
+
+
+    </dom-module>
+</div><dom-module id="tpa-feedback-page">
     <template>      
       <tpa-feedback></tpa-feedback>
     </template>
