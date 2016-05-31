@@ -1,0 +1,130 @@
+<link rel="import" href="../tpa-styles/tpa-styles.html">
+
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-input/paper-input.html">
+
+<link rel="import" href="../iron-form/iron-form.html">
+
+<style>
+    section {
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    section #image {
+        width: 100%;
+        min-height: 100%;
+    }
+
+    #box {
+        background-color: #FF6600;
+        width: 250px;
+        height: 200px;
+        position: absolute;
+        top: 50px;
+        right: 50px;
+        border-radius: 5px;
+        padding: 25px;
+    }
+
+    #box #me {
+        border-radius: 50%;
+        border: 2px solid #ccc;
+        width: 75px;
+        height: 75px;
+    }
+
+    #box .text {
+        color: #FFFFFF;
+        padding: 7px 10px;
+        font-size: 14px;
+    }
+
+    #box .layout {
+        margin-bottom: 10px ;
+    }
+
+    #box .buttons paper-button {
+        width: 100%;
+    }
+
+    #layover {
+        height: 80px;
+        width: 100%;
+        position: absolute;
+        bottom: 25px;
+        background-color: #000000;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 10px 0;
+    }
+
+    #layover .content {
+        width: 70%;
+        margin: 0 auto;
+    }
+
+    #layover .content #input {
+        color: #FFFFFF;
+    }
+
+    #text {
+        text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+        width: 300px;
+        position: absolute;
+        top: 50px;
+        left: 50px;
+    }
+
+    #text #headline {
+        font-size: 36px;
+        color: #FFFFFF;
+        margin-bottom: 15px;
+    }
+
+    #text #subline {
+        font-size: 24px;
+        color: #FFFFFF;
+    }
+
+</style>
+
+<section data-route="splash">
+
+    <img id="image" src="images/splash/woman.jpg" alt="mobile"/>
+
+    <div id="text">
+        <div id="headline">Mobiel betalen: ook iets voor jou?</div>
+        <div id="subline">Ontdek het gemak</div>
+    </div>
+
+    <div id="box">
+        <div class="layout horizontal">
+            <div>
+                <img id="me" src="images/profile/me.jpg"/>
+            </div>
+            <div>
+                <div class="text">A. van Dijk</div>
+                <div class="text">NL 22 INGB **** **** 89</div>
+            </div>
+        </div>
+        <div class="layout horizontal">
+            <paper-input class="flex password" id="input" type="password" noLabelFloat="true"
+                         placeholder="password"></paper-input>
+        </div>
+        <div class="layout horizontal">
+            <div class="flex"></div>
+            <div>
+                <paper-button class="secondary">Login</paper-button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="layover">
+        <div class="content">
+            <paper-input id="input" label="How we can help you ?"></paper-input>
+        </div>
+    </div>
+
+</section>

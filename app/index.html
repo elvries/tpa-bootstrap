@@ -64,6 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- endbuild -->
 
 <template is="dom-bind" id="app">
+
     <app-location route="{{route}}" path="/{{data.pageName}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:pageName" data="{{data}}"></app-route>
 
@@ -102,6 +103,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <!-- Main Content -->
                 <div class="content">
                     <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+                        <section data-route="splash">
+                            <img src="images/splash/mobile.jpg" alt="mobile" height="100"/>
+                        </section>
+
                         <section data-route="home">
                             <template is="dom-if" if="{{isSelected(data.pageName, 'home')}}">
                                 <link rel="import" href="elements/tpa-app-layout/tpa-app-layout.html">
@@ -164,7 +170,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <tpa-settings-page></tpa-settings-page>
                             </template>
                         </section>
-                        
+
                         <section data-route="feedback">
                             <template is="dom-if" if="{{isSelected(data.pageName, 'feedback')}}">
                                 <link rel="import" href="elements/tpa-pages/tpa-feedback-page.html">
