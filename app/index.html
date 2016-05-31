@@ -86,7 +86,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             --iron-icon-height: 28px;
             --iron-icon-width: 135px;
             fill: #000066;
-            margin-left:-15px;
             margin-top: 8px;
             vertical-align: bottom;
 
@@ -94,13 +93,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         @media all and (min-width: 0) and (max-width: 840px) {
             .icon-ing-logo iron-icon.ing-icon {
-                display:none;
+                /*display:none;*/
             }
         }
         .icon-ing-logo iron-icon.lion-icon {
             --iron-icon-height: 40px;
             --iron-icon-width: 82px;
             margin-left:-15px;
+        }
+
+        paper-toolbar {
+          background-color: #ffffff;
         }
 
     </style>
@@ -148,7 +151,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <app-header-layout has-scrolling-region>
                 <app-header style="box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);" fixed>
                     <paper-toolbar>
-
+                      <paper-icon-button id="menu" class="primary" icon="menu" on-tap="menuAction">
+                      </paper-icon-button>
                     </paper-toolbar>
                     <!--
                     <tpa-top-bar class="paper-header"></tpa-top-bar>
