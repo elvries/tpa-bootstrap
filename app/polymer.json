@@ -9,6 +9,6 @@
         "elements/tpa-pages/tpa-settings-page.html",
         "elements/tpa-pages/tpa-trading-page.html",
         "elements/tpa-pages/tpa-user-page.html",
-        "elements/tpa-pages/tpa-feedback.html"
+        "elements/tpa-pages/tpa-feedback-page.html"
     ]
 }
