@@ -1,0 +1,23 @@
+{
+  "description": "",
+  "main": "index.html",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "wct",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ING-Group/tpa-feedback.git"
+  },
+  "author": "Willem Veelenturf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ING-Group/tpa-feedback/issues"
+  },
+  "homepage": "https://github.com/ING-Group/tpa-feedback#readme"
+}

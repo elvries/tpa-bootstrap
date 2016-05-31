@@ -1,1 +1,0 @@
-Polymer({is:"tpa-contact-page"});

@@ -1,0 +1,30 @@
+{
+  "name": "tpa-feedback",
+  "homepage": "https://github.com/ING-Group/tpa-feedback",
+  "authors": [
+    "Willem Veelenturf <willem.veelenturf@gmail.com>"
+  ],
+  "description": "",
+  "main": "tpa-feedback.html",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "tpa-elements": "ING-Group/tpa-elements",
+    "tpa-styles": "ING-Group/tpa-styles",
+    "tpa-kitt": "ING-Group/tpa-kitt",
+    "iron-elements": "polymerelements/iron-elements#~1.0.10",
+    "neon-elements": "polymerelements/neon-elements#~1.0.0",
+    "neon-animation": "polymerelements/neon-animation#~1.2.3"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#~4.2.2",
+    "iron-component-page": "^1.1.6"
+  }
+}
