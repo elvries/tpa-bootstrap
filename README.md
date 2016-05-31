@@ -178,14 +178,22 @@ As part of the build process, the polymer-cli will build each element individual
 <a href="/#/new" class="link">New Page</a>
 ```
 
-#### Navigation bar registration
-
 Alternatively, you can add to the navigation bar.
 
 There is API with under the following address `/api/bootstrap` that can be extended to include the new page
 
 An API Blueprint file exists within the [tpa-nav-bar](https://github.com/ING-Group/tpa-nav-bar) demonstrating the convention required
 
+
+6) Register for any static content. By default only the vulcanized content from the pages will by copied. Any non-vulcanized content will need to be manually copied.
+
+Below is the gulp file content within the `gulp copy` task. Add your content within the `{..}`
+
+```js
+var bower = gulp.src([
+  'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font,tpa-feedback}/**/*'
+]).pipe(gulp.dest(dist('bower_components')));
+```
 
 
 ### Development workflow
