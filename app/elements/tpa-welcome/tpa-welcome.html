@@ -109,6 +109,9 @@
     </style>
 
     <template>
+
+        <tpa-reactive-user id="reactiveUser"></tpa-reactive-user>
+
         <section data-route="splash">
 
             <img id="image" src="../../images/splash/jongetje.jpg" alt="mobile"/>
@@ -126,8 +129,8 @@
                             <img id="me" src="../../images/profile/me.jpg"/>
                         </div>
                         <div>
-                            <div class="text">A. van Dijk</div>
-                            <div class="text">NL 22 INGB **** **** 89</div>
+                            <div class="text">{{user.name}}</div>
+                            <div class="text">{{user.account}}</div>
                         </div>
                     </div>
                     <div class="layout horizontal">
@@ -153,7 +156,13 @@
     </template>
     <script>
         Polymer({
-            is: "tpa-welcome"
+            is: "tpa-welcome",
+            ready: function () {
+                this.$.reactiveUser.subscribe(function (user) {
+                    console.log(user)
+                    this.user = user;
+                }.bind(this));
+            }
         })
     </script>
 </dom-module>

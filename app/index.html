@@ -66,11 +66,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <template is="dom-bind" id="app">
 
     <app-location route="{{route}}" path="/{{data.pageName}}" use-hash-as-path></app-location>
+
     <app-route route="{{route}}" pattern="/:pageName" data="{{data}}"></app-route>
 
     <tpa-globals>
         <iron-meta key="services" value="{{services}}"></iron-meta>
     </tpa-globals>
+
+    <tpa-reactive-hub>
+        <tpa-reactive-transactions></tpa-reactive-transactions>
+        <tpa-reactive-products></tpa-reactive-products>
+        <tpa-reactive-user></tpa-reactive-user>
+    </tpa-reactive-hub>
 
 
     <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px" force-narrow>
@@ -104,7 +111,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="content">
 
                     <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-{{data.pageName}}
                         <section data-route="splash" style="height: 700px">
                             <tpa-welcome></tpa-welcome>
                         </section>
