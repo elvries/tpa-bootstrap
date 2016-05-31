@@ -126,11 +126,19 @@ These components will have their own page and navigation within the bootstrap.
 
 #### Setup
 
-1) Install the dependencies
+1) Install the dependencies using bower
 
 ```sh
 bower install --save-dev tpa-new-element
 ```
+
+This will update the `bower.json` file with something like the following
+
+```json
+    "tpa-new-element": "ING-Group/tpa-new-element",
+```
+
+You can explicity set which version/branch of the component, see [bower documentation](http://bower.io/#getting-started)
 
 2) Add a new composable element to `app/tpa-pages` to act as a host
 
