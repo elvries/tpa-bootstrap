@@ -5,136 +5,155 @@
 
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 
-<style>
-    section {
-        height: 100%;
-        overflow: hidden;
-        position: relative;
-    }
+<dom-module id="tpa-welcome">
+    <style>
+        section {
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
 
-    section #image {
-        width: 100%;
-        min-height: 100%;
-    }
+        section #container {
+            margin: 0 auto;
+            position: relative;
+            max-width: 1000px;
+            height: 100%;
+        }
 
-    #box {
-        background-color: #FF6600;
-        width: 250px;
-        position: absolute;
-        top: 50px;
-        right: 50px;
-        border-radius: 5px;
-        padding: 25px;
-        box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
-    }
+        section #image {
+            width: 100%;
+            min-height: 100%;
+            position: absolute;
+        }
 
-    #box #me {
-        border-radius: 50%;
-        border: 2px solid #ccc;
-        width: 75px;
-        height: 75px;
-    }
+        #box {
+            background-color: #FF6600;
+            width: 250px;
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            border-radius: 5px;
+            padding: 25px;
+            box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
+        }
 
-    #box .text {
-        color: #FFFFFF;
-        padding: 7px 10px;
-        font-size: 14px;
-    }
+        #box #me {
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            width: 75px;
+            height: 75px;
+        }
 
-    #box .layout {
-        margin-bottom: 10px ;
-    }
+        #box .text {
+            color: #FFFFFF;
+            padding: 7px 10px;
+            font-size: 14px;
+        }
 
-    #box .buttons paper-button {
-        width: 100%;
-    }
+        #box .layout {
+            margin-bottom: 10px;
+        }
 
-    #box .password {
-        padding:10px;
-        background-color: rgba(255,255,255, 0.4);
-    }
+        #box .buttons paper-button {
+            width: 100%;
+        }
 
-    #box .password .floated-label-placeholder{
-        display: none;
-    }
+        #box .password {
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.4);
+        }
 
-    #layover {
-        width: 100%;
-        position: absolute;
-        bottom: 50px;
-        background-color: rgba(0, 0, 0, 0.3);
-        padding: 10px 0;
-    }
+        #box .password .floated-label-placeholder {
+            display: none;
+        }
 
-    #layover .content {
-        width: 70%;
-        height: 60px;
-        padding:10px;
-        margin: 0 auto;
-    }
+        #layover {
+            width: 100%;
+            position: absolute;
+            bottom: 50px;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px 0;
+        }
 
-    #layover .content #input {
-        color: #FFFFFF;
-        --paper-input-container-color: blue;
-    }
+        #layover .content {
+            width: 70%;
+            height: 60px;
+            padding: 10px;
+            margin: 0 auto;
+        }
 
-    #text {
-        text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
-        width: 300px;
-        position: absolute;
-        top: 50px;
-        left: 50px;
-    }
+        #layover .content #input {
+            color: #FFFFFF;
+            --paper-input-container-color: blue;
+        }
 
-    #text #headline {
-        font-size: 36px;
-        color: #FFFFFF;
-        margin-bottom: 15px;
-    }
+        #text {
+            text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+        }
 
-    #text #subline {
-        font-size: 24px;
-        color: #FFFFFF;
-    }
+        #text #headline {
+            font-size: 36px;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+        }
 
-</style>
+        #text #subline {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
 
-<section data-route="splash">
+    </style>
 
-    <img id="image" src="../../images/splash/woman.jpg" alt="mobile"/>
+    <template>
+        <section data-route="splash">
 
-    <div id="text">
-        <div id="headline">Mobiel betalen: ook iets voor jou?</div>
-        <div id="subline">Ontdek het gemak</div>
-    </div>
+            <img id="image" src="../../images/splash/jongetje.jpg" alt="mobile"/>
 
-    <div id="box">
-        <div class="layout horizontal">
-            <div>
-                <img id="me" src="../../images/profile/me.jpg"/>
+            <div id="container">
+
+                <div id="text">
+                    <div id="headline">Mobiel betalen: ook iets voor jou?</div>
+                    <div id="subline">Ontdek het gemak</div>
+                </div>
+
+                <div id="box">
+                    <div class="layout horizontal">
+                        <div>
+                            <img id="me" src="../../images/profile/me.jpg"/>
+                        </div>
+                        <div>
+                            <div class="text">A. van Dijk</div>
+                            <div class="text">NL 22 INGB **** **** 89</div>
+                        </div>
+                    </div>
+                    <div class="layout horizontal">
+                        <paper-input class="flex password" id="input" type="password" noLabelFloat="true"
+                                     placeholder="password"></paper-input>
+                    </div>
+                    <div class="layout horizontal">
+                        <div class="flex"></div>
+                        <div>
+                            <paper-button class="secondary">Login</paper-button>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-            <div>
-                <div class="text">A. van Dijk</div>
-                <div class="text">NL 22 INGB **** **** 89</div>
+            <div id="layover">
+                <div class="content">
+                    <paper-input id="input" label="How we can help you ?"></paper-input>
+                </div>
             </div>
-        </div>
-        <div class="layout horizontal">
-            <paper-input class="flex password" id="input" type="password" noLabelFloat="true"
-                         placeholder="password"></paper-input>
-        </div>
-        <div class="layout horizontal">
-            <div class="flex"></div>
-            <div>
-                <paper-button class="secondary">Login</paper-button>
-            </div>
-        </div>
-
-    </div>
-
-    <div id="layover">
-        <div class="content">
-            <paper-input id="input" label="How we can help you ?"></paper-input>
-        </div>
-    </div>
-
-</section>
+        </section>
+    </template>
+    <script>
+        Polymer({
+            is: "tpa-welcome"
+        })
+    </script>
+</dom-module>

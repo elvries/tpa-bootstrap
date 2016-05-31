@@ -102,10 +102,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </app-header>
                 <!-- Main Content -->
                 <div class="content">
-                    <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
 
-                        <section data-route="splash">
-                            <img src="images/splash/mobile.jpg" alt="mobile" height="100"/>
+                    <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+{{data.pageName}}
+                        <section data-route="splash" style="height: 700px">
+                            <tpa-welcome></tpa-welcome>
                         </section>
 
                         <section data-route="home">
