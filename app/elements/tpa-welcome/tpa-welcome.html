@@ -1,9 +1,9 @@
-<link rel="import" href="../tpa-styles/tpa-styles.html">
+<link rel="import" href="../../bower_components/tpa-styles/tpa-styles.html">
 
-<link rel="import" href="../paper-button/paper-button.html">
-<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 
-<link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 
 <style>
     section {
@@ -20,12 +20,12 @@
     #box {
         background-color: #FF6600;
         width: 250px;
-        height: 200px;
         position: absolute;
         top: 50px;
         right: 50px;
         border-radius: 5px;
         padding: 25px;
+        box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
     }
 
     #box #me {
@@ -49,23 +49,33 @@
         width: 100%;
     }
 
+    #box .password {
+        padding:10px;
+        background-color: rgba(255,255,255, 0.4);
+    }
+
+    #box .password .floated-label-placeholder{
+        display: none;
+    }
+
     #layover {
-        height: 80px;
         width: 100%;
         position: absolute;
-        bottom: 25px;
-        background-color: #000000;
-        background-color: rgba(0, 0, 0, 0.5);
+        bottom: 50px;
+        background-color: rgba(0, 0, 0, 0.3);
         padding: 10px 0;
     }
 
     #layover .content {
         width: 70%;
+        height: 60px;
+        padding:10px;
         margin: 0 auto;
     }
 
     #layover .content #input {
         color: #FFFFFF;
+        --paper-input-container-color: blue;
     }
 
     #text {
@@ -91,7 +101,7 @@
 
 <section data-route="splash">
 
-    <img id="image" src="images/splash/woman.jpg" alt="mobile"/>
+    <img id="image" src="../../images/splash/woman.jpg" alt="mobile"/>
 
     <div id="text">
         <div id="headline">Mobiel betalen: ook iets voor jou?</div>
@@ -101,7 +111,7 @@
     <div id="box">
         <div class="layout horizontal">
             <div>
-                <img id="me" src="images/profile/me.jpg"/>
+                <img id="me" src="../../images/profile/me.jpg"/>
             </div>
             <div>
                 <div class="text">A. van Dijk</div>
