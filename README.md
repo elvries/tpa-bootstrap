@@ -118,6 +118,76 @@ To see a list of globally installed dependencies
 npm list -g --depth=0
 ```
 
+### Adding a business page/component
+
+A business component is one that composes of elements from within the [tpa-retail-banking-elements](https://github.com/ing-group/tpa-retail-banking-elements) catalog
+
+These components will have their own page and navigation within the bootstrap.
+
+#### Setup
+
+1) Install the dependencies
+
+```sh
+bower install --save-dev tpa-new-element
+```
+
+2) Add a new composable element to `app/tpa-pages` to act as a host
+
+`app/tpa-pages/tpa-new-page.html`
+```html
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/tpa-new-element/tpa-new-element.html">
+
+<dom-module id="tpa-new-page">
+    <template>      
+      <tpa-new-element></tpa-new-element>
+    </template>
+    <script>
+        Polymer({
+            is: "tpa-new-page"
+        })
+    </script>
+</dom-module>
+
+```
+
+3) Register the new page for lazy-loading with service works in `app/polymer.json`
+
+```json
+"elements/tpa-pages/tpa-new-page.html"
+```
+
+As part of the build process, the polymer-cli will build each element individually. This allows lazy loading of pages within the application to improve the user experience via loading times.
+
+4) Register the new page for navigation with app-route in the `app/index.html`
+
+```html
+<section data-route="new">
+    <template is="dom-if" if="{{isSelected(data.pageName, 'new')}}">
+        <link rel="import" href="elements/tpa-pages/tpa-new-page.html">
+        <tpa-new-page></tpa-new-page>
+    </template>
+</section>
+```
+
+5) Implement navigation using a link
+
+```html
+<a href="/#/new" class="link">New Page</a>
+```
+
+#### Navigation bar registration
+
+Alternatively, you can add to the navigation bar.
+
+There is API with under the following address `/api/bootstrap` that can be extended to include the new page
+
+An API Blueprint file exists within the [tpa-nav-bar](https://github.com/ING-Group/tpa-nav-bar) demonstrating the convention required
+
+
+
 ### Development workflow
 
 #### Serve / watch
