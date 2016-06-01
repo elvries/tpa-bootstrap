@@ -1187,7 +1187,7 @@
 
     </dom-module>
 <dom-module name="tpa-profile">
-    <style>.profile{padding:15px;}.profile .name{font-weight:bold;font-size:0.9rem;margin:10px 0;}.profile .action-box{@apply (--layout-horizontal);}.profile ul.actions{padding:0 50px 0 0;margin:0;}.profile ul.actions li{font-size:0.85rem;list-style-type:none;line-height:1.6rem;}.profile ul.actions li a{display:inline-block;width:auto;color:var(--ing-grey-800);text-decoration:none;}.profile ul.actions li span{font-size:0.85rem;}.profile ul.actions li iron-icon{height:16px;width:16px;}.profile ul.actions li paper-badge{--paper-badge-margin-left:25px;--paper-badge-margin-bottom:10px;--paper-badge-background:var(--paper-blue-700);font-weight:bold;}.profile .avatar iron-icon{width:50px;height:50px;fill:#ddd;border:solid 2px #ddd;padding:10px;border-radius:50%;float:right;}.profile .buttons{margin-top:20px;}</style>
+    <style>.profile{padding:15px;}.profile .name{font-weight:bold;font-size:0.9rem;margin:10px 0;}.profile .action-box{@apply (--layout-horizontal);}.profile ul.actions{padding:0 50px 0 0;margin:0;}.profile ul.actions li{font-size:0.85rem;list-style-type:none;line-height:1.6rem;}.profile ul.actions li a{display:inline-block;width:auto;color:var(--ing-grey-800);text-decoration:none;}.profile ul.actions li span{font-size:0.85rem;}.profile ul.actions li iron-icon{height:16px;width:16px;}.profile ul.actions li paper-badge{--paper-badge-margin-left:25px;--paper-badge-margin-bottom:10px;--paper-badge-background:var(--paper-blue-700);font-weight:bold;}.profile .avatar img{width:75px;height:75px;fill:#ddd;border:solid 2px #ddd;border-radius:50%;}.profile .buttons{margin-top:20px;}</style>
     <template>
 
         <tpa-reactive-user id="reactiveUser"></tpa-reactive-user>
@@ -1230,7 +1230,7 @@
                 </ul>
                 <template is="dom-if" if="hasItem(profile.avatar)">
                     <div class="avatar">
-                        <iron-icon icon="{{profile.avatar}}"></iron-icon>
+                        <img src="./images/profile/{{user.picture}}">
                     </div>
                 </template>
             </div>

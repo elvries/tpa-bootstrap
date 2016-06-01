@@ -15,8 +15,7 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "tpa-elements": "ING-Group/tpa-elements",
+  "dependencies": {    
     "tpa-styles": "ING-Group/tpa-styles",
     "tpa-kitt": "ING-Group/tpa-kitt",
     "iron-elements": "polymerelements/iron-elements#~1.0.10",

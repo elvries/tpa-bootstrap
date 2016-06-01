@@ -122,25 +122,26 @@
   </template>
   </dom-module>
 <dom-module id="tpa-date-picker" assetpath="../../bower_components/tpa-date-picker/">
-  <template>
+    <style>:root{--paper-date-picker-heading:{margin-bottom:-51px;};}paper-date-picker{--default-primary-color:var(--ing-orange-300);--light-primary-color:var(--ing-grey-100);margin-top:0;padding:0;}paper-date-picker #heading{@apply (--paper-date-picker-dialog-heading);}paper-date-picker[narrow] ::content #heading{margin-bottom:0;}</style>
+    <template>
 
-    <template is="dom-if" if="{{isMobile}}">
-      <paper-input label="{{label}}" type="date" required$="{{required}}"></paper-input>
+        <template is="dom-if" if="{{isMobile}}">
+            <paper-input label="{{label}}" type="date" required$="{{required}}"></paper-input>
+        </template>
+
+        <template is="dom-if" if="{{!isMobile}}">
+          <paper-input label="{{label}}" on-tap="showDialog" value="{{formattedDate}}" required$="{{required}}" name$="{{name}}"></paper-input>
+        </template>
+
+        <paper-dialog id="dialog" class="paper-date-picker-dialog" on-iron-overlay-closed="dismissDialog">
+            <paper-date-picker id="picker" date="[[date]]" locale="{{locale}}" min-date$="{{_minDate}}" max-date$="{{max}}"></paper-date-picker>
+            <div class="buttons">
+                <paper-button raised="" class="primary" dialog-confirm="">OK</paper-button>
+                <paper-button raised="" class="secondary" dialog-dismiss="">Cancel</paper-button>
+            </div>
+        </paper-dialog>
+
     </template>
-
-    <template is="dom-if" if="{{!isMobile}}">
-      <paper-input label="{{label}}" on-tap="showDialog" value="{{formattedDate}}" required$="{{required}}" name$="{{name}}"></paper-input>
-    </template>
-
-    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="" on-iron-overlay-closed="dismissDialog">
-      <paper-date-picker id="picker" date="[[date]]" locale="{{locale}}" min-date$="{{_minDate}}" max-date$="{{max}}"></paper-date-picker>
-      <div class="buttons">
-        <paper-button dialog-dismiss="">Cancel</paper-button>
-        <paper-button dialog-confirm="">OK</paper-button>
-      </div>
-    </paper-dialog>
-
-  </template>
 </dom-module>
 <dom-module id="paper-dialog-scrollable" assetpath="../../bower_components/paper-dialog-scrollable/">
 
