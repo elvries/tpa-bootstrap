@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/tpa-styles/tpa-styles.html">
+
+<dom-module id="tpa-container">
+    <style>
+        .container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            left:0;
+            right:0;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 800px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .container {
+                max-width: 400px;
+            }
+        }
+    </style>
+    <template>
+        <div class="container">
+            <content></content>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "tpa-container"
+        })
+    </script>
+</dom-module>

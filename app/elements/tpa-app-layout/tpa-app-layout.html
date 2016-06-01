@@ -4,55 +4,85 @@
 <link rel="import" href="../../bower_components/tpa-dashboard/tpa-dashboard-data.html">
 <link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../../bower_components/tpa-reactive/tpa-reactive-user.html">
 
 <dom-module id="tpa-app-layout">
-    <template>
-        <tpa-dashboard-data></tpa-dashboard-data>
-        <style include="shared-styles iron-flex iron-flex-alignment">
-            .layout {
-                margin-bottom: 20px;
-            }
 
+    <style include="shared-styles iron-flex iron-flex-alignment">
+
+        .layout {
+            margin-bottom: 20px;
+        }
+
+        paper-card {
+            width: calc(33.3% - 20px);
+            margin: 24px 0;
+        }
+
+        @media (max-width: 1200px) {
             paper-card {
-                width: calc(33.3% - 20px);
-                margin: 24px 0;
+                width: calc(50% - 20px);
             }
+        }
 
-            @media (max-width: 1200px) {
-                paper-card {
-                    width: calc(50% - 20px);
-                }
+        @media (max-width: 800px) {
+            paper-card {
+                width: calc(100% - 0px);
             }
+        }
 
-            @media (max-width: 800px) {
-                paper-card {
-                    width: calc(100% - 0px);
-                }
-            }
+    </style>
+    <template>
 
-        </style>
+        <tpa-reactive-user id="reactiveUser"></tpa-reactive-user>
+
+        <tpa-dashboard-data></tpa-dashboard-data>
+
         <div class="horizontal around-justified layout wrap">
+
             <paper-card heading="Money Transfer">
-                <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450"
-                                account-balance="5000"></tpa-money-transfer>
+                <div class="card-content">
+                    <tpa-money-transfer id="moneyTransfer" class="focus-target"></tpa-money-transfer>
+                </div>
+
+                <div class="card-actions">
+                    <paper-button class="primary">submit</paper-button>
+                </div>
+
             </paper-card>
 
             <paper-card heading="Latest Transactions">
-              <tpa-transaction-list></tpa-transaction-list>
+                <div class="card-content">
+                    <tpa-transaction-list></tpa-transaction-list>
+                </div>
             </paper-card>
 
             <paper-card heading="Accounts">
-              <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
+                <div class="card-content">
+                    <tpa-transaction-list hide-icon group-title-field="accountType"></tpa-transaction-list>
+                </div>
             </paper-card>
 
             <paper-card heading="Mortgage calculation">
-                <tpa-mortgage-calculation></tpa-mortgage-calculation>
+                <div class="card-content">
+                    <tpa-mortgage-calculation></tpa-mortgage-calculation>
+                </div>
             </paper-card>
+
         </div>
+
     </template>
     <script>
         Polymer({
-            is: "tpa-app-layout"
+            is: "tpa-app-layout",
+            ready:function(){
+                console.log('hahahahah');
+                this.$.reactiveUser.subscribe(function(user){
+                    this.$.moneyTransfer.accountOwner = user.name;
+                    this.$.moneyTransfer.accountNumber = user.account;
+                    this.$.moneyTransfer.accountBalance = 5300;
+                }.bind(this))
+            }
         });
     </script>
 </dom-module>
