@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/tpa-styles/tpa-styles.html">
+
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/tpa-reactive/tpa-reactive-transactions.html">
+
+<dom-module id="tpa-notification">
+
+    <template>
+        <tpa-reactive-transactions id="reactiveTransactions"></tpa-reactive-transactions>
+        <paper-toast id="toast">
+            <paper-button onclick="toast.toggle()" class="primary">Show</paper-button>
+        </paper-toast>
+    </template>
+
+    <script>
+        Polymer({
+            is: "tpa-notification",
+
+            ready: function () {
+
+                document.addEventListener("keypress", function (e) {
+                    if(e.charCode === 20){
+                        var amount = Math.round(Math.random() * 100000) / 100;
+                        this.$.toast.opened = true;
+                        this.$.toast.text = "Hr D Wijnand e/o Mw J Binte Salim - € " + amount;
+                    }
+                }.bind(this));
+
+                this.$.reactiveTransactions.subscribe(function(data){
+                    //TODO: listen to new transactions
+                }.bind(this))
+
+            },
+            open: function () {
+                this.$.toast.opened = true;
+            }
+        })
+    </script>
+</dom-module>
