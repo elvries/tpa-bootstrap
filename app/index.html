@@ -54,11 +54,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="elements/elements.html">
 
     <!-- For shared styles, shared-styles.html import in elements.html -->
-    <style is="custom-style" include="shared-styles">
-    </style>
+    <style is="custom-style" include="shared-styles"></style>
+
 </head>
 
 <body unresolved>
+
+
 <!-- build:remove -->
 <span id="browser-sync-binding"></span>
 <!-- endbuild -->
@@ -101,16 +103,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-scroll-header-panel>
 
         <div main>
-            <tpa-ajax auto id="getBootstrapData" url="{{services.bootstrap}}" handle-as="json" last-response="{{bootstrapResponse}}"></tpa-ajax>
+            <tpa-ajax auto id="getBootstrapData" url="{{services.bootstrap}}" handle-as="json"
+                      last-response="{{bootstrapResponse}}"></tpa-ajax>
             <app-header-layout has-scrolling-region>
-                <app-header style="box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);" effects="material" reveals>
+                <app-header style="box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);" effects="material"
+                            reveals>
                     <tpa-top-bar class="paper-header"></tpa-top-bar>
                     <tpa-nav-bar base-url="{{baseUrl}}#/" tabs="[[bootstrapResponse.tabs]]"></tpa-nav-bar>
                 </app-header>
-                <!-- Main Content -->
-                <div class="content">
 
-                    <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                <!-- Main Content -->
+                <tpa-container>
+
+                    <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}"
+                                         fallback-selection="home" entry-animation="scale-up-animation"
+                                         exit-animation="fade-out-animation">
                         <section data-route="splash" style="height: 700px">
                             <tpa-welcome></tpa-welcome>
                         </section>
@@ -185,10 +192,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </template>
                         </section>
                     </neon-animated-pages>
-                </div>
+                </tpa-container>
             </app-header-layout>
         </div>
     </paper-drawer-panel>
+
+    <tpa-quick></tpa-quick>
 
     <paper-toast id="toast">
         <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
@@ -203,7 +212,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-toast id="cache-updated"
                  duration="10000"
                  text="A new version of this app is available.">
-                 <a href="javascript:history.go(0);" style="color: #ff9933; text-decoration: none;">REFRESH</a>
+        <a href="javascript:history.go(0);" style="color: #ff9933; text-decoration: none;">REFRESH</a>
     </paper-toast>
 
     <platinum-sw-register auto-register
@@ -217,7 +226,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </platinum-sw-cache>
     </platinum-sw-register>
 
+
 </template>
+
 
 <!-- build:js scripts/app.js -->
 <script src="scripts/app.js"></script>

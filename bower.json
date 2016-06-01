@@ -9,7 +9,7 @@
     "platinum-elements": "PolymerElements/platinum-elements#^2.0.0",
     "polymer": "Polymer/polymer#^1.4.0",
     "app-route": "PolymerElements/app-route#^0.9.1",
-    "app-layout": "PolymerElements/app-layout#^0.9.0",    
+    "app-layout": "PolymerElements/app-layout#^0.9.0",
     "tpa-top-bar": "ING-Group/tpa-top-bar",
     "tpa-nav-bar": "ING-Group/tpa-nav-bar",
     "tpa-icons": "ING-Group/tpa-icons",
@@ -22,8 +22,10 @@
     "tpa-styles": "ING-Group/tpa-styles",
     "tpa-font": "ING-Group/tpa-font",
     "tpa-mortgage-calculation": "ING-Group/tpa-mortgage-calculation",
-    "tpa-money-transfer": "ING-Group/tpa-money-transfer",    
-    "tpa-feedback": "ING-Group/tpa-feedback"
+    "tpa-money-transfer": "ING-Group/tpa-money-transfer",
+    "tpa-feedback": "ING-Group/tpa-feedback",
+    "tpa-toast-action": "ING-Group/tpa-toast-action",
+    "paper-fab-menu": "~0.4.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

@@ -42,5 +42,8 @@
   },
   "engines": {
     "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "tpa-toast-action": "ing-group/tpa-toast-action"
   }
 }
