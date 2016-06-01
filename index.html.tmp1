@@ -111,12 +111,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <tpa-nav-bar base-url="{{baseUrl}}#/" tabs="[[bootstrapResponse.tabs]]"></tpa-nav-bar>
                 </app-header>
                 <!-- Main Content -->
-                <div class="content">
+                <div class="content" id="content">
                     <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
                         <section data-route="home">
                             <template is="dom-if" if="{{isSelected(data.pageName, 'home')}}">
-                                <link rel="import" href="elements/tpa-app-layout/tpa-app-layout.html">
-                                <tpa-app-layout></tpa-app-layout>
+                                <link rel="import" href="bower_components/tpa-daily-banking/tpa-daily-banking.html">
+                                <tpa-daily-banking></tpa-daily-banking>
                             </template>
                         </section>
 
