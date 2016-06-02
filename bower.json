@@ -24,7 +24,6 @@
     "tpa-money-transfer": "ING-Group/tpa-money-transfer#remove_card_stuff",
     "tpa-feedback": "ING-Group/tpa-feedback",
     "tpa-toast-action": "ING-Group/tpa-toast-action",
-    "paper-fab-menu": "~0.4.0",
     "tpa-daily-banking": "ING-Group/tpa-daily-banking#demo"
   },
   "devDependencies": {

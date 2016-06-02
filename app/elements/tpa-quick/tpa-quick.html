@@ -45,9 +45,11 @@
 
         <tpa-reactive-user id="reactiveUser"></tpa-reactive-user>
 
+        <iron-signals on-iron-signal-mysignal="_handleEvent">
+
         <div class="quick">
 
-            <tpa-toast-action id="toastAction" title="Money transfer">
+            <tpa-toast-action id="toastAction" header="Quick money transfer">
                 <tpa-money-transfer id="moneyTransfer"></tpa-money-transfer>
 
                 <div class="buttons">
@@ -71,6 +73,9 @@
                     this.$.moneyTransfer.accountNumber = user.account;
                     this.$.moneyTransfer.accountBalance = 5300;
                 }.bind(this))
+            },
+            _handleEvent: function(e, data){
+                console.log(data)
             },
             open: function () {
                 this.$.toastAction.opened = true;
