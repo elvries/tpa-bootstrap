@@ -3,7 +3,7 @@
 ![](http://www.ing.com/static/ingdotcompresentation/static/img/logos/logo.hd.png)
 ## ING TPA Bootstrap with Polymer Starter Kit
 
-> A starting point for building ING web applications with Polymer 1.0
+> A starting point for building ING web applications with Polymer 1.0 and TPA components
 
 TPA Bootstrap is a clone from [Polymer Starter Kit](https://github.com/PolymerElements/polymer-starter-kit/tree/v1.3.0)
 
@@ -20,21 +20,22 @@ TPA Bootstrap is a clone from [Polymer Starter Kit](https://github.com/PolymerEl
 
 ### Demo
 
-[TPA Demo](http://www.tpabootstrap.net/#/home)  with Mock endpoints
+[Application](http://www.tpabootstrap.net/#/home) with mock endpoints
 
 ### Tutorials
 
 #### Polymer
-If you have not used Polymer before, you can find a variety of tutorials online (ensure they are 1.0+)
+If you have not used Polymer before, you can find a variety of tutorials online as long as they are with Polymer 1.x
 
-* [Polymer Project](https://www.polymer-project.org/1.0/start/index) - Build an Element
+* [Polymer Project](https://www.polymer-project.org/1.0/start/index) - Building an element
 * [Pluralsight](https://www.pluralsight.com/courses/building-web-application-polymer-material-design) - Web Applications using Polymer and Material Design
-* [LevelUpTuts](https://www.youtube.com/playlist?list=PLLnpHn493BHGhoGAb2PRKzv4Zw3QoatK-) - Polymer 1.0 Tutorials
+* [LevelUpTuts](https://www.youtube.com/playlist?list=PLLnpHn493BHGhoGAb2PRKzv4Zw3QoatK-) - Polymer 1.0 tutorials
 * [Google Developers](https://www.youtube.com/playlist?list=PLOU2XLYxmsII5c3Mgw6fNYCzaWrsM3sMN) - Polycasts with Rob Dodson
 
 
 #### Polymer Starter Kit
-Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://www.polymer-project.org):
+
+As the bootstrap application shares it's core with the Polymer Starter Kit, you can check out their tutorials on [polymer-project.org](https://www.polymer-project.org).
 
 * [Set up the PSK](https://www.polymer-project.org/1.0/docs/start/psk/set-up.html)
 * [Create a page](https://www.polymer-project.org/1.0/docs/start/psk/create-a-page.html)
@@ -42,16 +43,19 @@ Check out the Polymer Starter Kit tutorials on [polymer-project.org](https://www
 
 ## Getting Started
 
-To take advantage of Polymer Starter Kit you need to:
+You need to:
 
-1. Get a copy of the code.
-2. Install the dependencies if you don't already have them.
-3. Modify the application to your liking.
-4. Deploy your production code.
+1. Get a copy of the code
+2. Install the dependencies
+3. Modify the application to your liking
+4. Deploy your code to production.
 
 ### Get the code
 
-[Download](https://github.com/ING-Group/tpa-bootstrap/) and extract the code where you want to work.
+You can either
+
+* `git clone https://github.com/ING-Group/tpa-bootstrap.git` into a directory you want to work
+* [Download](https://github.com/ING-Group/tpa-bootstrap/) and extract the code where you want to work.
 
 :warning: **Important**: Contains dotfiles (files starting with a `.`). If you're copying the contents of the Bootstrap to a new location make sure you bring along these dotfiles as well! On Mac, [enable showing hidden files](http://ianlunn.co.uk/articles/quickly-showhide-hidden-files-mac-os-x-mavericks/), then try extracting/copying Bootstrap again. This time the dotfiles needed should be visible so you can copy them over without issues.
 
@@ -63,18 +67,18 @@ To take advantage of Polymer Starter Kit you need to:
 With Node.js installed, run the following one liner from the root of your download:
 
 ```sh
-npm install -g gulp bower && npm install && bower install
+npm install -g gulp bower web-component-tester web-component-tester-istanbul polymer-cli 
+npm install && bower install
 ```
 
 #### Prerequisites (for everyone)
 
 The full starter kit requires the following major dependencies:
 
-- Node.js, used to run JavaScript tools from the command line.
-- npm, the node package manager, installed with Node.js and used to install Node.js packages.
-- gulp, a Node.js-based build tool.
-- bower, a Node.js-based package manager used to install front-end packages (like Polymer).
-- The starter kit gulp build process uses platform specific tools which is handled by node-gyp which is included in node.js. See https://github.com/nodejs/node-gyp/blob/master/README.md for additional platform specific dependencies.
+* Node.js : Used to run JavaScript applications and tooling from the command line.
+* npm : node package manager, which is used to install development dependencies via packages.
+* bower : a Node.js-based package manager used to install front-end packages (like Polymer).
+* gulp : a Node.js-based task runner used primarily for building and hosting the application
 
 **To install dependencies:**
 
