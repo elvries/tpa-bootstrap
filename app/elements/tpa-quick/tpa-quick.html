@@ -49,7 +49,11 @@
 
             <tpa-toast-action id="toastAction" title="Money transfer">
                 <tpa-money-transfer id="moneyTransfer"></tpa-money-transfer>
-                <paper-button class="primary">Submit</paper-button>
+
+                <div class="buttons">
+                    <paper-button dialog-confirm>Submit</paper-button>
+                </div>
+
             </tpa-toast-action>
 
             <paper-fab icon="add" title="plus" on-tap="open"></paper-fab>

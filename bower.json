@@ -10,22 +10,22 @@
     "polymer": "Polymer/polymer#^1.4.0",
     "app-route": "PolymerElements/app-route#^0.9.1",
     "app-layout": "PolymerElements/app-layout#^0.9.0",
-    "tpa-top-bar": "ING-Group/tpa-top-bar",
-    "tpa-nav-bar": "ING-Group/tpa-nav-bar",
+    "tpa-top-bar": "ING-Group/tpa-top-bar#paper-toolbar-upgrade",
     "tpa-icons": "ING-Group/tpa-icons",
-    "tpa-transaction-list": "ING-Group/tpa-transaction-list",
+    "tpa-transaction-list": "ING-Group/tpa-transaction-list#itemized",
     "tpa-i18n": "ING-Group/tpa-i18n",
     "tpa-ajax": "ING-Group/tpa-ajax",
     "tpa-region-selection": "ING-Group/tpa-region-selection",
     "tpa-globals": "ING-Group/tpa-globals",
-    "tpa-dashboard": "ING-Group/tpa-dashboard",
+    "tpa-dashboard": "ING-Group/tpa-dashboard#demo",
     "tpa-styles": "ING-Group/tpa-styles",
     "tpa-font": "ING-Group/tpa-font",
     "tpa-mortgage-calculation": "ING-Group/tpa-mortgage-calculation",
-    "tpa-money-transfer": "ING-Group/tpa-money-transfer",
+    "tpa-money-transfer": "ING-Group/tpa-money-transfer#remove_card_stuff",
     "tpa-feedback": "ING-Group/tpa-feedback",
     "tpa-toast-action": "ING-Group/tpa-toast-action",
-    "paper-fab-menu": "~0.4.0"
+    "paper-fab-menu": "~0.4.0",
+    "tpa-daily-banking": "ING-Group/tpa-daily-banking#demo"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
@@ -33,5 +33,19 @@
   "ignore": [],
   "scripts": {
     "postinstall": "gulp fix-api-eol"
+  },
+  "resolutions": {
+    "polymer": "^1.3.1",
+    "paper-button": "1.0.12",
+    "paper-fab": "^1.0.0",
+    "paper-ripple": "^1.0.5",
+    "webcomponentsjs": "0.7.22",
+    "font-roboto": "^1.0.1",
+    "tpa-top-bar": "paper-toolbar-upgrade",
+    "tpa-dashboard": "demo",
+    "tpa-daily-banking": "demo",
+    "tpa-item": "real_item",
+    "tpa-money-transfer": "remove_card_stuff",
+    "tpa-transaction-list": "itemized"
   }
 }

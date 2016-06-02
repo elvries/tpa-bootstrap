@@ -5,6 +5,8 @@
 
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 
+<link rel="import" href="../tpa-container/tpa-container.html">
+
 <dom-module id="tpa-welcome">
     <style>
         section {
@@ -27,7 +29,7 @@
         }
 
         #box {
-            background-color: #FF6600;
+            background-color: #FFFFFF;
             width: 250px;
             position: absolute;
             top: 50px;
@@ -45,7 +47,7 @@
         }
 
         #box .text {
-            color: #FFFFFF;
+            color: #FF6600;
             padding: 7px 10px;
             font-size: 14px;
         }
@@ -70,9 +72,9 @@
         #layover {
             width: 100%;
             position: absolute;
-            bottom: 50px;
+            bottom: 70px;
             background-color: rgba(0, 0, 0, 0.3);
-            padding: 10px 0;
+            padding: 20px 0;
         }
 
         #layover .content {
@@ -80,11 +82,6 @@
             height: 60px;
             padding: 10px;
             margin: 0 auto;
-        }
-
-        #layover .content #input {
-            color: #FFFFFF;
-            --paper-input-container-color: blue;
         }
 
         #text {
@@ -110,13 +107,15 @@
 
     <template>
 
+        <iron-localstorage id="localstorage" name="login"></iron-localstorage>
+
         <tpa-reactive-user id="reactiveUser"></tpa-reactive-user>
 
         <section data-route="splash">
 
             <img id="image" src="../../images/splash/jongetje.jpg" alt="mobile"/>
 
-            <div id="container">
+            <tpa-container>
 
                 <div id="text">
                     <div id="headline">Mobiel betalen: ook iets voor jou?</div>
@@ -140,18 +139,20 @@
                     <div class="layout horizontal">
                         <div class="flex"></div>
                         <div>
-                            <paper-button class="secondary">Login</paper-button>
+                            <paper-button class="primary" on-tap="login">Login</paper-button>
                         </div>
                     </div>
 
                 </div>
 
-            </div>
+            </tpa-container>
+
             <div id="layover">
-                <div class="content">
+                <tpa-container>
                     <paper-input id="input" label="How we can help you ?"></paper-input>
-                </div>
+                </tpa-container>
             </div>
+
         </section>
     </template>
     <script>
@@ -162,6 +163,12 @@
                     console.log(user)
                     this.user = user;
                 }.bind(this));
+            },
+            login: function(){
+                this.$.localstorage.value = true;
+                this.$.localstorage.save();
+                this.$.localstorage.reload();
+
             }
         })
     </script>
