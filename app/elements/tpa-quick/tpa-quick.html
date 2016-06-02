@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/tpa-styles/tpa-styles.html">
 <link rel="import" href="../../bower_components/tpa-money-transfer/tpa-money-transfer.html">
 
+<link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
+
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-fab-menu/paper-fab-menu.html">
@@ -45,7 +47,7 @@
 
         <tpa-reactive-user id="reactiveUser"></tpa-reactive-user>
 
-        <iron-signals on-iron-signal-mysignal="_handleEvent">
+        <iron-signals on-iron-signal-quick="_handleEvent"></iron-signals>
 
         <div class="quick">
 
@@ -59,6 +61,7 @@
             </tpa-toast-action>
 
             <paper-fab icon="add" title="plus" on-tap="open"></paper-fab>
+
 
         </div>
 
@@ -75,7 +78,11 @@
                 }.bind(this))
             },
             _handleEvent: function(e, data){
-                console.log(data)
+                this.$.toastAction.opened = true;
+                this.$.moneyTransfer.querySelectorAll('input')[0].value = data.amount;
+                this.$.moneyTransfer.querySelector('vaadin-combo-box').value = data.name;
+                this.$.moneyTransfer.querySelectorAll('input')[2].value = data.accountNumber;
+                this.$.moneyTransfer.querySelectorAll('input')[3].value = data.description;
             },
             open: function () {
                 this.$.toastAction.opened = true;
