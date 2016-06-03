@@ -192,6 +192,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </platinum-sw-cache>
     </platinum-sw-register>
 
+    <platinum-push-messaging
+        id="push"
+        subscription="{{pushSubscribtion}}"
+        click="{{baseUrl}}"
+        title="New message"
+        message="You have a new message from TPA"
+        icon-url="./images/ingtouch/152.png"
+        on-platinum-push-messaging-click="handlePushMessage"
+        on-platinum-push-messaging-push="handlePushMessage">
+
+    </platinum-push-messaging>
 
 </template>
 
