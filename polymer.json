@@ -1,6 +1,6 @@
 {
     "fragments" : [
-        "elements/tpa-app-layout/tpa-app-layout.html",
+        "elements/tpa-pages/tpa-daily-banking.html",
         "elements/tpa-pages/tpa-contact-page.html",
         "elements/tpa-pages/tpa-insurance-page.html",
         "elements/tpa-pages/tpa-loans-page.html",

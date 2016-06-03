@@ -1,0 +1,44 @@
+{
+  "name": "tpa-daily-banking",
+  "version": "1.0.7",
+  "authors": [
+    "Anonymous <anonymous@example.com>"
+  ],
+  "description": "An element providing apps relevant to daily banking of customers",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "tpa-daily-banking.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/tpa-component/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "tpa-dashboard": "ING-Group/tpa-dashboard",
+    "tpa-styles": "ING-Group/tpa-styles",
+    "tpa-region-selection": "ING-Group/tpa-region-selection",
+    "tpa-font": "ING-Group/tpa-font",
+    "tpa-icons": "ING-Group/tpa-icons"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "tpa-icons": "https://github.com/ING-Group/tpa-icons.git",
+    "tpa-transaction-list": "https://github.com/ING-Group/tpa-transaction-list.git",
+    "tpa-i18n": "https://github.com/ING-Group/tpa-i18n.git",
+    "tpa-region-selection": "https://github.com/ING-Group/tpa-region-selection.git",
+    "tpa-globals": "https://github.com/ING-Group/tpa-globals.git",
+    "tpa-dashboard": "https://github.com/ING-Group/tpa-dashboard.git",
+    "tpa-money-transfer": "ING-Group/tpa-money-transfer",
+    "tpa-mortgage-calculation": "ING-Group/tpa-mortgage-calculation",
+    "tpa-styles": "ING-Group/tpa-styles",
+    "tpa-font": "ING-Group/tpa-font"
+  }
+}

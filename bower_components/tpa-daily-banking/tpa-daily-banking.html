@@ -1,0 +1,84 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../tpa-dashboard/tpa-dashboard-data.html">
+<link rel="import" href="../tpa-money-transfer/tpa-money-transfer.html">
+<link rel="import" href="../tpa-transaction-list/tpa-transaction-list.html">
+<link rel="import" href="../tpa-mortgage-calculation/tpa-mortgage-calculation.html">
+<link rel="import" href="../tpa-styles/tpa-styles.html">
+<link rel="import" href="../tpa-font/tpa-font.html">
+<link rel="import" href="../tpa-icons/tpa-icons.html">
+
+
+<!--
+An element consisting of applications that serve the purposes of daily banking .
+
+Example:
+
+    <tpa-daily-banking></tpa-daily-banking>
+
+
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<dom-module id="tpa-daily-banking">
+    <template>
+      <tpa-dashboard-data></tpa-dashboard-data>
+      <style include="shared-styles iron-flex iron-flex-alignment">
+            .layout {
+                margin-bottom: 20px;
+            }
+
+            paper-card {
+                width: calc(33.3% - 20px);
+                margin: 24px 0;
+            }
+
+            @media (max-width: 1200px) {
+                paper-card {
+                    width: calc(50% - 20px);
+                }
+            }
+
+            @media (max-width: 800px) {
+                paper-card {
+                    width: calc(100% - 0px);
+                }
+            }
+
+        </style>
+      <div class="horizontal around-justified layout wrap">
+        <paper-card heading="Money Transfer">
+          <tpa-money-transfer class="focus-target" account-owner="John Smith" account-number="12359238450"
+                              account-balance="5000"></tpa-money-transfer>
+        </paper-card>
+
+        <paper-card heading="Latest Transactions">
+          <tpa-transaction-list></tpa-transaction-list>
+        </paper-card>
+
+        <paper-card heading="Accounts">
+          <tpa-transaction-list data-source="accountGroups" hide-icon group-title-field="accountType"></tpa-transaction-list>
+        </paper-card>
+
+        <paper-card heading="Mortgage calculation">
+          <tpa-mortgage-calculation></tpa-mortgage-calculation>
+        </paper-card>
+      </div>
+    </template>
+    <script>
+        Polymer({
+            is: "tpa-daily-banking"
+        });
+    </script>
+</dom-module>

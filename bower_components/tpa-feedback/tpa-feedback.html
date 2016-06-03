@@ -1,4 +1,5 @@
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-input/paper-textarea.html">
 
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
@@ -77,7 +78,7 @@ Example:
 
         <kitt-platform></kitt-platform>
 
-        <neon-animated-pages selected="0" entry-animation="slide-from-right-animation"
+        <neon-animated-pages id="pages" selected="0" entry-animation="slide-from-right-animation"
                              exit-animation="slide-left-animation">
 
             <section id="intro">
@@ -105,8 +106,11 @@ Example:
             </section>
 
             <section id="feedback">
-                <textarea rows="5"></textarea>
+
+
                 <tpa-mobile-tablet-container class="content">
+
+                    <paper-textarea label="Your feedback" rows="7"></paper-textarea>
 
                     <paper-button class="primary" on-tap="send">Verstuur</paper-button>
 
@@ -137,28 +141,24 @@ Example:
 
             call: function () {
                 var kittPlatform = document.querySelector('kitt-platform');
-
                 kittPlatform.getInfo().then(function (info) {
                     console.log("Info", info);
-                })
+                });
             },
 
             next: function () {
-                var pages = document.querySelector('neon-animated-pages');
-                pages.selectNext();
+                this.$.pages.selectNext();
             },
 
             back: function () {
-                var pages = document.querySelector('neon-animated-pages');
-                pages.selectPrevious();
+                this.$.pages.selectPrevious();
             },
 
             send: function () {
-                var pages = document.querySelector('neon-animated-pages');
-                var ajax = document.querySelector('#ajax-send-feedback');
+                var ajax = this.querySelector('#ajax-send-feedback');
 
-                var kittPlatform = document.querySelector('kitt-platform');
-                var textArea = document.querySelector('textarea');
+                var kittPlatform = this.querySelector('kitt-platform');
+                var textArea = this.querySelector('textarea');
 
                 kittPlatform.getInfo().then(function(info){
                     var text = textArea.value + "\n\nDevice: " + info.deviceManufacturer + "\n" + info.deviceName + " versie: " + info.deviceVersion + "\nApp versie: " + info.appVersion
@@ -168,15 +168,13 @@ Example:
                         "type": "SUGGESTION"
                     });
                     ajax.generateRequest()
-                    pages.selectNext();
-                })
+                    this.$.pages.selectNext();
+                }.bind(this))
 
             },
 
             close: function () {
-                console.log('Close')
-                var pages = document.querySelector('neon-animated-pages');
-                pages.selected = 0;
+                this.$.pages.selected = 0;
             },
 
             handleResponse: function (data) {
