@@ -23,7 +23,8 @@
     "tpa-font": "ING-Group/tpa-font",
     "tpa-mortgage-calculation": "ING-Group/tpa-mortgage-calculation",
     "tpa-money-transfer": "ING-Group/tpa-money-transfer",
-    "tpa-feedback": "ING-Group/tpa-feedback"
+    "tpa-feedback": "ING-Group/tpa-feedback",
+    "paper-swipe": "https://github.com/motss/paper-swipe.git#^1.0.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

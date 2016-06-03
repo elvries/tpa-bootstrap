@@ -174,73 +174,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="content">
                     <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}" fallback-selection="home" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
                         <section data-route="home">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'home')}}">
-                                <link rel="import" href="elements/tpa-app-layout/tpa-app-layout.html">
-                                <tpa-app-layout></tpa-app-layout>
-                            </template>
-                        </section>
-
-                        <section data-route="users">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'users')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-user-page.html">
-                                <tpa-user-page></tpa-user-page>
-                            </template>
-                        </section>
-
-                        <section data-route="savingsgoals">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'savingsgoals')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-savingsgoals-page.html">
-                                <tpa-savingsgoals-page></tpa-savingsgoals-page>
-                            </template>
-                        </section>
-
-                        <section data-route="trading">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'trading')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-trading-page.html">
-                                <tpa-trading-page></tpa-trading-page>
-                            </template>
-                        </section>
-
-                        <section data-route="mortgage">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'mortgage')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-mortgage-page.html">
-                                <tpa-mortgage-page></tpa-mortgage-page>
-                            </template>
-                        </section>
-
-                        <section data-route="loans">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'loans')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-loans-page.html">
-                                <tpa-loans-page></tpa-loans-page>
-                            </template>
-                        </section>
-
-                        <section data-route="insurance">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'insurance')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-insurance-page.html">
-                                <tpa-insurance-page></tpa-insurance-page>
-                            </template>
-                        </section>
-
-                        <section data-route="contact">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'contact')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-contact-page.html">
-                                <tpa-contact-page></tpa-contact-page>
-                            </template>
-                        </section>
-
-                        <section data-route="settings">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'settings')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-settings-page.html">
-                                <tpa-settings-page></tpa-settings-page>
-                            </template>
-                        </section>
-
-                        <section data-route="feedback">
-                            <template is="dom-if" if="{{isSelected(data.pageName, 'feedback')}}">
-                                <link rel="import" href="elements/tpa-pages/tpa-feedback-page.html">
-                                <tpa-feedback-page></tpa-feedback-page>
-                            </template>
+                            <tpa-item-list></tpa-item-list>
                         </section>
                     </neon-animated-pages>
                 </div>
@@ -275,6 +209,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </platinum-sw-cache>
     </platinum-sw-register>
 
+    <platinum-push-messaging
+        id="push"
+        enabled
+        subscription="{{pushSubscriber}}"
+        clickUrl="{{baseUrl}}"
+        title="App update"
+        message="We have updated the application"
+        icon-url="./images/ingtouch/152.png"
+        on-platinum-push-messaging-click="handlePush"
+        on-platinum-push-messaging-push="handlePush">
+    </platinum-push-messaging>
 </template>
 
 <!-- build:js scripts/app.js -->

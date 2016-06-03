@@ -21,7 +21,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.apiPath = "/api/";
   app.apiBaseUrl = [app.apiBase, app.apiPath].join('');
 
-  app.services = {
+  app.pushSubscriber = {};
+    
+  app.observers = ['subscribed(pushSubscriber)'];
+
+
+    app.services = {
     "dashboard": app.apiBaseUrl + "dashboard",
     "bootstrap": app.apiBaseUrl + "bootstrap"
   };
@@ -32,6 +37,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // set app.baseURL to '/your-pathname/' if running from folder in production
     app.baseUrl = '/tpa-bootstrap/';
   }
+
+  app.items = [
+      {
+          name:"Thing 1"
+      },
+      {
+          name:"Transaction 2"
+      },
+      {
+          name:"Some other thing"
+      },
+      {
+          name:"Item"
+      },
+      {
+          name:"Go"
+      },
+      {
+          name:"Other"
+      }
+  ];
 
   app.menuItems = [
     {
@@ -113,6 +139,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.$.paperDrawerPanel.closeDrawer();
   };
 
+  app.handlePush = function(e, messageBody){
+    console.log("a pull request was received. With the message");
+    console.log(messageBody.message);
+  };
+        
   app.isSelected = function(selected, actual) {
     return selected === actual;
   };
