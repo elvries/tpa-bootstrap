@@ -122,7 +122,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.handleLoggedInEvent = function() {
     console.log("loginstore changed");
     this.$.loginstore.reload();
-
+  }
+  
   app.handlePushSubscription = function(subscription){
       console.log("Subscribed for push notifications at:");
       console.log(subscription.endpoint);
