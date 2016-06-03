@@ -40,14 +40,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       icon:"tpa:home"
     },
     {
+      route:"inbox",
+      title: "Inbox",
+      icon:"tpa:email"
+    },
+    {
       route:"users",
       title: "Users",
       icon:"tpa:users"
-    },
-    {
-      route:"contact",
-      title: "Contact",
-      icon:"tpa:email"
     },
     {
       route:"settings",
