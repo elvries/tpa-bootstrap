@@ -113,14 +113,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <tpa-top-bar class="paper-header"></tpa-top-bar>
                 </app-header>
 
-                <iron-localstorage name="login" value="{{login}}" ></iron-localstorage>
+                <iron-localstorage name="login" value="{{loggedin}}" ></iron-localstorage>
 
-                <template is="dom-if" if="{{!login}}">
-                    <tpa-welcome></tpa-welcome>
+                <template is="dom-if" if="[[!loggedin]]">
+                    <tpa-welcome loggedin="{{loggedin}}"></tpa-welcome>
                 </template>
 
                 <!-- Main Content -->
-                <template is="dom-if" if="{{login}}">
+                <template is="dom-if" if="[[loggedin]]">
                     <tpa-container>
 
                         <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}"
