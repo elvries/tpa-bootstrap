@@ -101,7 +101,7 @@
 
     <template>
 
-        <iron-localstorage id="localstorage" name="login" value="{{loggedin}}"></iron-localstorage>
+        <iron-localstorage id="localstorage" name="login"></iron-localstorage>
 
         <tpa-reactive-user id="reactiveUser"></tpa-reactive-user>
 
@@ -148,12 +148,6 @@
     <script>
         Polymer({
             is: "tpa-welcome",
-            properties: {
-              loggedin: {
-                type: Boolean,
-                notify: true
-              }
-            },
             ready: function () {
                 this.$.reactiveUser.subscribe(function (user) {
                     console.log(user)
@@ -164,7 +158,7 @@
                 this.$.localstorage.value = true;
                 this.$.localstorage.save();
                 this.$.localstorage.reload();
-
+                this.fire('iron-signal', {name: "loggedin-update", data: "login"});
             }
         })
     </script>
