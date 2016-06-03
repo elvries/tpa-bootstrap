@@ -58,7 +58,7 @@ var dist = function(subpath) {
 
 function drakovProxy(){
   var argv = {
-      sourceFiles: 'app/{elements,bower_components}/**/*-mock.md',      
+      sourceFiles: 'app/{elements,bower_components}/**/*-mock.md',
       serverPort: 5001,
       public : true
   };
@@ -129,7 +129,7 @@ gulp.task('copy', function() {
   // Copy over only the bower_components we need
   // These are things which cannot be vulcanized
   var bower = gulp.src([
-    'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font,tpa-feedback}/**/*'
+    'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,tpa-font,tpa-feedback,tpa-daily-banking}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
   return merge(app, bower)
