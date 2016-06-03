@@ -25,7 +25,8 @@
     "tpa-feedback": "ING-Group/tpa-feedback",
     "tpa-toast-action": "ING-Group/tpa-toast-action",
     "tpa-daily-banking": "ING-Group/tpa-daily-banking#demo",
-    "tpa-content-creditcard": "ING-Group/tpa-content-creditcard#sexy"
+    "tpa-content-creditcard": "ING-Group/tpa-content-creditcard#sexy",
+    "tpa-item-list": "https://github.com/ING-Group/tpa-item-list.git"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

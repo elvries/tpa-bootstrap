@@ -137,6 +137,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 <tpa-daily-banking></tpa-daily-banking>
                             </section>
 
+                            <section data-route="inbox">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'inbox')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page></tpa-inbox-page>
+                                </template>
+                            </section>
+
                             <section data-route="settings">
                                 <template is="dom-if" if="{{isSelected(data.pageName, 'settings')}}">
                                     <link rel="import" href="elements/tpa-pages/tpa-settings-page.html">
@@ -191,6 +198,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </platinum-sw-cache>
     </platinum-sw-register>
 
+    <platinum-push-messaging
+        id="push"
+        subscription="{{pushSubscribtion}}"
+        click="{{baseUrl}}"
+        title="New message"
+        message="You have a new message from TPA"
+        icon-url="./images/ingtouch/152.png"
+        on-platinum-push-messaging-click="handlePushMessage"
+        on-platinum-push-messaging-push="handlePushMessage">
+
+    </platinum-push-messaging>
 
 </template>
 

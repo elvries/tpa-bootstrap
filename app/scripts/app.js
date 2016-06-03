@@ -27,6 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   };
 
   app.baseUrl = '/';
+
+  app.pushSubscribtion;
+
+  app.observers = ['handlePushSubscription(pushSubscribtion)']
   if (window.location.port === '') {  // if production
     // Uncomment app.baseURL below and
     // set app.baseURL to '/your-pathname/' if running from folder in production
@@ -40,14 +44,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       icon:"tpa:home"
     },
     {
+      route:"inbox",
+      title: "Inbox",
+      icon:"tpa:email"
+    },
+    {
       route:"users",
       title: "Users",
       icon:"tpa:users"
-    },
-    {
-      route:"contact",
-      title: "Contact",
-      icon:"tpa:email"
     },
     {
       route:"settings",
@@ -75,6 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
+    app.$.push.enable();
   });
 
   // See https://github.com/Polymer/polymer/issues/1381
@@ -117,6 +122,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.handleLoggedInEvent = function() {
     console.log("loginstore changed");
     this.$.loginstore.reload();
+
+  app.handlePushSubscription = function(subscription){
+      console.log("Subscribed for push notifications at:");
+      console.log(subscription.endpoint);
+  };
+
+  app.handlePushMessage = function(){
+      console.log("Got a push request");
   }
 
 })(document);
