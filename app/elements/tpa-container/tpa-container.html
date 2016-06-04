@@ -30,7 +30,17 @@
     </template>
     <script>
         Polymer({
-            is: "tpa-container"
+            is: "tpa-container",
+            ready: function() {
+              var app = document.querySelector("#app");
+              if (app.loggedin) {
+                app.$.paperDrawerPanel.drawerWidth = "282px";
+                app.$.paperDrawerPanel.forceNarrow = false;
+              } else {
+                app.$.paperDrawerPanel.forceNarrow = false;
+                app.$.paperDrawerPanel.drawerWidth = "0px";
+              }
+            }
         })
     </script>
 </dom-module>

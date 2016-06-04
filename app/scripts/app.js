@@ -126,6 +126,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app.handleLoggedInEvent = function() {
     this.$.loginstore.reload();
+    if (this.loggedin) {
+      this.$.paperDrawerPanel.drawerWidth = "282px";
+      this.$.paperDrawerPanel.forceNarrow = false;
+    } else {
+      this.$.paperDrawerPanel.forceNarrow = false;
+      this.$.paperDrawerPanel.drawerWidth = "0px";
+    }
   }
 
   app.handleTransactionSwipe = function() {
