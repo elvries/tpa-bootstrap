@@ -54,7 +54,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="elements/elements.html">
 
     <!-- For shared styles, shared-styles.html import in elements.html -->
-    <style is="custom-style" include="shared-styles"></style>
+    <style is="custom-style" include="shared-styles">
+        .tpa-container {
+            position: relative;
+            max-width: 1200px;
+            padding: 0 38px;
+            margin: 0 auto;
+            width:60%;
+            left:0;
+            right:0;
+        }
+
+        @media (max-width: 1200px) {
+            .tpa-container {
+                max-width: 800px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .tpa-container {
+                width:100%;
+                padding:0px;
+            }
+        }
+    </style>
 
     <!-- Place the Theme fonts here, do not Vulcanize -->
     <link rel="import" href="../bower_components/tpa-styles/app-theme.html">
@@ -127,8 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 <!-- Main Content -->
                 <template is="dom-if" if="[[loggedin]]">
-                    <tpa-container>
-
+                    <div class="tpa-container">
                         <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}"
                                              fallback-selection="home" entry-animation="scale-up-animation"
                                              exit-animation="fade-out-animation">
@@ -159,7 +181,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </section>
 
                         </neon-animated-pages>
-                    </tpa-container>
+                    </div>
 
                     <tpa-quick></tpa-quick>
                 </template>
