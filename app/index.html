@@ -170,6 +170,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-meta key="services" value="{{services}}"></iron-meta>
     </tpa-globals>
 
+    <tpa-bootstrap-i18n
+      id="i18ncontent"
+      content="{{i18ncontent}}"></tpa-bootstrap-i18n>
     <tpa-reactive-hub>
         <tpa-reactive-transactions></tpa-reactive-transactions>
         <tpa-reactive-products></tpa-reactive-products>
@@ -200,48 +203,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </template>
                 <hr style="margin-left: 10px; width: 260px; border-style: solid; color: #ddd; border-width: 1px;"/>
 
-                <paper-item disabled><div style="font-size: 12px;">Finance Categories</div></paper-item>
+                <paper-item disabled><div style="font-size: 12px;">{{i18ncontent.FinancialCategories}}</div></paper-item>
                 <paper-item data-route="groceries" on-click="closeDrawer">
                   <iron-icon icon="tpa:shoppingbasket" style="color: purple;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Groceries</span>
+                  <span class="padding-left-sm">{{i18ncontent.Groceries}}</span>
                 </paper-item>
                 <paper-item data-route="atm" on-click="closeDrawer">
                   <iron-icon icon="tpa:debt" style="color: #0066ff;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Cash/ATM</span>
+                  <span class="padding-left-sm">{{i18ncontent.CashATM}}</span>
                 </paper-item>
                 <paper-item data-route="bills" on-click="closeDrawer">
                   <iron-icon icon="tpa:calendar" style="color: green;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Bills</span>
+                  <span class="padding-left-sm">{{i18ncontent.Bills}}</span>
                 </paper-item>
                 <paper-item data-route="transfers" on-click="closeDrawer">
                   <iron-icon icon="tpa:right-left" style="color: red;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Transfers</span>
+                  <span class="padding-left-sm">{{i18ncontent.Transfers}}</span>
                 </paper-item>
                 <paper-item data-route="salary" on-click="closeDrawer">
                   <iron-icon icon="tpa:moneybag" style="color: #993300;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Salary</span>
+                  <span class="padding-left-sm">{{i18ncontent.Salary}}</span>
                 </paper-item>
                 <paper-item data-route="directdebits" on-click="closeDrawer">
                   <iron-icon icon="tpa:calendar-2" style="color: darkblue;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Direct Debits</span>
+                  <span class="padding-left-sm">{{i18ncontent.DirectDebits}}</span>
                 </paper-item>
                 <hr style="margin-left: 10px; width: 260px; border-style: solid; color: #ddd; border-width: 1px;"/>
-                <paper-item disabled><div style="font-size: 12px;">Messages &amp; Notifications</div></paper-item>
+                <paper-item disabled><div style="font-size: 12px;">{{i18ncontent.MessagesNotifications}}</div></paper-item>
                 <paper-item data-route="received" on-click="closeDrawer">
                   <iron-icon icon="tpa:email" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Received</span>
+                  <span class="padding-left-sm">{{i18ncontent.Received}}</span>
                 </paper-item>
                 <paper-item data-route="draft" on-click="closeDrawer">
                   <iron-icon icon="tpa:save" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Draft</span>
+                  <span class="padding-left-sm">{{i18ncontent.Draft}}</span>
                 </paper-item>
                 <paper-item data-route="sent" on-click="closeDrawer">
                   <iron-icon icon="tpa:play" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Sent</span>
+                  <span class="padding-left-sm">{{i18ncontent.Sent}}</span>
                 </paper-item>
                 <paper-item data-route="promos" on-click="closeDrawer">
                   <iron-icon icon="tpa:wealth-increase" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">Promos</span>
+                  <span class="padding-left-sm">{{i18ncontent.Promos}}</span>
                 </paper-item>
             </paper-menu>
 
