@@ -181,7 +181,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               last-response="{{bootstrapResponse}}"></tpa-ajax>
 
 
-    <paper-drawer-panel id="paperDrawerPanel" drawer-width="282px" responsive-width="840px">
+    <paper-drawer-panel id="paperDrawerPanel" drawer-width="282px" responsive-width="840px" force-narrow="[[!loggedin]]">
         <!-- Drawer Scroll Header Panel -->
         <paper-scroll-header-panel drawer fixed>
 
@@ -299,7 +299,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
     </paper-drawer-panel>
 
-    <tpa-quick></tpa-quick>
+    <template is="dom-if" if="[[loggedin]]">
+      <tpa-quick></tpa-quick>
+    </template>
 
     <tpa-notification></tpa-notification>
 
