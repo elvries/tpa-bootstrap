@@ -39,24 +39,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app.menuItems = [
     {
-      route:"home",
-      title: "Home",
-      icon:"tpa:home"
-    },
-    {
       route:"inbox",
-      title: "Inbox",
-      icon:"tpa:email"
+      title: "Me",
+      icon:"tpa:user"
     },
     {
-      route:"users",
-      title: "Users",
-      icon:"tpa:users"
+      route:"transactions1",
+      title: "INGB 8765 4321 04 ($25,120)",
+      icon:"tpa:moneybag"
     },
     {
-      route:"settings",
-      title: "Settings",
-      icon:"tpa:settings"
+      route:"savings1",
+      title: "INGB 8765 4321 01 ($45,020)",
+      icon:"tpa:pig"
+    },
+    {
+      route:"savings2",
+      title: "INGB 8765 4321 02 ($12,253)",
+      icon:"tpa:pig"
+    },
+    {
+      route:"loan1",
+      title: "INGB 8765 4321 03 ($100,231)",
+      icon:"tpa:home"
     }
   ];
 
@@ -123,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     console.log("loginstore changed");
     this.$.loginstore.reload();
   }
-  
+
   app.handlePushSubscription = function(subscription){
       console.log("Subscribed for push notifications at:");
       console.log(subscription.endpoint);

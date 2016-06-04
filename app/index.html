@@ -134,6 +134,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             .padding-left-sm {
                 margin-left:20px;
+                color: #000000;
+                font-size: 14px;
+            }
+
+            .menuicon {
+              --iron-icon-width: 24px;
+              --iron-icon-height: 24px;
+              color: #ff6600;
             }
 
     </style>
@@ -173,7 +181,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               last-response="{{bootstrapResponse}}"></tpa-ajax>
 
 
-    <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px">
+    <paper-drawer-panel id="paperDrawerPanel" drawer-width="292px" responsive-width="840px">
         <!-- Drawer Scroll Header Panel -->
         <paper-scroll-header-panel drawer fixed>
 
@@ -186,10 +194,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-menu class="app-menu" attr-for-selected="data-route" selected="{{data.pageName}}">
                 <template as="item" is="dom-repeat" items="{{menuItems}}">
                     <paper-item data-route="{{item.route}}" on-click="closeDrawer">
-                        <iron-icon icon="{{item.icon}}"></iron-icon>
+                        <iron-icon icon="{{item.icon}}" class="menuicon"></iron-icon>
                         <span class="padding-left-sm">{{item.title}}</span>
                     </paper-item>
                 </template>
+                <hr style="margin-left: 10px; width: 270px; border-style: solid; color: #ddd; border-width: 1px;"/>
+
+                <paper-item disabled><div style="font-size: 12px;">Finance Categories</div></paper-item>
+                <paper-item data-route="groceries" on-click="closeDrawer">
+                  <iron-icon icon="tpa:shoppingbasket" style="color: purple;" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Groceries</span>
+                </paper-item>
+                <paper-item data-route="atm" on-click="closeDrawer">
+                  <iron-icon icon="tpa:debt" style="color: #0066ff;" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Cash/ATM</span>
+                </paper-item>
+                <paper-item data-route="bills" on-click="closeDrawer">
+                  <iron-icon icon="tpa:calendar" style="color: green;" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Bills</span>
+                </paper-item>
+                <paper-item data-route="transfers" on-click="closeDrawer">
+                  <iron-icon icon="tpa:right-left" style="color: red;" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Transfers</span>
+                </paper-item>
+                <paper-item data-route="salary" on-click="closeDrawer">
+                  <iron-icon icon="tpa:moneybag" style="color: #993300;" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Salary</span>
+                </paper-item>
+                <paper-item data-route="directdebits" on-click="closeDrawer">
+                  <iron-icon icon="tpa:calendar-2" style="color: darkblue;" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Direct Debits</span>
+                </paper-item>
+                <hr style="margin-left: 10px; width: 270px; border-style: solid; color: #ddd; border-width: 1px;"/>
+                <paper-item disabled><div style="font-size: 12px;">Messages &amp; Notifications</div></paper-item>
+                <paper-item data-route="received" on-click="closeDrawer">
+                  <iron-icon icon="tpa:email" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Received</span>
+                </paper-item>
+                <paper-item data-route="draft" on-click="closeDrawer">
+                  <iron-icon icon="tpa:save" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Draft</span>
+                </paper-item>
+                <paper-item data-route="sent" on-click="closeDrawer">
+                  <iron-icon icon="tpa:play" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Sent</span>
+                </paper-item>
+                <paper-item data-route="promos" on-click="closeDrawer">
+                  <iron-icon icon="tpa:wealth-increase" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Promos</span>
+                </paper-item>
             </paper-menu>
 
         </paper-scroll-header-panel>
@@ -211,7 +264,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <template is="dom-if" if="[[loggedin]]">
                     <tpa-container>
                         <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}"
-                                             fallback-selection="home" entry-animation="scale-up-animation"
+                                             fallback-selection="inbox" entry-animation="fade-in-animation"
                                              exit-animation="fade-out-animation">
 
                             <section data-route="home">
