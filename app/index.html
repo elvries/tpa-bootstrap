@@ -54,29 +54,88 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="elements/elements.html">
 
     <!-- For shared styles, shared-styles.html import in elements.html -->
+
     <style is="custom-style" include="shared-styles">
-        .tpa-container {
-            position: relative;
-            max-width: 1200px;
-            padding: 0 38px;
-            margin: 0 auto;
-            width:60%;
-            left:0;
-            right:0;
-        }
 
-        @media (max-width: 1200px) {
             .tpa-container {
-                max-width: 800px;
+                position: relative;
+                max-width: 1200px;
+                padding: 0 38px;
+                margin: 0 auto;
+                width:60%;
+                left:0;
+                right:0;
             }
-        }
 
-        @media (max-width: 800px) {
-            .tpa-container {
+            @media (max-width: 1200px) {
+                .tpa-container {
+                    max-width: 800px;
+                }
+            }
+
+            @media (max-width: 800px) {
+                .tpa-container {
+                    width:100%;
+                    padding:0px;
+                }
+            }
+
+            .flex-equal-justified {
+                justify-content:space-around;
+                display:flex;
+                flex-direction:row;
                 width:100%;
-                padding:0px;
             }
-        }
+
+            .flex-self-center {
+                display:flex;
+                flex-direction:row;
+            }
+
+            .flex-self-center.actions{
+                justify-content: flex-end;
+            }
+
+            .flex-equal-justified > div,
+            .flex-equal-justified > span{
+                width:33%;
+            }
+            .icon-ing-logo {
+                display: inherit;
+                text-align:left;
+                margin-left: -50px;
+            }
+
+            .icon-ing-logo iron-icon.ing-icon {
+                --iron-icon-height: 28px;
+                --iron-icon-width: 135px;
+                fill: #000066;
+                margin-top: 8px;
+                vertical-align: bottom;
+
+            }
+
+            .icon-ing-logo iron-icon.lion-icon {
+                --iron-icon-height: 40px;
+                --iron-icon-width: 82px;
+                margin-left:-15px;
+            }
+
+            paper-toolbar {
+              background-color: #ff6200;
+            }
+
+            iron-icon.side-bar-icon {
+                --iron-icon-fill-color:var(--primary-color);
+            }
+            paper-item:hover {
+                background-color:var(--ing-grey-200);
+                font-weight:strong;
+            }
+            .padding-left-sm {
+                margin-left:20px;
+            }
+
     </style>
 
     <!-- Place the Theme fonts here, do not Vulcanize -->
@@ -114,12 +173,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               last-response="{{bootstrapResponse}}"></tpa-ajax>
 
 
-    <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px" force-narrow>
+    <paper-drawer-panel id="paperDrawerPanel" responsive-width="840px">
         <!-- Drawer Scroll Header Panel -->
         <paper-scroll-header-panel drawer fixed>
 
             <!-- Drawer Toolbar -->
-            <paper-toolbar id="drawerToolbar">
+            <paper-toolbar id="drawerToolbar"  style="box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);">
                 <span class="menu-name">ING TPA Bootstrap</span>
             </paper-toolbar>
 
@@ -138,7 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div main>
 
             <app-header-layout has-scrolling-region>
-                <app-header style="box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);" effects="material" reveals>
+                <app-header style="box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);" fixed>
                     <tpa-top-bar class="paper-header"></tpa-top-bar>
                 </app-header>
 
@@ -150,7 +209,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 <!-- Main Content -->
                 <template is="dom-if" if="[[loggedin]]">
-                    <div class="tpa-container">
+                    <tpa-container>
                         <neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{data.pageName}}"
                                              fallback-selection="home" entry-animation="scale-up-animation"
                                              exit-animation="fade-out-animation">
@@ -181,15 +240,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </section>
 
                         </neon-animated-pages>
-                    </div>
-
-                    <tpa-quick></tpa-quick>
+                    </tpa-container>
                 </template>
             </app-header-layout>
         </div>
     </paper-drawer-panel>
 
-
+    <tpa-quick></tpa-quick>
 
     <tpa-notification></tpa-notification>
 

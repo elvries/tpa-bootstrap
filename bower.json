@@ -18,7 +18,7 @@
     "tpa-region-selection": "ING-Group/tpa-region-selection",
     "tpa-globals": "ING-Group/tpa-globals",
     "tpa-dashboard": "ING-Group/tpa-dashboard#demo",
-    "tpa-styles": "ING-Group/tpa-styles",
+    "tpa-styles": "ING-Group/tpa-styles#ubersexy",
     "tpa-font": "ING-Group/tpa-font",
     "tpa-mortgage-calculation": "ING-Group/tpa-mortgage-calculation",
     "tpa-money-transfer": "ING-Group/tpa-money-transfer#remove_card_stuff",
@@ -47,6 +47,7 @@
     "tpa-daily-banking": "demo",
     "tpa-item": "real_item",
     "tpa-money-transfer": "remove_card_stuff",
-    "tpa-transaction-list": "itemized"
+    "tpa-transaction-list": "itemized",
+    "tpa-styles": "ubersexy"
   }
 }
