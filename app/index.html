@@ -169,7 +169,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <tpa-globals>
         <iron-meta key="services" value="{{services}}"></iron-meta>
     </tpa-globals>
-
+    <paper-dialog
+      id="optionTransaction"
+      with-backdrop>
+        <paper-button>
+          <iron-icon icon="flag"></iron-icon>
+          Flag
+        </paper-button>
+        <paper-button>
+          <iron-icon icon="tpa:email"></iron-icon>
+          Forward
+        </paper-button>
+        <paper-button>
+          <iron-icon icon="av:repeat"></iron-icon>
+          Repeat
+        </paper-button>
+      </paper-dialog>
     <tpa-bootstrap-i18n
       id="i18ncontent"
       content="{{i18ncontent}}"></tpa-bootstrap-i18n>
@@ -178,7 +193,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <tpa-reactive-products></tpa-reactive-products>
         <tpa-reactive-user></tpa-reactive-user>
     </tpa-reactive-hub>
-    <iron-signals on-iron-signal-loggedin-update="handleLoggedInEvent"></iron-signals>
+    <iron-signals on-iron-signal-loggedin-update="handleLoggedInEvent" on-iron-signal-transaction-swipe="handleTransactionSwipe"></iron-signals>
 
     <tpa-ajax auto id="getBootstrapData" url="{{services.bootstrap}}" handle-as="json"
               last-response="{{bootstrapResponse}}"></tpa-ajax>

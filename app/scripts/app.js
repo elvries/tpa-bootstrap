@@ -125,8 +125,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   };
 
   app.handleLoggedInEvent = function() {
-    console.log("loginstore changed");
     this.$.loginstore.reload();
+  }
+
+  app.handleTransactionSwipe = function() {
+    this.$.optionTransaction.open();
   }
 
   app.handlePushSubscription = function(subscription){
