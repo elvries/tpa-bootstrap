@@ -1,6 +1,5 @@
 {
     "fragments" : [
-        "elements/tpa-app-layout/tpa-app-layout.html",
         "elements/tpa-pages/tpa-settings-page.html",
         "elements/tpa-pages/tpa-feedback-page.html",
         "elements/tpa-pages/tpa-inbox-page.html"
