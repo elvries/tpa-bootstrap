@@ -285,14 +285,100 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                              fallback-selection="inbox" entry-animation="fade-in-animation"
                                              exit-animation="fade-out-animation">
 
-                            <section data-route="home">
-                                <tpa-daily-banking></tpa-daily-banking>
-                            </section>
-
                             <section data-route="inbox">
                                 <template is="dom-if" if="{{isSelected(data.pageName, 'inbox')}}">
                                     <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
                                     <tpa-inbox-page></tpa-inbox-page>
+                                </template>
+                            </section>
+
+                            <section data-route="transactions1">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'transactions1')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="transactions1"></tpa-inbox-page>
+                                </template>
+                            </section>
+
+                            <section data-route="savings1">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'savings1')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="savings1"></tpa-inbox-page>
+                                </template>
+                            </section>
+
+                            <section data-route="savings2">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'savings2')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="savings2"></tpa-inbox-page>
+                                </template>
+                            </section>
+
+                            <section data-route="loan1">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'loan1')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="loan1"></tpa-inbox-page>
+                                </template>
+                            </section>
+
+                            <section data-route="groceries">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'groceries')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="groceries"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="atm">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'atm')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="atm"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="bills">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'bills')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="bills"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="transfers">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'transfers')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="transfers"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="salary">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'salary')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="salary"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="directdebits">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'directdebits')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="directdebits"></tpa-inbox-page>
+                                </template>
+                            </section>
+
+                            <section data-route="received">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'received')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="received"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="draft">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'draft')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="draft"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="sent">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'sent')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="sent"></tpa-inbox-page>
+                                </template>
+                            </section>
+                            <section data-route="promos">
+                                <template is="dom-if" if="{{isSelected(data.pageName, 'promos')}}">
+                                    <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
+                                    <tpa-inbox-page page="promos"></tpa-inbox-page>
                                 </template>
                             </section>
 

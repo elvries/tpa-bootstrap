@@ -1,12 +1,18 @@
 <link rel="import" href="../../bower_components/tpa-item-list/tpa-item-list.html">
 <dom-module id="tpa-inbox-page">
     <template>
-      <tpa-item-list>
+      <tpa-item-list page="[[page]]">
       </tpa-item-list>
     </template>
     <script>
         Polymer({
-            is: "tpa-inbox-page"
+            is: "tpa-inbox-page",
+            properties: {
+              page: {
+                type: String,
+                notify: true
+              }
+            }
         })
     </script>
 </dom-module>
