@@ -60,8 +60,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
     {
       route:"loan1",
-      title: "INGB 8765 4321 03 ($100,231)",
-      icon:"tpa:home"
+      title: "**** **** **** 4321 ($1450-)",
+      icon:"credit-card"
     }
   ];
 
