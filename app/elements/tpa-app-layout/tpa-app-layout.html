@@ -76,7 +76,6 @@
         Polymer({
             is: "tpa-app-layout",
             ready:function(){
-                console.log('hahahahah');
                 this.$.reactiveUser.subscribe(function(user){
                     this.$.moneyTransfer.accountOwner = user.name;
                     this.$.moneyTransfer.accountNumber = user.account;

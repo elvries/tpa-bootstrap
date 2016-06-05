@@ -213,37 +213,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <template as="item" is="dom-repeat" items="{{menuItems}}">
                     <paper-item data-route="{{item.route}}" on-click="closeDrawer">
                         <iron-icon icon="{{item.icon}}" class="menuicon"></iron-icon>
-                        <span class="padding-left-sm">{{item.title}}</span>
+                        <div two-line>
+                            <div class="padding-left-sm"><b>{{item.name}}</b></div>
+                            <div class="padding-left-sm" style="color:#FF6600">{{item.title}}</div>
+                        </div>
+
                     </paper-item>
                 </template>
                 <hr style="margin-left: 10px; width: 260px; border-style: solid; color: #ddd; border-width: 1px;"/>
 
                 <paper-item disabled><div style="font-size: 12px;">{{i18ncontent.FinancialCategories}}</div></paper-item>
+
+                <paper-item data-route="directdebits" on-click="closeDrawer">
+                    <iron-icon icon="tpa:calendar-2" style="color: darkblue;" class="menuicon"></iron-icon>
+                    <span class="padding-left-sm">{{i18ncontent.DirectDebits}}</span>
+                </paper-item>
+
+                <paper-item data-route="transfers" on-click="closeDrawer">
+                    <iron-icon icon="tpa:right-left" style="color: red;" class="menuicon"></iron-icon>
+                    <span class="padding-left-sm">{{i18ncontent.Transfers}}</span>
+                </paper-item>
+
+                <paper-item data-route="salary" on-click="closeDrawer">
+                    <iron-icon icon="tpa:moneybag" style="color: #993300;" class="menuicon"></iron-icon>
+                    <span class="padding-left-sm">{{i18ncontent.Salary}}</span>
+                </paper-item>
+
+                <paper-item data-route="atm" on-click="closeDrawer">
+                    <iron-icon icon="tpa:debt" style="color: #0066ff;" class="menuicon"></iron-icon>
+                    <span class="padding-left-sm">{{i18ncontent.CashATM}}</span>
+                </paper-item>
+
+                <paper-item data-route="bills" on-click="closeDrawer">
+                    <iron-icon icon="tpa:calendar" style="color: green;" class="menuicon"></iron-icon>
+                    <span class="padding-left-sm">{{i18ncontent.Bills}}</span>
+                </paper-item>
+
                 <paper-item data-route="groceries" on-click="closeDrawer">
                   <iron-icon icon="tpa:shoppingbasket" style="color: purple;" class="menuicon"></iron-icon>
                   <span class="padding-left-sm">{{i18ncontent.Groceries}}</span>
                 </paper-item>
-                <paper-item data-route="atm" on-click="closeDrawer">
-                  <iron-icon icon="tpa:debt" style="color: #0066ff;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">{{i18ncontent.CashATM}}</span>
-                </paper-item>
-                <paper-item data-route="bills" on-click="closeDrawer">
-                  <iron-icon icon="tpa:calendar" style="color: green;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">{{i18ncontent.Bills}}</span>
-                </paper-item>
-                <paper-item data-route="transfers" on-click="closeDrawer">
-                  <iron-icon icon="tpa:right-left" style="color: red;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">{{i18ncontent.Transfers}}</span>
-                </paper-item>
-                <paper-item data-route="salary" on-click="closeDrawer">
-                  <iron-icon icon="tpa:moneybag" style="color: #993300;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">{{i18ncontent.Salary}}</span>
-                </paper-item>
-                <paper-item data-route="directdebits" on-click="closeDrawer">
-                  <iron-icon icon="tpa:calendar-2" style="color: darkblue;" class="menuicon"></iron-icon>
-                  <span class="padding-left-sm">{{i18ncontent.DirectDebits}}</span>
-                </paper-item>
+
                 <hr style="margin-left: 10px; width: 260px; border-style: solid; color: #ddd; border-width: 1px;"/>
+
                 <paper-item disabled><div style="font-size: 12px;">{{i18ncontent.MessagesNotifications}}</div></paper-item>
                 <paper-item data-route="received" on-click="closeDrawer">
                   <iron-icon icon="tpa:email" class="menuicon"></iron-icon>
