@@ -1,17 +1,91 @@
 <link rel="import" href="../../bower_components/tpa-item-list/tpa-item-list.html">
+<link rel="import" href="../../bower_components/tpa-item/tpa-item-action.html">
+
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-from-right-animation.html">
+
 <dom-module id="tpa-inbox-page">
+
+    <style>
+
+    </style>
+
     <template>
-      <tpa-item-list page="[[page]]">
-      </tpa-item-list>
+
+        <neon-animated-pages id="pages" class="flex" selected="0" entry-animation="slide-from-right-animation"
+                             exit-animation="slide-left-animation">
+
+            <section class="layout vertical">
+
+                <template is="dom-if" if="{{_showSteun(page)}}">
+
+                    <paper-card style="width: 100%">
+                        <paper-listbox>
+                            <tpa-item-action
+                                description="Steun de slachtoffers van ... en maak € 10.00 over naar giro 555.">
+                                <paper-button item-button class="primary" on-tap="_steun">Steun giro 555</paper-button>
+                            </tpa-item-action>
+                        </paper-listbox>
+                    </paper-card>
+
+                </template>
+
+                <template is="dom-if" if="{{_showCreditcard(page)}}">
+                    <paper-card style="width: 100%">
+                        <paper-listbox>
+                            <tpa-item-action description="Ervaar de extra voordelen van een platinum Creditcard.">
+                                <paper-button item-button class="primary" on-tap="_creditcard">Meer informatie
+                                </paper-button>
+                            </tpa-item-action>
+                        </paper-listbox>
+                    </paper-card>
+                </template>
+
+
+                <tpa-item-list page="[[page]]"></tpa-item-list>
+
+            </section>
+
+            <section class="layout vertical">
+                <paper-card>
+                    <tpa-content-creditcard></tpa-content-creditcard>
+                </paper-card>
+            </section>
+        </neon-animated-pages>
     </template>
     <script>
         Polymer({
             is: "tpa-inbox-page",
             properties: {
-              page: {
-                type: String,
-                notify: true
-              }
+                page: {
+                    type: String,
+                    notify: true
+                }
+            },
+
+            _steun: function () {
+                this.fire('iron-signal', {
+                    name: 'quick', data: {
+                        amount: 10.00,
+                        accountNumber: "555",
+                        description: "gift"
+                    }
+                })
+            },
+
+            _creditcard: function () {
+                this.$.pages.selectNext();
+            },
+
+            _showSteun: function (page) {
+                return page === 'transactions1';
+            },
+
+            _showCreditcard: function (page) {
+                return page === 'loan1';
             }
         })
     </script>

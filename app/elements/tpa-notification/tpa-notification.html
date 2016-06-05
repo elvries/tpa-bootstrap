@@ -23,8 +23,15 @@
                 document.addEventListener("keypress", function (e) {
                     if(e.charCode === 20){
                         var amount = Math.round(Math.random() * 100000) / 100;
+
+                        var transaction = {
+                            amount: amount,
+                            name: "Hr D Wijnand e/o Mw J Binte Salim"
+                        };
+
                         this.$.toast.opened = true;
-                        this.$.toast.text = "Hr D Wijnand e/o Mw J Binte Salim - € " + amount;
+                        this.$.toast.text = transaction.name + "  - € " + transaction.amount;
+                        this.fire('iron-signal', {name: 'transaction', data: transaction});
                     }
                 }.bind(this));
 
