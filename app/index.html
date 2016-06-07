@@ -273,6 +273,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <iron-icon icon="tpa:wealth-increase" class="menuicon"></iron-icon>
                   <span class="padding-left-sm">{{i18ncontent.Promos}}</span>
                 </paper-item>
+                <hr style="margin-left: 10px; width: 260px; border-style: solid; color: #ddd; border-width: 1px;"/>
+                <paper-item data-route="settings" on-click="closeDrawer">
+                  <iron-icon icon="tpa:settings" class="menuicon"></iron-icon>
+                  <span class="padding-left-sm">Settings</span>
+                </paper-item>
             </paper-menu>
 
         </paper-scroll-header-panel>
@@ -372,25 +377,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <section data-route="received">
                                 <template is="dom-if" if="{{isSelected(data.pageName, 'received')}}">
                                     <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
-                                    <tpa-inbox-page page="received"></tpa-inbox-page>
+                                    <tpa-inbox-page page="received" is-message></tpa-inbox-page>
                                 </template>
                             </section>
                             <section data-route="draft">
                                 <template is="dom-if" if="{{isSelected(data.pageName, 'draft')}}">
                                     <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
-                                    <tpa-inbox-page page="draft"></tpa-inbox-page>
+                                    <tpa-inbox-page page="draft" is-message></tpa-inbox-page>
                                 </template>
                             </section>
                             <section data-route="sent">
                                 <template is="dom-if" if="{{isSelected(data.pageName, 'sent')}}">
                                     <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
-                                    <tpa-inbox-page page="sent"></tpa-inbox-page>
+                                    <tpa-inbox-page page="sent" is-message></tpa-inbox-page>
                                 </template>
                             </section>
                             <section data-route="promos">
                                 <template is="dom-if" if="{{isSelected(data.pageName, 'promos')}}">
                                     <link rel="import" href="elements/tpa-pages/tpa-inbox-page.html">
-                                    <tpa-inbox-page page="promos"></tpa-inbox-page>
+                                    <tpa-inbox-page page="promos" is-message></tpa-inbox-page>
                                 </template>
                             </section>
 
