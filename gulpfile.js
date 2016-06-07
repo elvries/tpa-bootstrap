@@ -218,6 +218,7 @@ gulp.task('cache-config', function(callback) {
 
   glob([
     'index.html',
+    'scripts/app.js'
     './',
     'bower_components/webcomponentsjs/webcomponents-lite.min.js',
     '{elements,scripts,styles}/**/*.*',
