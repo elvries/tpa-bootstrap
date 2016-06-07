@@ -10,7 +10,12 @@
 <dom-module id="tpa-inbox-page">
 
     <style>
-
+      tpa-item-action{
+        display: block;
+      }
+      tpa-item-list{
+        display: block;
+      }
     </style>
 
     <template>
@@ -19,7 +24,7 @@
                              exit-animation="slide-left-animation">
 
             <section class="layout vertical">
-
+                <!-- Temporary disabled iOS
                 <template is="dom-if" if="{{_showSteun(page)}}">
 
                     <paper-card style="width: 100%">
@@ -43,10 +48,8 @@
                         </paper-listbox>
                     </paper-card>
                 </template>
-
-
+              -->
                 <tpa-item-list page="[[page]]"></tpa-item-list>
-
             </section>
 
             <section class="layout vertical">
